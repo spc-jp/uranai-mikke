@@ -1,0 +1,19 @@
+占いみっけ情報
+
+
+──────────────
+1つ目
+──────────────
+Variable name（変数名）
+PRO_PASSWORD
+Value（値）
+自分で決めたパスワードを入力
+例）uranai2025
+──────────────
+2つ目
+──────────────
+Variable name（変数名）
+ANTHROPIC_API_KEY
+Value（値）
+ClaudeのAPIキーを貼り付け
+（sk-ant-api03-… から始まる文字列）

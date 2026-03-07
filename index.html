@@ -4,165 +4,145 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>占いみっけ｜鑑定師さんの集客サポートツール</title>
-<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;800&family=Zen+Kaku+Gothic+New:wght@300;400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;800&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-:root {
-  --deep:#120d1e; --gold:#c9a84c; --gold-light:#e8cc80;
-  --mist:#8b7aa8; --pale:#f0ebf8;
-  --card:rgba(255,255,255,0.04); --border:rgba(201,168,76,0.25);
+:root{
+  --bg:#0c0c0c; --bg2:#161616; --bg3:#1e1e1e;
+  --accent:#b85c38; --accent2:#d4785a;
+  --text:#e8e0d4; --text2:#9a9088; --text3:#5a5450;
+  --border:rgba(232,224,212,0.1); --border2:rgba(184,92,56,0.35);
+  --r:4px; --r2:8px;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
-body{background:var(--deep);color:var(--pale);font-family:'Zen Kaku Gothic New',sans-serif;min-height:100vh;overflow-x:hidden;}
-body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 20% 20%,rgba(90,60,140,0.4) 0%,transparent 50%),radial-gradient(ellipse at 80% 80%,rgba(40,20,80,0.6) 0%,transparent 50%);pointer-events:none;z-index:0;}
-
-/* ライトモード */
-body.light{--deep:#f5f0fc;--pale:#2d2040;--mist:#6b5a8a;--card:rgba(255,255,255,0.7);--gold:#9a6f1e;--gold-light:#7a5510;background:#f0ebf8;}
-body.light::before{background:radial-gradient(ellipse at 20% 20%,rgba(220,200,255,0.4) 0%,transparent 50%);}
-body.light .stars{display:none;}
-body.light input,body.light textarea,body.light select{background:rgba(255,255,255,0.85);color:var(--pale);}
-body.light .result-text{background:rgba(255,255,255,0.8);color:var(--pale);}
-body.light .modal{background:#fff;}
-body.light .chip{color:var(--mist);}
-body.light .result-tab-bar{background:rgba(0,0,0,0.06);}
-body.light .pw-gate-box{background:#fff;}
-body.light .platform-btn{color:var(--mist);}
-
-/* 星 */
-.stars{position:fixed;inset:0;z-index:0;pointer-events:none;}
-.star{position:absolute;background:white;border-radius:50%;animation:twinkle var(--d,3s) ease-in-out infinite alternate;}
-@keyframes twinkle{from{opacity:.2}to{opacity:1}}
-
-/* アニメ */
-@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
-
-/* レイアウト */
-.wrap{position:relative;z-index:1;max-width:680px;margin:0 auto;padding:32px 20px 80px;}
+body{background:var(--bg);color:var(--text);font-family:'Noto Sans JP',sans-serif;font-weight:300;min-height:100vh;overflow-x:hidden;line-height:1.7;}
+.wrap{max-width:620px;margin:0 auto;padding:40px 24px 100px;}
 .main-content{transition:filter .3s;}
-.main-content.locked{filter:blur(4px);pointer-events:none;user-select:none;}
+.main-content.locked{filter:blur(6px);pointer-events:none;user-select:none;}
 
 /* ツールバー */
-.toolbar{display:flex;justify-content:flex-end;gap:8px;margin-bottom:24px;}
-.tool-btn{display:flex;align-items:center;gap:5px;padding:7px 14px;border-radius:100px;border:1px solid var(--border);background:var(--card);color:var(--mist);font-family:'Zen Kaku Gothic New',sans-serif;font-size:12px;cursor:pointer;backdrop-filter:blur(8px);transition:all .2s;letter-spacing:.08em;}
-.tool-btn:hover{border-color:var(--gold);color:var(--gold);}
-.tool-btn svg{width:14px;height:14px;}
+.toolbar{display:flex;justify-content:flex-end;gap:6px;margin-bottom:48px;}
+.tool-btn{display:flex;align-items:center;gap:4px;padding:6px 12px;border-radius:var(--r);border:1px solid var(--border);background:transparent;color:var(--text2);font-family:'Noto Sans JP',sans-serif;font-size:11px;font-weight:400;cursor:pointer;transition:all .15s;letter-spacing:.06em;}
+.tool-btn:hover{border-color:var(--accent);color:var(--accent);}
+.tool-btn svg{width:12px;height:12px;flex-shrink:0;}
 
 /* ヘッダー */
-header{text-align:center;margin-bottom:40px;}
-.logo-mark{font-size:40px;margin-bottom:12px;display:block;filter:drop-shadow(0 0 16px rgba(201,168,76,.6));animation:float 4s ease-in-out infinite;}
-h1{font-family:'Shippori Mincho',serif;font-size:clamp(28px,6vw,42px);font-weight:800;letter-spacing:.12em;background:linear-gradient(135deg,var(--gold-light),var(--gold),#a07830);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.2;margin-bottom:10px;}
-.tagline{font-size:13px;color:var(--mist);letter-spacing:.18em;font-weight:300;}
-.divider{width:80px;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:18px auto;}
+header{margin-bottom:56px;}
+.header-kana{font-size:10px;letter-spacing:.4em;color:var(--text3);margin-bottom:8px;font-weight:400;}
+h1{font-family:'Shippori Mincho',serif;font-size:clamp(32px,6vw,48px);font-weight:800;letter-spacing:.2em;color:var(--text);line-height:1.1;margin-bottom:16px;cursor:pointer;}
+h1 span{color:var(--accent);}
+.header-line{width:32px;height:1px;background:var(--accent);margin:16px 0;}
+.tagline{font-size:12px;color:var(--text2);letter-spacing:.15em;font-weight:300;}
+
+/* セクション見出し */
+.section-label{font-size:10px;letter-spacing:.3em;color:var(--accent);margin-bottom:20px;font-family:'Noto Sans JP',sans-serif;font-weight:500;display:flex;align-items:center;gap:12px;}
+.section-label::after{content:'';flex:1;height:1px;background:var(--border);}
 
 /* カード */
-.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:32px 28px;margin-bottom:20px;backdrop-filter:blur(12px);animation:fadeUp .6s ease both;}
-.card-title{font-family:'Shippori Mincho',serif;font-size:16px;color:var(--gold);letter-spacing:.15em;margin-bottom:20px;display:flex;align-items:center;gap:8px;}
-.card-title::after{content:'';flex:1;height:1px;background:var(--border);}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:32px;margin-bottom:16px;}
 
 /* フォーム */
-label{display:block;font-size:12px;color:var(--mist);letter-spacing:.12em;margin-bottom:6px;margin-top:16px;}
-label:first-of-type{margin-top:0;}
-input,textarea,select{width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(201,168,76,0.2);border-radius:8px;padding:11px 14px;color:var(--pale);font-family:'Zen Kaku Gothic New',sans-serif;font-size:15px;outline:none;transition:border-color .2s,background .2s;}
-input:focus,textarea:focus,select:focus{border-color:var(--gold);background:rgba(201,168,76,0.08);}
-textarea{resize:vertical;min-height:72px;}
-select option{background:#1e1530;}
-.preset-select{font-size:13px;margin-bottom:8px;cursor:pointer;background:rgba(201,168,76,0.06);border-color:rgba(201,168,76,0.3);}
+.field{margin-bottom:24px;}
+.field:last-child{margin-bottom:0;}
+label{display:block;font-size:11px;letter-spacing:.15em;color:var(--text2);margin-bottom:8px;font-weight:400;}
+input,textarea,select{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;color:var(--text);font-family:'Noto Sans JP',sans-serif;font-size:14px;font-weight:300;outline:none;transition:border-color .15s;-webkit-appearance:none;}
+input:focus,textarea:focus,select:focus{border-color:var(--accent);}
+textarea{resize:vertical;min-height:72px;line-height:1.7;}
+select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239a9088' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px;}
+select option{background:var(--bg2);}
+.preset-select{font-size:12px;margin-bottom:8px;color:var(--text2);}
 
 /* チップ */
-.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;}
-.chip{padding:6px 14px;border-radius:100px;border:1px solid var(--border);font-size:13px;cursor:pointer;color:var(--mist);background:transparent;font-family:'Zen Kaku Gothic New',sans-serif;transition:all .2s;}
-.chip:hover{border-color:var(--gold);color:var(--gold);}
-.chip.active{background:rgba(201,168,76,0.15);border-color:var(--gold);color:var(--gold-light);}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px;}
+.chip{padding:7px 14px;border-radius:var(--r);border:1px solid var(--border);font-size:12px;cursor:pointer;color:var(--text2);background:transparent;font-family:'Noto Sans JP',sans-serif;font-weight:400;transition:all .15s;letter-spacing:.04em;}
+.chip:hover{border-color:var(--accent2);color:var(--text);}
+.chip.active{background:rgba(184,92,56,0.15);border-color:var(--accent);color:var(--accent2);}
 
 /* 生成ボタン */
-.btn-generate{width:100%;padding:16px;background:linear-gradient(135deg,#6b4c1e,var(--gold),#6b4c1e);background-size:200% 100%;border:none;border-radius:12px;color:#1a1228;font-family:'Shippori Mincho',serif;font-size:17px;font-weight:800;letter-spacing:.18em;cursor:pointer;transition:background-position .4s,transform .2s,box-shadow .3s;box-shadow:0 4px 24px rgba(201,168,76,0.25);margin-top:8px;}
-.btn-generate:hover{background-position:100% 0;transform:translateY(-2px);box-shadow:0 8px 32px rgba(201,168,76,0.45);}
-.btn-generate:active{transform:translateY(0);}
+.btn-generate{width:100%;padding:16px;background:var(--accent);border:none;border-radius:var(--r);color:#fff;font-family:'Shippori Mincho',serif;font-size:15px;font-weight:600;letter-spacing:.25em;cursor:pointer;transition:background .15s,transform .1s;margin-top:8px;}
+.btn-generate:hover{background:var(--accent2);}
+.btn-generate:active{transform:scale(.99);}
 
 /* 結果 */
 #results{display:none;}
 #results.show{display:block;}
-.result-tab-bar{display:flex;gap:4px;margin-bottom:16px;background:rgba(255,255,255,0.04);border-radius:10px;padding:4px;}
-.result-tab{flex:1;padding:9px;border:none;border-radius:7px;background:transparent;color:var(--mist);font-family:'Zen Kaku Gothic New',sans-serif;font-size:13px;cursor:pointer;transition:all .2s;}
-.result-tab.active{background:rgba(201,168,76,0.15);color:var(--gold-light);}
+.result-tab-bar{display:flex;gap:0;margin-bottom:20px;border-bottom:1px solid var(--border);}
+.result-tab{padding:10px 16px;border:none;border-bottom:2px solid transparent;background:transparent;color:var(--text2);font-family:'Noto Sans JP',sans-serif;font-size:12px;cursor:pointer;transition:all .15s;letter-spacing:.06em;margin-bottom:-1px;}
+.result-tab:hover{color:var(--text);}
+.result-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
 .result-panel{display:none;}
 .result-panel.active{display:block;}
-.result-text{background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;padding:18px;font-size:14px;line-height:1.9;white-space:pre-wrap;color:var(--pale);min-height:120px;}
-.btn-copy{margin-top:10px;width:100%;padding:11px;background:rgba(201,168,76,0.12);border:1px solid var(--border);border-radius:8px;color:var(--gold);font-family:'Zen Kaku Gothic New',sans-serif;font-size:13px;cursor:pointer;letter-spacing:.1em;transition:all .2s;}
-.btn-copy:hover{background:rgba(201,168,76,0.22);}
+.result-text{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:20px;font-size:13px;line-height:2;white-space:pre-wrap;color:var(--text);min-height:120px;font-weight:300;}
+.btn-copy{margin-top:10px;width:100%;padding:11px;background:transparent;border:1px solid var(--border);border-radius:var(--r);color:var(--text2);font-family:'Noto Sans JP',sans-serif;font-size:12px;cursor:pointer;letter-spacing:.1em;transition:all .15s;}
+.btn-copy:hover{border-color:var(--accent);color:var(--accent);}
 .btn-copy.copied{color:#7ec8a0;border-color:#7ec8a0;}
 
-/* AI Pro エリア */
-.pro-badge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:100px;background:rgba(201,168,76,0.2);border:1px solid var(--gold);color:var(--gold);letter-spacing:.1em;margin-left:8px;vertical-align:middle;}
-.platform-btns{display:flex;gap:10px;margin-bottom:12px;}
-.platform-btn{flex:1;padding:12px 6px;border-radius:10px;border:1px solid var(--border);background:transparent;color:var(--mist);font-family:'Zen Kaku Gothic New',sans-serif;font-size:12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px;transition:all .2s;letter-spacing:.06em;}
-.platform-btn .p-icon{font-size:20px;line-height:1;}
-.platform-btn:hover{border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,0.06);}
-.platform-btn.active{border-color:var(--gold);color:var(--gold-light);background:rgba(201,168,76,0.15);box-shadow:0 0 12px rgba(201,168,76,0.15);}
-.ai-loading{text-align:center;color:var(--mist);font-size:13px;padding:20px 0;display:none;}
+/* Pro */
+.pro-badge{display:inline-block;font-size:9px;padding:2px 7px;border-radius:2px;background:var(--accent);color:#fff;letter-spacing:.1em;margin-left:10px;vertical-align:middle;font-family:'Noto Sans JP',sans-serif;font-weight:500;}
+.platform-btns{display:flex;gap:8px;margin-bottom:16px;}
+.platform-btn{flex:1;padding:14px 6px;border-radius:var(--r);border:1px solid var(--border);background:transparent;color:var(--text2);font-family:'Noto Sans JP',sans-serif;font-size:11px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;transition:all .15s;letter-spacing:.06em;}
+.platform-btn .p-icon{font-size:18px;line-height:1;}
+.platform-btn:hover{border-color:var(--accent);color:var(--text);}
+.platform-btn.active{border-color:var(--accent);color:var(--accent2);background:rgba(184,92,56,0.12);}
+.ai-loading{text-align:center;color:var(--text2);font-size:12px;padding:24px 0;display:none;letter-spacing:.1em;}
 .ai-loading.show{display:block;}
 
 /* モーダル */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.65);backdrop-filter:blur(4px);z-index:200;align-items:center;justify-content:center;padding:20px;}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(4px);z-index:200;align-items:center;justify-content:center;padding:20px;}
 .modal-overlay.open{display:flex;}
-.modal{background:#1e1530;border:1px solid var(--border);border-radius:16px;padding:28px 24px;max-width:440px;width:100%;position:relative;max-height:85vh;overflow-y:auto;}
-.modal-title{font-family:'Shippori Mincho',serif;font-size:16px;color:var(--gold);letter-spacing:.15em;margin-bottom:18px;}
-.modal-close{position:absolute;top:14px;right:16px;background:none;border:none;color:var(--mist);font-size:22px;cursor:pointer;line-height:1;}
-.modal-close:hover{color:var(--gold);}
-
-/* 使い方 */
-.howto-section{margin-bottom:18px;}
-.howto-section h3{font-size:13px;color:var(--gold);letter-spacing:.1em;margin-bottom:8px;padding-bottom:4px;border-bottom:1px solid var(--border);}
+.modal{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:32px 28px;max-width:440px;width:100%;position:relative;max-height:85vh;overflow-y:auto;}
+.modal-title{font-family:'Shippori Mincho',serif;font-size:16px;color:var(--text);letter-spacing:.15em;margin-bottom:24px;font-weight:600;}
+.modal-close{position:absolute;top:16px;right:18px;background:none;border:none;color:var(--text3);font-size:18px;cursor:pointer;line-height:1;transition:color .15s;}
+.modal-close:hover{color:var(--text);}
+.howto-section{margin-bottom:24px;}
+.howto-section h3{font-size:10px;color:var(--accent);letter-spacing:.2em;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);font-family:'Noto Sans JP',sans-serif;font-weight:500;}
 .howto-section ul{list-style:none;}
-.howto-section li{font-size:13px;color:var(--pale);opacity:.85;line-height:1.8;padding:3px 0 3px 18px;position:relative;}
-.howto-section li::before{content:'✦';position:absolute;left:0;color:var(--gold);font-size:10px;top:6px;}
+.howto-section li{font-size:12px;color:var(--text2);line-height:1.8;padding:3px 0 3px 16px;position:relative;}
+.howto-section li::before{content:'—';position:absolute;left:0;color:var(--text3);font-size:10px;top:5px;}
 
 /* 設定 */
-.setting-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border);font-size:14px;color:var(--pale);}
+.setting-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--text2);}
 .setting-row:last-child{border-bottom:none;}
-.toggle{position:relative;width:44px;height:24px;display:inline-block;}
+.toggle{position:relative;width:40px;height:22px;display:inline-block;}
 .toggle input{position:absolute;opacity:0;width:0;height:0;}
-.toggle-track{position:absolute;inset:0;border-radius:100px;background:rgba(255,255,255,0.15);border:1px solid var(--border);cursor:pointer;transition:background .3s;}
-.toggle input:checked + .toggle-track{background:rgba(201,168,76,0.5);border-color:var(--gold);}
-.toggle-thumb{position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:var(--mist);transition:transform .3s,background .3s;pointer-events:none;}
-.toggle input:checked ~ .toggle-thumb{transform:translateX(20px);background:var(--gold);}
-.setting-action-btn{padding:6px 16px;border-radius:100px;border:1px solid var(--border);background:rgba(201,168,76,0.1);color:var(--gold);font-family:'Zen Kaku Gothic New',sans-serif;font-size:12px;cursor:pointer;transition:all .2s;letter-spacing:.08em;}
-.setting-action-btn:hover{background:rgba(201,168,76,0.25);}
+.toggle-track{position:absolute;inset:0;border-radius:100px;background:var(--bg3);border:1px solid var(--border);cursor:pointer;transition:background .2s;}
+.toggle input:checked + .toggle-track{background:var(--accent);border-color:var(--accent);}
+.toggle-thumb{position:absolute;top:3px;left:3px;width:14px;height:14px;border-radius:50%;background:var(--text3);transition:transform .2s,background .2s;pointer-events:none;}
+.toggle input:checked ~ .toggle-thumb{transform:translateX(18px);background:#fff;}
+.setting-action-btn{padding:5px 14px;border-radius:var(--r);border:1px solid var(--border);background:transparent;color:var(--text2);font-family:'Noto Sans JP',sans-serif;font-size:11px;cursor:pointer;transition:all .15s;letter-spacing:.06em;}
+.setting-action-btn:hover{border-color:var(--accent);color:var(--accent);}
 
 /* PWゲート */
-.pw-gate{display:none;position:fixed;inset:0;background:rgba(10,6,20,0.92);backdrop-filter:blur(8px);z-index:300;align-items:center;justify-content:center;padding:20px;}
+.pw-gate{display:none;position:fixed;inset:0;background:rgba(8,6,4,0.96);backdrop-filter:blur(12px);z-index:300;align-items:center;justify-content:center;padding:24px;}
 .pw-gate.show{display:flex;}
-.pw-gate-box{background:#1e1530;border:1px solid var(--border);border-radius:20px;padding:36px 28px;max-width:380px;width:100%;text-align:center;animation:fadeUp .4s ease both;}
-.pw-gate-icon{font-size:44px;margin-bottom:12px;display:block;filter:drop-shadow(0 0 16px rgba(201,168,76,.5));}
-.pw-gate-title{font-family:'Shippori Mincho',serif;font-size:20px;font-weight:800;letter-spacing:.12em;background:linear-gradient(135deg,var(--gold-light),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px;}
-.pw-gate-sub{font-size:12px;color:var(--mist);letter-spacing:.1em;margin-bottom:24px;line-height:1.8;}
-.pw-gate input{width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(201,168,76,0.3);border-radius:10px;padding:13px 16px;color:var(--pale);font-family:'Zen Kaku Gothic New',sans-serif;font-size:16px;outline:none;text-align:center;letter-spacing:.2em;margin-bottom:12px;transition:border-color .2s;}
-.pw-gate input:focus{border-color:var(--gold);}
-.pw-gate-btn{width:100%;padding:14px;background:linear-gradient(135deg,#6b4c1e,var(--gold),#6b4c1e);background-size:200% 100%;border:none;border-radius:10px;color:#1a1228;font-family:'Shippori Mincho',serif;font-size:16px;font-weight:800;letter-spacing:.15em;cursor:pointer;transition:all .3s;box-shadow:0 4px 20px rgba(201,168,76,0.3);}
-.pw-gate-btn:hover{background-position:100% 0;box-shadow:0 6px 28px rgba(201,168,76,0.5);}
-.pw-gate-error{font-size:12px;color:#e07070;margin-top:10px;min-height:18px;}
-.pw-gate-free{font-size:11px;color:rgba(139,122,168,0.4);margin-top:14px;letter-spacing:.08em;}
+.pw-gate-box{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:48px 36px;max-width:360px;width:100%;text-align:center;}
+.pw-gate-mark{font-family:'Shippori Mincho',serif;font-size:32px;color:var(--accent);margin-bottom:20px;display:block;letter-spacing:.1em;}
+.pw-gate-title{font-family:'Shippori Mincho',serif;font-size:22px;font-weight:800;letter-spacing:.2em;color:var(--text);margin-bottom:8px;}
+.pw-gate-sub{font-size:11px;color:var(--text2);letter-spacing:.1em;margin-bottom:32px;line-height:1.9;}
+.pw-gate input{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;color:var(--text);font-family:'Noto Sans JP',sans-serif;font-size:15px;outline:none;text-align:center;letter-spacing:.2em;margin-bottom:12px;transition:border-color .15s;}
+.pw-gate input:focus{border-color:var(--accent);}
+.pw-gate-btn{width:100%;padding:15px;background:var(--accent);border:none;border-radius:var(--r);color:#fff;font-family:'Shippori Mincho',serif;font-size:15px;font-weight:600;letter-spacing:.25em;cursor:pointer;transition:background .15s;}
+.pw-gate-btn:hover{background:var(--accent2);}
+.pw-gate-error{font-size:11px;color:#e07070;margin-top:10px;min-height:16px;}
+.pw-gate-free{font-size:10px;color:var(--text3);margin-top:16px;letter-spacing:.08em;}
 
 /* フッター */
-footer{text-align:center;margin-top:48px;font-size:11px;color:rgba(139,122,168,0.5);letter-spacing:.1em;}
+footer{text-align:center;margin-top:64px;padding-top:32px;border-top:1px solid var(--border);font-size:10px;color:var(--text3);letter-spacing:.15em;line-height:2;}
 
-@media(max-width:480px){.wrap{padding:24px 14px 60px;}.card{padding:22px 16px;}}
+@media(max-width:480px){.wrap{padding:28px 16px 80px;}.card{padding:24px 18px;}.pw-gate-box{padding:36px 24px;}}
 </style>
 </head>
 <body>
 
-<div class="stars" id="stars"></div>
-
-<!-- PWゲート（4/1以降に表示） -->
+<!-- PWゲート -->
 <div class="pw-gate" id="pw-gate">
   <div class="pw-gate-box">
-    <span class="pw-gate-icon">🔮</span>
-    <div class="pw-gate-title">占いみっけ Pro</div>
+    <span class="pw-gate-mark">卜</span>
+    <div class="pw-gate-title">占いみっけ</div>
     <p class="pw-gate-sub">2026年4月よりPro版に移行しました。<br>パスワードを入力してご利用ください。</p>
     <input type="password" id="gate-pw" placeholder="パスワード" onkeydown="if(event.key==='Enter')checkGate()">
-    <button class="pw-gate-btn" onclick="checkGate()">✦ 入室する ✦</button>
+    <button class="pw-gate-btn" onclick="checkGate()">入室する</button>
     <div class="pw-gate-error" id="gate-error"></div>
-    <div class="pw-gate-free">ご購入・お問い合わせはSPCまで</div>
+    <div class="pw-gate-free">ご購入・お問い合わせは SPC まで</div>
   </div>
 </div>
 
@@ -170,8 +150,7 @@ footer{text-align:center;margin-top:48px;font-size:11px;color:rgba(139,122,168,0
 <div class="modal-overlay" id="howto-modal">
   <div class="modal">
     <button class="modal-close" onclick="closeModal('howto-modal')">✕</button>
-    <div class="modal-title">🔮 使い方ガイド</div>
-
+    <div class="modal-title">使い方ガイド</div>
     <div class="howto-section">
       <h3>このツールについて</h3>
       <ul>
@@ -180,7 +159,6 @@ footer{text-align:center;margin-top:48px;font-size:11px;color:rgba(139,122,168,0
         <li>2026年4月1日以降：パスワード認証でAI生成（Pro版）に切り替わります</li>
       </ul>
     </div>
-
     <div class="howto-section">
       <h3>共通の入力手順</h3>
       <ul>
@@ -191,7 +169,6 @@ footer{text-align:center;margin-top:48px;font-size:11px;color:rgba(139,122,168,0
         <li>⑤ 投稿の雰囲気を4つの中からひとつ選んでください</li>
       </ul>
     </div>
-
     <div class="howto-section">
       <h3>無料版（〜2026年3月31日）</h3>
       <ul>
@@ -201,7 +178,6 @@ footer{text-align:center;margin-top:48px;font-size:11px;color:rgba(139,122,168,0
         <li>「コピーする」ボタンでそのまま貼り付けて使えます</li>
       </ul>
     </div>
-
     <div class="howto-section">
       <h3>Pro版（2026年4月1日〜）</h3>
       <ul>
@@ -215,16 +191,14 @@ footer{text-align:center;margin-top:48px;font-size:11px;color:rgba(139,122,168,0
         <li>タブを閉じると再度パスワード入力が必要になります</li>
       </ul>
     </div>
-
     <div class="howto-section">
-      <h3>設定メニュー（⚙歯車ボタン）でできること</h3>
+      <h3>設定メニューでできること</h3>
       <ul>
         <li>ダークモード／ライトモードの切り替え</li>
         <li>デモデータの読み込み（入力サンプルをワンタップで確認）</li>
         <li>入力内容のクリア（全てリセットします）</li>
       </ul>
     </div>
-
   </div>
 </div>
 
@@ -232,9 +206,9 @@ footer{text-align:center;margin-top:48px;font-size:11px;color:rgba(139,122,168,0
 <div class="modal-overlay" id="settings-modal">
   <div class="modal">
     <button class="modal-close" onclick="closeModal('settings-modal')">✕</button>
-    <div class="modal-title">⚙ 設定</div>
+    <div class="modal-title">設定</div>
     <div class="setting-row">
-      <span>🌙 ダークモード</span>
+      <span>ダークモード</span>
       <label class="toggle">
         <input type="checkbox" id="dark-toggle" checked onchange="toggleTheme(this)">
         <div class="toggle-track"></div>
@@ -242,11 +216,11 @@ footer{text-align:center;margin-top:48px;font-size:11px;color:rgba(139,122,168,0
       </label>
     </div>
     <div class="setting-row">
-      <span>📋 デモデータを入れる</span>
+      <span>デモデータを入れる</span>
       <button class="setting-action-btn" onclick="loadDemo();closeModal('settings-modal')">入れる</button>
     </div>
     <div class="setting-row">
-      <span>🗑 入力内容をクリア</span>
+      <span>入力内容をクリア</span>
       <button class="setting-action-btn" onclick="clearAll();closeModal('settings-modal')">クリア</button>
     </div>
   </div>
@@ -257,217 +231,180 @@ footer{text-align:center;margin-top:48px;font-size:11px;color:rgba(139,122,168,0
 
   <div class="toolbar">
     <button class="tool-btn" onclick="openModal('howto-modal')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
-      使い方
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>使い方
     </button>
     <button class="tool-btn" onclick="openModal('settings-modal')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-      設定
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>設定
     </button>
   </div>
 
   <header>
-    <span class="logo-mark">🔮</span>
-    <h1 onclick="location.reload()" style="cursor:pointer;">占いみっけ</h1>
+    <div class="header-kana">uranai mikke</div>
+    <h1 onclick="location.reload()">占い<span>みっけ</span></h1>
+    <div class="header-line"></div>
     <p class="tagline">本物の鑑定師さんのための、集客サポートツール</p>
-    <div class="divider"></div>
   </header>
 
-  <!-- 入力カード -->
   <div class="card">
-    <div class="card-title">✦ あなたのことを教えてください</div>
-
-    <label>お名前・ハンドルネーム</label>
-    <input type="text" id="name" placeholder="例）月詠 さくら" maxlength="30">
-
-    <label>得意な占術（複数OK）</label>
-    <div class="chips" id="chips">
-      <button class="chip" data-v="タロット">🃏 タロット</button>
-      <button class="chip" data-v="星座占い">⭐ 星座占い</button>
-      <button class="chip" data-v="数秘術">🔢 数秘術</button>
-      <button class="chip" data-v="四柱推命">🀄 四柱推命</button>
-      <button class="chip" data-v="西洋占星術">🌙 西洋占星術</button>
-      <button class="chip" data-v="霊感・霊視">🕯 霊感・霊視</button>
-      <button class="chip" data-v="ルーン">🪨 ルーン</button>
-      <button class="chip" data-v="オラクルカード">🌸 オラクルカード</button>
+    <div class="section-label">あなたのことを教えてください</div>
+    <div class="field">
+      <label>お名前・ハンドルネーム</label>
+      <input type="text" id="name" placeholder="例）月詠 さくら" maxlength="30">
     </div>
-
-    <label>今月のテーマ・メッセージ（任意）</label>
-    <select id="theme-select" class="preset-select" onchange="applyPreset('theme-select','theme')">
-      <option value="">▼ 例文から選ぶ（選ぶと下に反映されます）</option>
-      <option value="流れが変わる月。新しい出会いや気づきが訪れます。直感を信じて動いてみてください。">🌊 流れが変わる月（出会い・気づき）</option>
-      <option value="立ち止まって内省する月。自分の本音をじっくり見つめ直す時間を大切に。">🌿 内省の月（自分を見つめ直す）</option>
-      <option value="行動の月。迷いを手放し、一歩踏み出す勇気が湧いてくる時期です。">✊ 行動の月（踏み出す・前進）</option>
-    </select>
-    <textarea id="theme" placeholder="そのまま使ってもOK、自由に書き換えてもOKです"></textarea>
-
-    <label>ひとこと自己紹介（任意）</label>
-    <select id="bio-select" class="preset-select" onchange="applyPreset('bio-select','bio')">
-      <option value="">▼ 例文から選ぶ（選ぶと下に反映されます）</option>
-      <option value="鑑定歴〇年。恋愛・転職・人間関係が得意です。">💼 経歴タイプ（得意ジャンルをアピール）</option>
-      <option value="穏やかに、丁寧に。あなたの本音に寄り添う鑑定を心がけています。">🌸 スタイルタイプ（寄り添い・丁寧さ）</option>
-      <option value="オンライン鑑定・メール鑑定承ります。初めての方もお気軽にどうぞ。">📩 案内タイプ（受付方法・初心者歓迎）</option>
-    </select>
-    <input type="text" id="bio" placeholder="そのまま使ってもOK、〇年の部分など自由に書き換えてください">
-
-    <label style="margin-top:20px;">投稿の雰囲気</label>
-    <div class="chips" id="tone-chips">
-      <button class="chip active" data-tone="やさしく">🌷 やさしく</button>
-      <button class="chip" data-tone="神秘的に">🌌 神秘的に</button>
-      <button class="chip" data-tone="背中を押す">✊ 背中を押す</button>
-      <button class="chip" data-tone="落ち着いて">🍃 落ち着いて</button>
+    <div class="field">
+      <label>得意な占術（複数選択OK）</label>
+      <div class="chips" id="chips">
+        <button class="chip" data-v="タロット">タロット</button>
+        <button class="chip" data-v="星座占い">星座占い</button>
+        <button class="chip" data-v="数秘術">数秘術</button>
+        <button class="chip" data-v="四柱推命">四柱推命</button>
+        <button class="chip" data-v="西洋占星術">西洋占星術</button>
+        <button class="chip" data-v="霊感・霊視">霊感・霊視</button>
+        <button class="chip" data-v="ルーン">ルーン</button>
+        <button class="chip" data-v="オラクルカード">オラクルカード</button>
+      </div>
+    </div>
+    <div class="field">
+      <label>今月のテーマ・メッセージ（任意）</label>
+      <select id="theme-select" class="preset-select" onchange="applyPreset('theme-select','theme')">
+        <option value="">例文から選ぶ</option>
+        <option value="流れが変わる月。新しい出会いや気づきが訪れます。直感を信じて動いてみてください。">流れが変わる月（出会い・気づき）</option>
+        <option value="立ち止まって内省する月。自分の本音をじっくり見つめ直す時間を大切に。">内省の月（自分を見つめ直す）</option>
+        <option value="行動の月。迷いを手放し、一歩踏み出す勇気が湧いてくる時期です。">行動の月（踏み出す・前進）</option>
+      </select>
+      <textarea id="theme" placeholder="そのまま使っても、自由に書き換えてもOKです"></textarea>
+    </div>
+    <div class="field">
+      <label>ひとこと自己紹介（任意）</label>
+      <select id="bio-select" class="preset-select" onchange="applyPreset('bio-select','bio')">
+        <option value="">例文から選ぶ</option>
+        <option value="鑑定歴〇年。恋愛・転職・人間関係が得意です。">経歴タイプ</option>
+        <option value="穏やかに、丁寧に。あなたの本音に寄り添う鑑定を心がけています。">スタイルタイプ</option>
+        <option value="オンライン鑑定・メール鑑定承ります。初めての方もお気軽にどうぞ。">案内タイプ</option>
+      </select>
+      <input type="text" id="bio" placeholder="そのまま使っても、自由に書き換えてください">
+    </div>
+    <div class="field">
+      <label>投稿の雰囲気</label>
+      <div class="chips" id="tone-chips">
+        <button class="chip active" data-tone="やさしく">やさしく</button>
+        <button class="chip" data-tone="神秘的に">神秘的に</button>
+        <button class="chip" data-tone="背中を押す">背中を押す</button>
+        <button class="chip" data-tone="落ち着いて">落ち着いて</button>
+      </div>
     </div>
   </div>
 
-  <button class="btn-generate" id="btn-template" onclick="generate()">✦ 投稿文を生成する ✦</button>
+  <button class="btn-generate" id="btn-template" onclick="generate()">投稿文を生成する</button>
 
-  <!-- テンプレート結果 -->
-  <div id="results" class="card" style="margin-top:20px;">
-    <div class="card-title">✦ 生成された投稿文</div>
+  <div id="results" class="card" style="margin-top:16px;">
+    <div class="section-label">生成された投稿文</div>
     <div class="result-tab-bar">
-      <button class="result-tab active" onclick="switchTab('x',this)">𝕏 X用</button>
-      <button class="result-tab" onclick="switchTab('insta',this)">📸 Instagram</button>
-      <button class="result-tab" onclick="switchTab('line',this)">💬 LINE配信</button>
+      <button class="result-tab active" onclick="switchTab('x',this)">X</button>
+      <button class="result-tab" onclick="switchTab('insta',this)">Instagram</button>
+      <button class="result-tab" onclick="switchTab('line',this)">LINE配信</button>
     </div>
     <div id="panel-x" class="result-panel active">
       <div class="result-text" id="text-x"></div>
-      <button class="btn-copy" onclick="copyText('text-x',this)">📋 コピーする</button>
+      <button class="btn-copy" onclick="copyText('text-x',this)">コピーする</button>
     </div>
     <div id="panel-insta" class="result-panel">
       <div class="result-text" id="text-insta"></div>
-      <button class="btn-copy" onclick="copyText('text-insta',this)">📋 コピーする</button>
+      <button class="btn-copy" onclick="copyText('text-insta',this)">コピーする</button>
     </div>
     <div id="panel-line" class="result-panel">
       <div class="result-text" id="text-line"></div>
-      <button class="btn-copy" onclick="copyText('text-line',this)">📋 コピーする</button>
+      <button class="btn-copy" onclick="copyText('text-line',this)">コピーする</button>
     </div>
   </div>
 
-  <!-- AI生成エリア（Pro版） -->
-  <div class="card" id="ai-card" style="margin-top:20px;display:none;">
-    <div class="card-title">✦ AI投稿文生成<span class="pro-badge">PRO</span></div>
-    <p style="font-size:13px;color:var(--mist);margin-bottom:14px;line-height:1.8;">上の入力内容をもとに、AIがあなたらしい投稿文を自動生成します。</p>
+  <div class="card" id="ai-card" style="margin-top:16px;display:none;">
+    <div class="section-label">AI投稿文生成 <span class="pro-badge">PRO</span></div>
+    <p style="font-size:12px;color:var(--text2);margin-bottom:20px;line-height:1.9;letter-spacing:.04em;">入力内容をもとに、AIがあなたらしい投稿文を自動生成します。</p>
     <div class="platform-btns" id="platform-btns">
       <button class="platform-btn active" data-platform="x" onclick="selectPlatform(this)">
         <span class="p-icon">𝕏</span>X
       </button>
       <button class="platform-btn" data-platform="instagram" onclick="selectPlatform(this)">
-        <span class="p-icon">📸</span>Instagram
+        <span class="p-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></span>Instagram
       </button>
       <button class="platform-btn" data-platform="line" onclick="selectPlatform(this)">
-        <span class="p-icon">💬</span>LINE
+        <span class="p-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 11.5C21 16.75 16.75 21 11.5 21c-1.34 0-2.62-.28-3.77-.79L3 21l.79-4.73A9.43 9.43 0 0 1 2 11.5C2 6.25 6.25 2 11.5 2S21 6.25 21 11.5z"/></svg></span>LINE
       </button>
     </div>
-    <button class="btn-generate" onclick="generateAI()">✦ AIで投稿文を生成する ✦</button>
-    <div class="ai-loading" id="ai-loading">🔮 AIが考えています...</div>
+    <button class="btn-generate" onclick="generateAI()">AIで投稿文を生成する</button>
+    <div class="ai-loading" id="ai-loading">生成中...</div>
     <div class="result-text" id="ai-result" style="display:none;margin-top:12px;"></div>
-    <button class="btn-copy" id="ai-copy" onclick="copyText('ai-result',this)" style="display:none;margin-top:10px;">📋 コピーする</button>
+    <button class="btn-copy" id="ai-copy" onclick="copyText('ai-result',this)" style="display:none;margin-top:10px;">コピーする</button>
   </div>
 
-  <footer>
-    占いみっけ｜SPC<br>「考えるを、ひとりにしない」
-  </footer>
-
-</div><!-- /wrap -->
+  <footer>占いみっけ &nbsp;|&nbsp; SPC<br>「考えるを、ひとりにしない」</footer>
+</div>
 
 <script>
-// =====================
-// 定数
-// =====================
 var UNLOCK_DATE  = new Date('2026-04-01T00:00:00+09:00');
 var WORKERS_URL  = 'https://uranai-mikke.yymmatsu.workers.dev';
-var PRO_PASSWORD = 'uranai2025'; // ← ここでパスワードを変更できます
+var PRO_PASSWORD = 'uranai2025';
 
-// =====================
-// 星を生成
-// =====================
 (function(){
-  var s = document.getElementById('stars');
-  for(var i=0;i<80;i++){
-    var el = document.createElement('div');
-    el.className = 'star';
-    var size = Math.random()*2.5+0.5;
-    el.style.cssText = 'width:'+size+'px;height:'+size+'px;top:'+Math.random()*100+'%;left:'+Math.random()*100+'%;--d:'+(Math.random()*3+2)+'s;animation-delay:'+(Math.random()*4)+'s;';
-    s.appendChild(el);
-  }
-})();
-
-// =====================
-// PWゲート初期化
-// =====================
-(function(){
-  var now = new Date();
-  if(now >= UNLOCK_DATE){
-    // 有料期間
-    if(sessionStorage.getItem('pro_unlocked') === '1'){
-      // 認証済み → Pro画面
-      showProMode();
-    } else {
-      // 未認証 → ゲート表示
+  if(new Date() >= UNLOCK_DATE){
+    if(sessionStorage.getItem('pro_unlocked') !== '1'){
       document.getElementById('pw-gate').classList.add('show');
       document.getElementById('main-content').classList.add('locked');
-    }
-  } else {
-    // 無料期間 → テンプレートのみ
-    showFreeMode();
-  }
+    } else { showProMode(); }
+  } else { showFreeMode(); }
 })();
 
 function showFreeMode(){
-  var btnT  = document.getElementById('btn-template');
-  var res   = document.getElementById('results');
-  var aiCard= document.getElementById('ai-card');
-  if(btnT)   btnT.style.display='block';
-  if(aiCard) aiCard.style.display='none';
+  document.getElementById('btn-template').style.display='block';
+  document.getElementById('ai-card').style.display='none';
 }
-
 function showProMode(){
-  var btnT  = document.getElementById('btn-template');
-  var res   = document.getElementById('results');
-  var aiCard= document.getElementById('ai-card');
-  if(btnT)   btnT.style.display='none';
-  if(res)    res.style.display='none';
-  if(aiCard) aiCard.style.display='block';
+  document.getElementById('btn-template').style.display='none';
+  document.getElementById('results').style.display='none';
+  document.getElementById('ai-card').style.display='block';
   document.getElementById('main-content').classList.remove('locked');
 }
-
 function checkGate(){
-  var pw  = document.getElementById('gate-pw').value;
-  var err = document.getElementById('gate-error');
-  err.textContent = '';
-  if(!pw){ err.textContent = 'パスワードを入力してください'; return; }
-
-  if(pw === PRO_PASSWORD){
+  var pw=document.getElementById('gate-pw').value;
+  var err=document.getElementById('gate-error');
+  err.textContent='';
+  if(!pw){ err.textContent='パスワードを入力してください'; return; }
+  if(pw===PRO_PASSWORD){
     sessionStorage.setItem('pro_unlocked','1');
     sessionStorage.setItem('pro_pw',pw);
     document.getElementById('pw-gate').classList.remove('show');
     showProMode();
   } else {
-    err.textContent = 'パスワードが正しくありません';
+    err.textContent='パスワードが正しくありません';
     document.getElementById('gate-pw').value='';
     document.getElementById('gate-pw').focus();
   }
 }
-
-// =====================
-// モーダル
-// =====================
 function openModal(id){ document.getElementById(id).classList.add('open'); }
 function closeModal(id){ document.getElementById(id).classList.remove('open'); }
 document.querySelectorAll('.modal-overlay').forEach(function(o){
   o.addEventListener('click',function(e){ if(e.target===o) o.classList.remove('open'); });
 });
-
-// =====================
-// 設定
-// =====================
 function toggleTheme(chk){
-  document.body.classList.toggle('light',!chk.checked);
+  if(!chk.checked){
+    document.body.style.setProperty('--bg','#f5f0ea');
+    document.body.style.setProperty('--bg2','#ffffff');
+    document.body.style.setProperty('--bg3','#f0ece6');
+    document.body.style.setProperty('--text','#1a1510');
+    document.body.style.setProperty('--text2','#6a6058');
+    document.body.style.setProperty('--text3','#aaa098');
+    document.body.style.setProperty('--border','rgba(26,21,16,0.12)');
+  } else {
+    document.body.style.setProperty('--bg','#0c0c0c');
+    document.body.style.setProperty('--bg2','#161616');
+    document.body.style.setProperty('--bg3','#1e1e1e');
+    document.body.style.setProperty('--text','#e8e0d4');
+    document.body.style.setProperty('--text2','#9a9088');
+    document.body.style.setProperty('--text3','#5a5450');
+    document.body.style.setProperty('--border','rgba(232,224,212,0.1)');
+  }
 }
-
-// =====================
-// チップ
-// =====================
 document.getElementById('chips').addEventListener('click',function(e){
   var c=e.target.closest('.chip'); if(c) c.classList.toggle('active');
 });
@@ -476,35 +413,14 @@ document.getElementById('tone-chips').addEventListener('click',function(e){
   document.querySelectorAll('#tone-chips .chip').forEach(function(x){ x.classList.remove('active'); });
   c.classList.add('active');
 });
-
-// =====================
-// プルダウン → テキスト反映
-// =====================
-function applyPreset(selectId,targetId){
-  var sel=document.getElementById(selectId);
-  if(!sel.value) return;
-  document.getElementById(targetId).value=sel.value;
-  sel.selectedIndex=0;
-}
-
-// =====================
-// デモデータ
-// =====================
+function applyPreset(s,t){ var el=document.getElementById(s); if(!el.value) return; document.getElementById(t).value=el.value; el.selectedIndex=0; }
 function loadDemo(){
   document.getElementById('name').value='月詠 さくら';
   document.getElementById('theme').value='自分を信じて一歩踏み出す月。迷いが晴れる出来事が訪れます。';
   document.getElementById('bio').value='鑑定歴8年。恋愛・転職・人間関係が得意です。';
-  document.querySelectorAll('#chips .chip').forEach(function(c){
-    c.classList.toggle('active', c.dataset.v==='タロット'||c.dataset.v==='西洋占星術');
-  });
-  document.querySelectorAll('#tone-chips .chip').forEach(function(c,i){
-    c.classList.toggle('active',i===0);
-  });
+  document.querySelectorAll('#chips .chip').forEach(function(c){ c.classList.toggle('active',c.dataset.v==='タロット'||c.dataset.v==='西洋占星術'); });
+  document.querySelectorAll('#tone-chips .chip').forEach(function(c,i){ c.classList.toggle('active',i===0); });
 }
-
-// =====================
-// クリア
-// =====================
 function clearAll(){
   document.getElementById('name').value='';
   document.getElementById('theme').value='';
@@ -518,10 +434,6 @@ function clearAll(){
   document.getElementById('ai-result').textContent='';
   document.getElementById('ai-copy').style.display='none';
 }
-
-// =====================
-// テンプレートデータ
-// =====================
 var TEMPLATES={
   'やさしく':{
     x:["🌙 今月も、あなたのそばに。\n\n{theme}\n\n小さな不安も、大きな迷いも、\nそっと寄り添いながら一緒に読み解いていきます✨\n\n{skill}で、あなたの「今」を照らします。\n\n📩 無料お試し鑑定、受付中です。\nプロフィールのリンクからどうぞ🌸\n\n{hashtag}",
@@ -545,119 +457,69 @@ var TEMPLATES={
     line:["こんにちは🍃 {name}です。\n\n今月のメッセージをお届けします。\n\n{theme}\n\n慌てなくていい。\nただ、今の自分の声をちゃんと聴いてあげてください。\n\n{skill}で、穏やかに、ていねいに向き合います。\n\n→ お申し込みはこちら\n【リンク】"]
   }
 };
-
-var HASHTAG={
-  'タロット':'#タロット占い #タロットリーディング',
-  '星座占い':'#星座占い #今月の運勢',
-  '数秘術':'#数秘術 #数字占い',
-  '四柱推命':'#四柱推命 #命式',
-  '西洋占星術':'#西洋占星術 #ホロスコープ',
-  '霊感・霊視':'#霊感鑑定 #霊視',
-  'ルーン':'#ルーン占い #ルーン',
-  'オラクルカード':'#オラクルカード #カードリーディング'
-};
+var HASHTAG={'タロット':'#タロット占い #タロットリーディング','星座占い':'#星座占い #今月の運勢','数秘術':'#数秘術 #数字占い','四柱推命':'#四柱推命 #命式','西洋占星術':'#西洋占星術 #ホロスコープ','霊感・霊視':'#霊感鑑定 #霊視','ルーン':'#ルーン占い #ルーン','オラクルカード':'#オラクルカード #カードリーディング'};
 var COMMON='#占い #占い師 #鑑定 #スピリチュアル';
-
-function getSelected(id){
-  return Array.from(document.querySelectorAll('#'+id+' .chip.active')).map(function(c){ return c.dataset.v||c.dataset.tone; });
-}
+function getSelected(id){ return Array.from(document.querySelectorAll('#'+id+' .chip.active')).map(function(c){ return c.dataset.v||c.dataset.tone; }); }
 function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
 function build(tpl,name,skills,theme,bio){
   var skillStr=skills.length?skills.join('・'):'占い';
   var htags=skills.map(function(s){ return HASHTAG[s]||''; }).join(' ').trim()+' '+COMMON;
-  return tpl
-    .replace(/{name}/g,name||'私')
-    .replace(/{skill}/g,skillStr)
-    .replace(/{theme}/g,theme||'あなたの未来に、光が差し込む月。\n新しい流れが始まろうとしています。')
-    .replace(/{bio}/g,bio||'')
-    .replace(/{hashtag}/g,htags.trim());
+  return tpl.replace(/{name}/g,name||'私').replace(/{skill}/g,skillStr).replace(/{theme}/g,theme||'あなたの未来に、光が差し込む月。\n新しい流れが始まろうとしています。').replace(/{bio}/g,bio||'').replace(/{hashtag}/g,htags.trim());
 }
-
-// =====================
-// テンプレート生成
-// =====================
 function generate(){
-  var name  =document.getElementById('name').value.trim();
+  var name=document.getElementById('name').value.trim();
   var skills=getSelected('chips');
-  var theme =document.getElementById('theme').value.trim();
-  var bio   =document.getElementById('bio').value.trim();
-  var tones =getSelected('tone-chips');
-  var tone  =tones[0]||'やさしく';
-  var T=TEMPLATES[tone];
-  document.getElementById('text-x').textContent    =build(pick(T.x),   name,skills,theme,bio);
+  var theme=document.getElementById('theme').value.trim();
+  var bio=document.getElementById('bio').value.trim();
+  var tones=getSelected('tone-chips');
+  var T=TEMPLATES[tones[0]||'やさしく'];
+  document.getElementById('text-x').textContent=build(pick(T.x),name,skills,theme,bio);
   document.getElementById('text-insta').textContent=build(pick(T.insta),name,skills,theme,bio);
-  document.getElementById('text-line').textContent =build(pick(T.line), name,skills,theme,bio);
+  document.getElementById('text-line').textContent=build(pick(T.line),name,skills,theme,bio);
   var r=document.getElementById('results');
   r.classList.add('show');
   setTimeout(function(){ r.scrollIntoView({behavior:'smooth',block:'start'}); },100);
 }
-
-// =====================
-// タブ切替
-// =====================
 function switchTab(key,btn){
   document.querySelectorAll('.result-tab').forEach(function(t){ t.classList.remove('active'); });
   document.querySelectorAll('.result-panel').forEach(function(p){ p.classList.remove('active'); });
   btn.classList.add('active');
   document.getElementById('panel-'+key).classList.add('active');
 }
-
-// =====================
-// コピー
-// =====================
 function copyText(id,btn){
-  var el=document.getElementById(id);
-  if(!el) return;
+  var el=document.getElementById(id); if(!el) return;
   navigator.clipboard.writeText(el.textContent).then(function(){
-    btn.textContent='✅ コピーしました！';
+    btn.textContent='コピーしました';
     btn.classList.add('copied');
-    setTimeout(function(){ btn.textContent='📋 コピーする'; btn.classList.remove('copied'); },2000);
+    setTimeout(function(){ btn.textContent='コピーする'; btn.classList.remove('copied'); },2000);
   });
 }
-
-// =====================
-// プラットフォーム選択
-// =====================
 function selectPlatform(btn){
   document.querySelectorAll('#platform-btns .platform-btn').forEach(function(b){ b.classList.remove('active'); });
   btn.classList.add('active');
 }
-
-// =====================
-// AI生成
-// =====================
 function generateAI(){
   var pw=sessionStorage.getItem('pro_pw');
   if(!pw){ alert('パスワード認証が必要です。ページを再読み込みしてください。'); return; }
-  var name    =document.getElementById('name').value.trim();
-  var theme   =document.getElementById('theme').value.trim();
-  var bio     =document.getElementById('bio').value.trim();
-  var skills  =getSelected('chips');
-  var tones   =getSelected('tone-chips');
+  var name=document.getElementById('name').value.trim();
+  var theme=document.getElementById('theme').value.trim();
+  var bio=document.getElementById('bio').value.trim();
+  var skills=getSelected('chips');
+  var tones=getSelected('tone-chips');
   var activeBtn=document.querySelector('#platform-btns .platform-btn.active');
-  var platform =activeBtn?activeBtn.dataset.platform:'x';
+  var platform=activeBtn?activeBtn.dataset.platform:'x';
   var loading=document.getElementById('ai-loading');
-  var result =document.getElementById('ai-result');
+  var result=document.getElementById('ai-result');
   var copyBtn=document.getElementById('ai-copy');
   loading.classList.add('show');
   result.style.display='none';
   copyBtn.style.display='none';
-  fetch(WORKERS_URL+'/generate',{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({password:pw,name:name||'私',skills:skills,theme:theme,bio:bio,tone:tones[0]||'やさしく',platform:platform})
-  })
+  fetch(WORKERS_URL+'/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:pw,name:name||'私',skills:skills,theme:theme,bio:bio,tone:tones[0]||'やさしく',platform:platform})})
   .then(function(r){ return r.json(); })
   .then(function(d){
     loading.classList.remove('show');
-    if(d.text){
-      result.textContent=d.text;
-      result.style.display='block';
-      copyBtn.style.display='block';
-    } else {
-      result.textContent='エラーが発生しました。もう一度お試しください。';
-      result.style.display='block';
-    }
+    if(d.text){ result.textContent=d.text; result.style.display='block'; copyBtn.style.display='block'; }
+    else { result.textContent='エラーが発生しました。もう一度お試しください。'; result.style.display='block'; }
   })
   .catch(function(){
     loading.classList.remove('show');
