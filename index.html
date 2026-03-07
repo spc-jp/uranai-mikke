@@ -4,145 +4,548 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>占いみっけ｜鑑定師さんの集客サポートツール</title>
-<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;800&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;800&family=Zen+Kaku+Gothic+New:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
-:root{
-  --bg:#0c0c0c; --bg2:#161616; --bg3:#1e1e1e;
-  --accent:#b85c38; --accent2:#d4785a;
-  --text:#e8e0d4; --text2:#9a9088; --text3:#5a5450;
-  --border:rgba(232,224,212,0.1); --border2:rgba(184,92,56,0.35);
-  --r:4px; --r2:8px;
+/* Material Design 3 (M3) Color Tokens 
+  ※元の紫・金の世界観をM3のカラースキーマにマッピング
+*/
+:root {
+  /* ダークテーマ (デフォルト) */
+  --md-sys-color-primary: #E8CC80; /* Gold */
+  --md-sys-color-on-primary: #412D00;
+  --md-sys-color-primary-container: #5D4200;
+  --md-sys-color-on-primary-container: #FFDEA5;
+  --md-sys-color-secondary-container: #4A4458; /* Muted Purple */
+  --md-sys-color-on-secondary-container: #E8DEF8;
+  --md-sys-color-background: #141218;
+  --md-sys-color-on-background: #E6E0E9;
+  --md-sys-color-surface: #141218;
+  --md-sys-color-on-surface: #E6E0E9;
+  --md-sys-color-surface-variant: #49454F;
+  --md-sys-color-on-surface-variant: #CAC4D0;
+  --md-sys-color-outline: #938F99;
+  --md-sys-color-outline-variant: #49454F;
+  --md-sys-color-surface-container: #211F26;
+  --md-sys-color-surface-container-high: #2B2930;
+  --md-sys-color-surface-container-highest: #36343B;
+  --md-sys-color-error: #FFB4AB;
 }
+
+body.light {
+  /* ライトテーマ */
+  --md-sys-color-primary: #7A5510;
+  --md-sys-color-on-primary: #FFFFFF;
+  --md-sys-color-primary-container: #FFDEA5;
+  --md-sys-color-on-primary-container: #261900;
+  --md-sys-color-secondary-container: #E8DEF8;
+  --md-sys-color-on-secondary-container: #1D192B;
+  --md-sys-color-background: #FEF7FF;
+  --md-sys-color-on-background: #1D1B20;
+  --md-sys-color-surface: #FEF7FF;
+  --md-sys-color-on-surface: #1D1B20;
+  --md-sys-color-surface-variant: #E7E0EC;
+  --md-sys-color-on-surface-variant: #49454F;
+  --md-sys-color-outline: #79747E;
+  --md-sys-color-outline-variant: #CAC4D0;
+  --md-sys-color-surface-container: #F3EDF7;
+  --md-sys-color-surface-container-high: #ECE6F0;
+  --md-sys-color-surface-container-highest: #E6E0E9;
+  --md-sys-color-error: #BA1A1A;
+}
+
 *{margin:0;padding:0;box-sizing:border-box;}
-body{background:var(--bg);color:var(--text);font-family:'Noto Sans JP',sans-serif;font-weight:300;min-height:100vh;overflow-x:hidden;line-height:1.7;}
-.wrap{max-width:620px;margin:0 auto;padding:40px 24px 100px;}
+body {
+  background: var(--md-sys-color-background);
+  color: var(--md-sys-color-on-background);
+  font-family: 'Zen Kaku Gothic New', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.5;
+}
+
+/* 幻想的な背景グラデーション (M3 Backgroundに馴染ませる) */
+body::before {
+  content:'';
+  position:fixed;
+  inset:0;
+  background: radial-gradient(ellipse at 20% 20%, rgba(208,188,255,0.06) 0%, transparent 50%),
+              radial-gradient(ellipse at 80% 80%, rgba(232,204,128,0.04) 0%, transparent 50%);
+  pointer-events:none;
+  z-index:0;
+}
+body.light::before {
+  background: radial-gradient(ellipse at 20% 20%, rgba(103,80,164,0.05) 0%, transparent 50%);
+}
+body.light .stars { display: none; }
+
+/* 星のアニメーション（そのまま維持） */
+.stars{position:fixed;inset:0;z-index:0;pointer-events:none;}
+.star{position:absolute;background:white;border-radius:50%;animation:twinkle var(--d,3s) ease-in-out infinite alternate;}
+@keyframes twinkle{from{opacity:.1}to{opacity:.9}}
+
+/* 共通アニメーション（そのまま維持） */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+
+/* レイアウト */
+.wrap{position:relative;z-index:1;max-width:680px;margin:0 auto;padding:32px 20px 80px;}
 .main-content{transition:filter .3s;}
 .main-content.locked{filter:blur(6px);pointer-events:none;user-select:none;}
 
-/* ツールバー */
-.toolbar{display:flex;justify-content:flex-end;gap:6px;margin-bottom:48px;}
-.tool-btn{display:flex;align-items:center;gap:4px;padding:6px 12px;border-radius:var(--r);border:1px solid var(--border);background:transparent;color:var(--text2);font-family:'Noto Sans JP',sans-serif;font-size:11px;font-weight:400;cursor:pointer;transition:all .15s;letter-spacing:.06em;}
-.tool-btn:hover{border-color:var(--accent);color:var(--accent);}
-.tool-btn svg{width:12px;height:12px;flex-shrink:0;}
+/* M3: ツールバー (Text Buttons) */
+.toolbar{display:flex;justify-content:flex-end;gap:8px;margin-bottom:24px;}
+.tool-btn {
+  display:flex;align-items:center;gap:8px;
+  padding:8px 16px;
+  border-radius:100px;
+  border:none;
+  background:transparent;
+  color:var(--md-sys-color-primary);
+  font-family:'Zen Kaku Gothic New',sans-serif;
+  font-size:14px;
+  font-weight:500;
+  cursor:pointer;
+  transition:background-color .2s;
+}
+.tool-btn:hover { background: rgba(232,204,128,0.08); }
+.body.light .tool-btn:hover { background: rgba(122,85,16,0.08); }
+.tool-btn svg { width:18px;height:18px;fill:currentColor; }
 
 /* ヘッダー */
-header{margin-bottom:56px;}
-.header-kana{font-size:10px;letter-spacing:.4em;color:var(--text3);margin-bottom:8px;font-weight:400;}
-h1{font-family:'Shippori Mincho',serif;font-size:clamp(32px,6vw,48px);font-weight:800;letter-spacing:.2em;color:var(--text);line-height:1.1;margin-bottom:16px;cursor:pointer;}
-h1 span{color:var(--accent);}
-.header-line{width:32px;height:1px;background:var(--accent);margin:16px 0;}
-.tagline{font-size:12px;color:var(--text2);letter-spacing:.15em;font-weight:300;}
+header{text-align:center;margin-bottom:40px;}
+.logo-mark {
+  font-size:48px;
+  margin-bottom:16px;
+  display:block;
+  filter:drop-shadow(0 0 16px rgba(232,204,128,.4));
+  animation:float 4s ease-in-out infinite; /* 動きを維持 */
+}
+h1 {
+  font-family:'Shippori Mincho',serif;
+  font-size:clamp(32px, 6vw, 44px);
+  font-weight:800;
+  letter-spacing:.08em;
+  color: var(--md-sys-color-primary);
+  line-height:1.2;
+  margin-bottom:12px;
+}
+.tagline {
+  font-size:14px;
+  color:var(--md-sys-color-on-surface-variant);
+  letter-spacing:.1em;
+  font-weight:400;
+}
+.divider {
+  width:64px;height:2px;
+  background:var(--md-sys-color-primary);
+  border-radius:2px;
+  margin:24px auto;
+  opacity: 0.5;
+}
 
-/* セクション見出し */
-.section-label{font-size:10px;letter-spacing:.3em;color:var(--accent);margin-bottom:20px;font-family:'Noto Sans JP',sans-serif;font-weight:500;display:flex;align-items:center;gap:12px;}
-.section-label::after{content:'';flex:1;height:1px;background:var(--border);}
+/* M3: Cards (Filled Card) */
+.card {
+  background: var(--md-sys-color-surface-container);
+  border-radius: 16px; /* M3規格の角丸 */
+  padding: 32px 24px;
+  margin-bottom: 24px;
+  animation: fadeUp .6s ease both;
+}
+.card-title {
+  font-family:'Shippori Mincho',serif;
+  font-size:20px;
+  color:var(--md-sys-color-primary);
+  margin-bottom:24px;
+  display:flex;align-items:center;gap:12px;
+}
+.card-title::after {
+  content:'';flex:1;height:1px;
+  background:var(--md-sys-color-outline-variant);
+}
 
-/* カード */
-.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:32px;margin-bottom:16px;}
+/* M3: Forms (Outlined Text Fields) */
+.field-group { margin-bottom: 24px; }
+.field-group:last-child { margin-bottom: 0; }
+label {
+  display:block;
+  font-size:13px;
+  color:var(--md-sys-color-on-surface);
+  margin-bottom:8px;
+  font-weight:500;
+}
+input[type="text"], input[type="password"], textarea, select {
+  width:100%;
+  background:var(--md-sys-color-surface);
+  border:1px solid var(--md-sys-color-outline);
+  border-radius:4px; /* M3テキストフィールドの角丸 */
+  padding:16px;
+  color:var(--md-sys-color-on-surface);
+  font-family:'Zen Kaku Gothic New',sans-serif;
+  font-size:16px; /* モバイルでのズーム防止＆M3基準 */
+  outline:none;
+  transition:all .2s;
+  -webkit-appearance:none;
+}
+input:focus, textarea:focus, select:focus {
+  border-color:var(--md-sys-color-primary);
+  border-width:2px;
+  padding:15px; /* ボーダーが太くなる分パディングを減らす */
+}
+textarea { resize:vertical; min-height:96px; line-height:1.6; }
+select {
+  cursor:pointer;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23938F99' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 16px center;padding-right:40px;
+}
+body.light select {
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2379747E' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+}
+select option { background: var(--md-sys-color-surface-container-high); }
+.preset-select { font-size:14px; margin-bottom:12px; }
 
-/* フォーム */
-.field{margin-bottom:24px;}
-.field:last-child{margin-bottom:0;}
-label{display:block;font-size:11px;letter-spacing:.15em;color:var(--text2);margin-bottom:8px;font-weight:400;}
-input,textarea,select{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:12px 14px;color:var(--text);font-family:'Noto Sans JP',sans-serif;font-size:14px;font-weight:300;outline:none;transition:border-color .15s;-webkit-appearance:none;}
-input:focus,textarea:focus,select:focus{border-color:var(--accent);}
-textarea{resize:vertical;min-height:72px;line-height:1.7;}
-select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239a9088' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px;}
-select option{background:var(--bg2);}
-.preset-select{font-size:12px;margin-bottom:8px;color:var(--text2);}
+/* M3: Filter Chips */
+.chips { display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;}
+.chip {
+  padding:8px 16px;
+  border-radius:8px; /* M3規格 */
+  border:1px solid var(--md-sys-color-outline);
+  font-size:14px;
+  cursor:pointer;
+  color:var(--md-sys-color-on-surface-variant);
+  background:transparent;
+  font-family:'Zen Kaku Gothic New',sans-serif;
+  transition:all .2s;
+  display:flex;align-items:center;gap:6px;
+}
+.chip:hover {
+  background: rgba(232,204,128,0.08); /* state layer */
+  color: var(--md-sys-color-on-surface);
+}
+body.light .chip:hover { background: rgba(122,85,16,0.08); }
+.chip.active {
+  background: var(--md-sys-color-secondary-container);
+  border-color: transparent;
+  color: var(--md-sys-color-on-secondary-container);
+}
 
-/* チップ */
-.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px;}
-.chip{padding:7px 14px;border-radius:var(--r);border:1px solid var(--border);font-size:12px;cursor:pointer;color:var(--text2);background:transparent;font-family:'Noto Sans JP',sans-serif;font-weight:400;transition:all .15s;letter-spacing:.04em;}
-.chip:hover{border-color:var(--accent2);color:var(--text);}
-.chip.active{background:rgba(184,92,56,0.15);border-color:var(--accent);color:var(--accent2);}
+/* M3: Filled Button (生成ボタン) */
+.btn-generate {
+  width:100%;
+  padding:16px 24px;
+  background: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+  border:none;
+  border-radius:100px; /* フルラウンド */
+  font-family:'Shippori Mincho',serif;
+  font-size:18px;
+  font-weight:600;
+  letter-spacing:.08em;
+  cursor:pointer;
+  transition:all .2s;
+  box-shadow: 0 1px 3px 1px rgba(0,0,0,0.15), 0 1px 2px 0 rgba(0,0,0,0.3); /* Elevation 1 */
+  margin-top:8px;
+  position: relative;
+  overflow: hidden;
+}
+.btn-generate::after {
+  content: ''; position: absolute; inset: 0; background: currentColor; opacity: 0; transition: opacity .2s;
+}
+.btn-generate:hover {
+  box-shadow: 0 2px 6px 2px rgba(0,0,0,0.15), 0 1px 2px 0 rgba(0,0,0,0.3); /* Elevation 2 */
+}
+.btn-generate:hover::after { opacity: 0.08; /* hover state layer */ }
+.btn-generate:active::after { opacity: 0.12; /* pressed state layer */ }
 
-/* 生成ボタン */
-.btn-generate{width:100%;padding:16px;background:var(--accent);border:none;border-radius:var(--r);color:#fff;font-family:'Shippori Mincho',serif;font-size:15px;font-weight:600;letter-spacing:.25em;cursor:pointer;transition:background .15s,transform .1s;margin-top:8px;}
-.btn-generate:hover{background:var(--accent2);}
-.btn-generate:active{transform:scale(.99);}
+/* 結果エリア (Tabs) */
+#results { display:none; }
+#results.show { display:block; }
+.result-tab-bar {
+  display:flex;
+  border-bottom: 1px solid var(--md-sys-color-outline-variant);
+  margin-bottom:24px;
+}
+.result-tab {
+  flex:1;
+  padding:12px;
+  border:none;
+  background:transparent;
+  color:var(--md-sys-color-on-surface-variant);
+  font-family:'Zen Kaku Gothic New',sans-serif;
+  font-size:14px;
+  font-weight:500;
+  cursor:pointer;
+  transition:all .2s;
+  border-bottom: 3px solid transparent;
+}
+.result-tab:hover {
+  background: rgba(232,204,128,0.08);
+  color: var(--md-sys-color-on-surface);
+}
+body.light .result-tab:hover { background: rgba(122,85,16,0.08); }
+.result-tab.active {
+  color: var(--md-sys-color-primary);
+  border-bottom-color: var(--md-sys-color-primary);
+}
+.result-panel { display:none; }
+.result-panel.active { display:block; }
+.result-text {
+  background: var(--md-sys-color-surface);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: 12px;
+  padding: 24px;
+  font-size:15px;
+  line-height:1.8;
+  white-space:pre-wrap;
+  color:var(--md-sys-color-on-surface);
+  min-height:160px;
+}
 
-/* 結果 */
-#results{display:none;}
-#results.show{display:block;}
-.result-tab-bar{display:flex;gap:0;margin-bottom:20px;border-bottom:1px solid var(--border);}
-.result-tab{padding:10px 16px;border:none;border-bottom:2px solid transparent;background:transparent;color:var(--text2);font-family:'Noto Sans JP',sans-serif;font-size:12px;cursor:pointer;transition:all .15s;letter-spacing:.06em;margin-bottom:-1px;}
-.result-tab:hover{color:var(--text);}
-.result-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
-.result-panel{display:none;}
-.result-panel.active{display:block;}
-.result-text{background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:20px;font-size:13px;line-height:2;white-space:pre-wrap;color:var(--text);min-height:120px;font-weight:300;}
-.btn-copy{margin-top:10px;width:100%;padding:11px;background:transparent;border:1px solid var(--border);border-radius:var(--r);color:var(--text2);font-family:'Noto Sans JP',sans-serif;font-size:12px;cursor:pointer;letter-spacing:.1em;transition:all .15s;}
-.btn-copy:hover{border-color:var(--accent);color:var(--accent);}
-.btn-copy.copied{color:#7ec8a0;border-color:#7ec8a0;}
+/* M3: Outlined Button (コピーボタン) */
+.btn-copy {
+  margin-top:16px;
+  width:100%;
+  padding:12px 24px;
+  background: transparent;
+  border: 1px solid var(--md-sys-color-outline);
+  border-radius: 100px;
+  color: var(--md-sys-color-primary);
+  font-family:'Zen Kaku Gothic New',sans-serif;
+  font-size:14px;
+  font-weight:500;
+  cursor:pointer;
+  transition:all .2s;
+}
+.btn-copy:hover {
+  background: rgba(232,204,128,0.08);
+  border-color: var(--md-sys-color-primary);
+}
+body.light .btn-copy:hover { background: rgba(122,85,16,0.08); }
+.btn-copy.copied {
+  background: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+  border-color: var(--md-sys-color-primary);
+}
 
-/* Pro */
-.pro-badge{display:inline-block;font-size:9px;padding:2px 7px;border-radius:2px;background:var(--accent);color:#fff;letter-spacing:.1em;margin-left:10px;vertical-align:middle;font-family:'Noto Sans JP',sans-serif;font-weight:500;}
-.platform-btns{display:flex;gap:8px;margin-bottom:16px;}
-.platform-btn{flex:1;padding:14px 6px;border-radius:var(--r);border:1px solid var(--border);background:transparent;color:var(--text2);font-family:'Noto Sans JP',sans-serif;font-size:11px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;transition:all .15s;letter-spacing:.06em;}
-.platform-btn .p-icon{font-size:18px;line-height:1;}
-.platform-btn:hover{border-color:var(--accent);color:var(--text);}
-.platform-btn.active{border-color:var(--accent);color:var(--accent2);background:rgba(184,92,56,0.12);}
-.ai-loading{text-align:center;color:var(--text2);font-size:12px;padding:24px 0;display:none;letter-spacing:.1em;}
-.ai-loading.show{display:block;}
+/* AI Pro エリア */
+.pro-badge {
+  display:inline-block;
+  font-size:11px;
+  padding:2px 8px;
+  border-radius:4px;
+  background: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+  font-weight: 700;
+  margin-left:12px;
+  vertical-align:middle;
+}
+/* M3: Segmented Buttons風のトグル */
+.platform-btns {
+  display:flex;
+  gap:12px;
+  margin-bottom:24px;
+}
+.platform-btn {
+  flex:1;
+  padding:16px 8px;
+  border-radius:12px;
+  border:1px solid var(--md-sys-color-outline);
+  background:var(--md-sys-color-surface);
+  color:var(--md-sys-color-on-surface-variant);
+  font-family:'Zen Kaku Gothic New',sans-serif;
+  font-size:14px;
+  font-weight:500;
+  cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  transition:all .2s;
+}
+.platform-btn .p-icon { font-size:24px; line-height:1; }
+.platform-btn:hover { background: rgba(232,204,128,0.08); color: var(--md-sys-color-on-surface); }
+body.light .platform-btn:hover { background: rgba(122,85,16,0.08); }
+.platform-btn.active {
+  border-color: transparent;
+  background: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+}
+.ai-loading { text-align:center; color:var(--md-sys-color-on-surface-variant); font-size:14px; padding:24px 0; display:none; }
+.ai-loading.show { display:block; }
 
-/* モーダル */
-.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(4px);z-index:200;align-items:center;justify-content:center;padding:20px;}
-.modal-overlay.open{display:flex;}
-.modal{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:32px 28px;max-width:440px;width:100%;position:relative;max-height:85vh;overflow-y:auto;}
-.modal-title{font-family:'Shippori Mincho',serif;font-size:16px;color:var(--text);letter-spacing:.15em;margin-bottom:24px;font-weight:600;}
-.modal-close{position:absolute;top:16px;right:18px;background:none;border:none;color:var(--text3);font-size:18px;cursor:pointer;line-height:1;transition:color .15s;}
-.modal-close:hover{color:var(--text);}
-.howto-section{margin-bottom:24px;}
-.howto-section h3{font-size:10px;color:var(--accent);letter-spacing:.2em;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border);font-family:'Noto Sans JP',sans-serif;font-weight:500;}
-.howto-section ul{list-style:none;}
-.howto-section li{font-size:12px;color:var(--text2);line-height:1.8;padding:3px 0 3px 16px;position:relative;}
-.howto-section li::before{content:'—';position:absolute;left:0;color:var(--text3);font-size:10px;top:5px;}
+/* M3: Dialogs (モーダル) */
+.modal-overlay {
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,0.6);
+  backdrop-filter:blur(4px);
+  z-index:200;align-items:center;justify-content:center;padding:24px;
+}
+.modal-overlay.open { display:flex; }
+.modal {
+  background: var(--md-sys-color-surface-container-high);
+  border-radius:28px;
+  padding:32px 24px;
+  max-width:440px;width:100%;
+  position:relative;
+  max-height:85vh;overflow-y:auto;
+  box-shadow: 0 4px 8px 3px rgba(0,0,0,0.15), 0 1px 3px 0 rgba(0,0,0,0.3); /* Elevation 3 */
+}
+.modal-title {
+  font-family:'Shippori Mincho',serif;
+  font-size:24px; /* M3 Headline Small */
+  color:var(--md-sys-color-on-surface);
+  margin-bottom:24px;
+}
+.modal-close {
+  position:absolute;top:20px;right:20px;
+  width:40px;height:40px;
+  border-radius:50%;
+  background:transparent;
+  border:none;
+  color:var(--md-sys-color-on-surface-variant);
+  font-size:20px;
+  cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:background-color .2s;
+}
+.modal-close:hover { background: var(--md-sys-color-surface-variant); color:var(--md-sys-color-on-surface); }
+
+/* 使い方 */
+.howto-section { margin-bottom:24px; }
+.howto-section h3 {
+  font-size:14px;
+  color:var(--md-sys-color-primary);
+  margin-bottom:12px;
+  padding-bottom:8px;
+  border-bottom:1px solid var(--md-sys-color-outline-variant);
+}
+.howto-section ul { list-style:none; }
+.howto-section li {
+  font-size:14px;
+  color:var(--md-sys-color-on-surface);
+  line-height:1.6;
+  padding:4px 0 4px 20px;
+  position:relative;
+}
+.howto-section li::before {
+  content:'✦';
+  position:absolute;left:0;top:6px;
+  color:var(--md-sys-color-primary);
+  font-size:12px;
+}
 
 /* 設定 */
-.setting-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--text2);}
-.setting-row:last-child{border-bottom:none;}
-.toggle{position:relative;width:40px;height:22px;display:inline-block;}
-.toggle input{position:absolute;opacity:0;width:0;height:0;}
-.toggle-track{position:absolute;inset:0;border-radius:100px;background:var(--bg3);border:1px solid var(--border);cursor:pointer;transition:background .2s;}
-.toggle input:checked + .toggle-track{background:var(--accent);border-color:var(--accent);}
-.toggle-thumb{position:absolute;top:3px;left:3px;width:14px;height:14px;border-radius:50%;background:var(--text3);transition:transform .2s,background .2s;pointer-events:none;}
-.toggle input:checked ~ .toggle-thumb{transform:translateX(18px);background:#fff;}
-.setting-action-btn{padding:5px 14px;border-radius:var(--r);border:1px solid var(--border);background:transparent;color:var(--text2);font-family:'Noto Sans JP',sans-serif;font-size:11px;cursor:pointer;transition:all .15s;letter-spacing:.06em;}
-.setting-action-btn:hover{border-color:var(--accent);color:var(--accent);}
+.setting-row {
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 0;
+  border-bottom:1px solid var(--md-sys-color-outline-variant);
+  font-size:15px;
+  color:var(--md-sys-color-on-surface);
+}
+.setting-row:last-child { border-bottom:none; }
 
-/* PWゲート */
-.pw-gate{display:none;position:fixed;inset:0;background:rgba(8,6,4,0.96);backdrop-filter:blur(12px);z-index:300;align-items:center;justify-content:center;padding:24px;}
-.pw-gate.show{display:flex;}
-.pw-gate-box{background:var(--bg2);border:1px solid var(--border);border-radius:var(--r2);padding:48px 36px;max-width:360px;width:100%;text-align:center;}
-.pw-gate-mark{font-family:'Shippori Mincho',serif;font-size:32px;color:var(--accent);margin-bottom:20px;display:block;letter-spacing:.1em;}
-.pw-gate-title{font-family:'Shippori Mincho',serif;font-size:22px;font-weight:800;letter-spacing:.2em;color:var(--text);margin-bottom:8px;}
-.pw-gate-sub{font-size:11px;color:var(--text2);letter-spacing:.1em;margin-bottom:32px;line-height:1.9;}
-.pw-gate input{width:100%;background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;color:var(--text);font-family:'Noto Sans JP',sans-serif;font-size:15px;outline:none;text-align:center;letter-spacing:.2em;margin-bottom:12px;transition:border-color .15s;}
-.pw-gate input:focus{border-color:var(--accent);}
-.pw-gate-btn{width:100%;padding:15px;background:var(--accent);border:none;border-radius:var(--r);color:#fff;font-family:'Shippori Mincho',serif;font-size:15px;font-weight:600;letter-spacing:.25em;cursor:pointer;transition:background .15s;}
-.pw-gate-btn:hover{background:var(--accent2);}
-.pw-gate-error{font-size:11px;color:#e07070;margin-top:10px;min-height:16px;}
-.pw-gate-free{font-size:10px;color:var(--text3);margin-top:16px;letter-spacing:.08em;}
+/* M3: Switch */
+.toggle { position:relative; width:52px; height:32px; display:inline-block; }
+.toggle input { position:absolute; opacity:0; width:0; height:0; }
+.toggle-track {
+  position:absolute; inset:0;
+  border-radius:16px;
+  background: var(--md-sys-color-surface-container-highest);
+  border: 2px solid var(--md-sys-color-outline);
+  cursor:pointer;
+  transition: all .2s;
+}
+.toggle-thumb {
+  position:absolute; top:6px; left:6px;
+  width:16px; height:16px;
+  border-radius:50%;
+  background: var(--md-sys-color-outline);
+  transition: all .2s cubic-bezier(0.2, 0, 0, 1);
+  pointer-events:none;
+}
+.toggle input:checked + .toggle-track {
+  background: var(--md-sys-color-primary);
+  border-color: var(--md-sys-color-primary);
+}
+.toggle input:checked ~ .toggle-thumb {
+  top:2px; left:2px;
+  width:24px; height:24px;
+  transform:translateX(20px);
+  background: var(--md-sys-color-on-primary);
+}
+.setting-action-btn {
+  padding:8px 20px;
+  border-radius:100px;
+  border:1px solid var(--md-sys-color-outline);
+  background:transparent;
+  color:var(--md-sys-color-primary);
+  font-family:'Zen Kaku Gothic New',sans-serif;
+  font-size:14px;
+  font-weight:500;
+  cursor:pointer;
+  transition:all .2s;
+}
+.setting-action-btn:hover { background:rgba(232,204,128,0.08); }
+body.light .setting-action-btn:hover { background: rgba(122,85,16,0.08); }
+
+/* PWゲート (M3 Full Screen or Modal style) */
+.pw-gate {
+  display:none;position:fixed;inset:0;
+  background:rgba(20,18,24,0.92); /* M3 Scrim */
+  backdrop-filter:blur(8px);
+  z-index:300;align-items:center;justify-content:center;padding:24px;
+}
+.pw-gate.show { display:flex; }
+.pw-gate-box {
+  background: var(--md-sys-color-surface-container-high);
+  border-radius:28px;
+  padding:40px 32px;
+  max-width:400px;width:100%;
+  text-align:center;
+  animation:fadeUp .4s ease both;
+  box-shadow: 0 4px 8px 3px rgba(0,0,0,0.15);
+}
+.pw-gate-icon { font-size:56px; margin-bottom:16px; display:block; filter:drop-shadow(0 0 16px rgba(232,204,128,.4)); }
+.pw-gate-title {
+  font-family:'Shippori Mincho',serif;
+  font-size:28px;
+  color:var(--md-sys-color-primary);
+  margin-bottom:8px;
+}
+.pw-gate-sub { font-size:14px; color:var(--md-sys-color-on-surface-variant); margin-bottom:32px; line-height:1.6; }
+.pw-gate input { margin-bottom:24px; text-align:center; letter-spacing:.2em; }
+.pw-gate-btn {
+  width:100%;padding:16px;
+  background: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+  border:none;border-radius:100px;
+  font-family:'Shippori Mincho',serif;font-size:18px;font-weight:700;
+  cursor:pointer;transition:all .2s;
+}
+.pw-gate-btn:hover { box-shadow: 0 2px 6px 2px rgba(0,0,0,0.15); background: linear-gradient(rgba(255,255,255,0.08), rgba(255,255,255,0.08)), var(--md-sys-color-primary); }
+.pw-gate-error { font-size:13px; color:var(--md-sys-color-error); margin-top:16px; min-height:20px; }
+.pw-gate-free { font-size:12px; color:var(--md-sys-color-outline); margin-top:24px; }
 
 /* フッター */
-footer{text-align:center;margin-top:64px;padding-top:32px;border-top:1px solid var(--border);font-size:10px;color:var(--text3);letter-spacing:.15em;line-height:2;}
+footer { text-align:center; margin-top:56px; font-size:13px; color:var(--md-sys-color-outline); }
 
-@media(max-width:480px){.wrap{padding:28px 16px 80px;}.card{padding:24px 18px;}.pw-gate-box{padding:36px 24px;}}
+@media(max-width:480px){
+  .wrap{padding:24px 16px 60px;}
+  .card{padding:24px 20px;}
+  .modal{padding:24px 20px;}
+}
 </style>
 </head>
 <body>
 
+<div class="stars" id="stars"></div>
+
 <!-- PWゲート -->
 <div class="pw-gate" id="pw-gate">
   <div class="pw-gate-box">
-    <span class="pw-gate-mark">卜</span>
-    <div class="pw-gate-title">占いみっけ</div>
+    <span class="pw-gate-icon">🔮</span>
+    <div class="pw-gate-title">占いみっけ Pro</div>
     <p class="pw-gate-sub">2026年4月よりPro版に移行しました。<br>パスワードを入力してご利用ください。</p>
     <input type="password" id="gate-pw" placeholder="パスワード" onkeydown="if(event.key==='Enter')checkGate()">
     <button class="pw-gate-btn" onclick="checkGate()">入室する</button>
     <div class="pw-gate-error" id="gate-error"></div>
-    <div class="pw-gate-free">ご購入・お問い合わせは SPC まで</div>
+    <div class="pw-gate-free">ご購入・お問い合わせはSPCまで</div>
   </div>
 </div>
 
@@ -150,7 +553,7 @@ footer{text-align:center;margin-top:64px;padding-top:32px;border-top:1px solid v
 <div class="modal-overlay" id="howto-modal">
   <div class="modal">
     <button class="modal-close" onclick="closeModal('howto-modal')">✕</button>
-    <div class="modal-title">使い方ガイド</div>
+    <div class="modal-title">🔮 使い方ガイド</div>
     <div class="howto-section">
       <h3>このツールについて</h3>
       <ul>
@@ -206,9 +609,9 @@ footer{text-align:center;margin-top:64px;padding-top:32px;border-top:1px solid v
 <div class="modal-overlay" id="settings-modal">
   <div class="modal">
     <button class="modal-close" onclick="closeModal('settings-modal')">✕</button>
-    <div class="modal-title">設定</div>
+    <div class="modal-title">⚙ 設定</div>
     <div class="setting-row">
-      <span>ダークモード</span>
+      <span>🌙 ダークモード</span>
       <label class="toggle">
         <input type="checkbox" id="dark-toggle" checked onchange="toggleTheme(this)">
         <div class="toggle-track"></div>
@@ -216,11 +619,11 @@ footer{text-align:center;margin-top:64px;padding-top:32px;border-top:1px solid v
       </label>
     </div>
     <div class="setting-row">
-      <span>デモデータを入れる</span>
+      <span>📋 デモデータを入れる</span>
       <button class="setting-action-btn" onclick="loadDemo();closeModal('settings-modal')">入れる</button>
     </div>
     <div class="setting-row">
-      <span>入力内容をクリア</span>
+      <span>🗑 入力内容をクリア</span>
       <button class="setting-action-btn" onclick="clearAll();closeModal('settings-modal')">クリア</button>
     </div>
   </div>
@@ -231,78 +634,85 @@ footer{text-align:center;margin-top:64px;padding-top:32px;border-top:1px solid v
 
   <div class="toolbar">
     <button class="tool-btn" onclick="openModal('howto-modal')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>使い方
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+      使い方
     </button>
     <button class="tool-btn" onclick="openModal('settings-modal')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>設定
+      <svg viewBox="0 0 24 24"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.06-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.73,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.06,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.43-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.49-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/></svg>
+      設定
     </button>
   </div>
 
   <header>
-    <div class="header-kana">uranai mikke</div>
-    <h1 onclick="location.reload()">占い<span>みっけ</span></h1>
-    <div class="header-line"></div>
+    <span class="logo-mark">🔮</span>
+    <h1 onclick="location.reload()" style="cursor:pointer;">占いみっけ</h1>
+    <div class="divider"></div>
     <p class="tagline">本物の鑑定師さんのための、集客サポートツール</p>
   </header>
 
   <div class="card">
-    <div class="section-label">あなたのことを教えてください</div>
-    <div class="field">
+    <div class="card-title">✦ あなたのことを教えてください</div>
+
+    <div class="field-group">
       <label>お名前・ハンドルネーム</label>
       <input type="text" id="name" placeholder="例）月詠 さくら" maxlength="30">
     </div>
-    <div class="field">
-      <label>得意な占術（複数選択OK）</label>
+
+    <div class="field-group">
+      <label>得意な占術（複数OK）</label>
       <div class="chips" id="chips">
-        <button class="chip" data-v="タロット">タロット</button>
-        <button class="chip" data-v="星座占い">星座占い</button>
-        <button class="chip" data-v="数秘術">数秘術</button>
-        <button class="chip" data-v="四柱推命">四柱推命</button>
-        <button class="chip" data-v="西洋占星術">西洋占星術</button>
-        <button class="chip" data-v="霊感・霊視">霊感・霊視</button>
-        <button class="chip" data-v="ルーン">ルーン</button>
-        <button class="chip" data-v="オラクルカード">オラクルカード</button>
+        <button class="chip" data-v="タロット">🃏 タロット</button>
+        <button class="chip" data-v="星座占い">⭐ 星座占い</button>
+        <button class="chip" data-v="数秘術">🔢 数秘術</button>
+        <button class="chip" data-v="四柱推命">🀄 四柱推命</button>
+        <button class="chip" data-v="西洋占星術">🌙 西洋占星術</button>
+        <button class="chip" data-v="霊感・霊視">🕯 霊感・霊視</button>
+        <button class="chip" data-v="ルーン">🪨 ルーン</button>
+        <button class="chip" data-v="オラクルカード">🌸 オラクルカード</button>
       </div>
     </div>
-    <div class="field">
+
+    <div class="field-group">
       <label>今月のテーマ・メッセージ（任意）</label>
       <select id="theme-select" class="preset-select" onchange="applyPreset('theme-select','theme')">
-        <option value="">例文から選ぶ</option>
-        <option value="流れが変わる月。新しい出会いや気づきが訪れます。直感を信じて動いてみてください。">流れが変わる月（出会い・気づき）</option>
-        <option value="立ち止まって内省する月。自分の本音をじっくり見つめ直す時間を大切に。">内省の月（自分を見つめ直す）</option>
-        <option value="行動の月。迷いを手放し、一歩踏み出す勇気が湧いてくる時期です。">行動の月（踏み出す・前進）</option>
+        <option value="">▼ 例文から選ぶ（選ぶと下に反映されます）</option>
+        <option value="流れが変わる月。新しい出会いや気づきが訪れます。直感を信じて動いてみてください。">🌊 流れが変わる月（出会い・気づき）</option>
+        <option value="立ち止まって内省する月。自分の本音をじっくり見つめ直す時間を大切に。">🌿 内省の月（自分を見つめ直す）</option>
+        <option value="行動の月。迷いを手放し、一歩踏み出す勇気が湧いてくる時期です。">✊ 行動の月（踏み出す・前進）</option>
       </select>
-      <textarea id="theme" placeholder="そのまま使っても、自由に書き換えてもOKです"></textarea>
+      <textarea id="theme" placeholder="そのまま使ってもOK、自由に書き換えてもOKです"></textarea>
     </div>
-    <div class="field">
+
+    <div class="field-group">
       <label>ひとこと自己紹介（任意）</label>
       <select id="bio-select" class="preset-select" onchange="applyPreset('bio-select','bio')">
-        <option value="">例文から選ぶ</option>
-        <option value="鑑定歴〇年。恋愛・転職・人間関係が得意です。">経歴タイプ</option>
-        <option value="穏やかに、丁寧に。あなたの本音に寄り添う鑑定を心がけています。">スタイルタイプ</option>
-        <option value="オンライン鑑定・メール鑑定承ります。初めての方もお気軽にどうぞ。">案内タイプ</option>
+        <option value="">▼ 例文から選ぶ（選ぶと下に反映されます）</option>
+        <option value="鑑定歴〇年。恋愛・転職・人間関係が得意です。">💼 経歴タイプ（得意ジャンルをアピール）</option>
+        <option value="穏やかに、丁寧に。あなたの本音に寄り添う鑑定を心がけています。">🌸 スタイルタイプ（寄り添い・丁寧さ）</option>
+        <option value="オンライン鑑定・メール鑑定承ります。初めての方もお気軽にどうぞ。">📩 案内タイプ（受付方法・初心者歓迎）</option>
       </select>
-      <input type="text" id="bio" placeholder="そのまま使っても、自由に書き換えてください">
+      <input type="text" id="bio" placeholder="そのまま使ってもOK、〇年の部分など自由に書き換えてください">
     </div>
-    <div class="field">
+
+    <div class="field-group" style="margin-top:32px;">
       <label>投稿の雰囲気</label>
       <div class="chips" id="tone-chips">
-        <button class="chip active" data-tone="やさしく">やさしく</button>
-        <button class="chip" data-tone="神秘的に">神秘的に</button>
-        <button class="chip" data-tone="背中を押す">背中を押す</button>
-        <button class="chip" data-tone="落ち着いて">落ち着いて</button>
+        <button class="chip active" data-tone="やさしく">🌷 やさしく</button>
+        <button class="chip" data-tone="神秘的に">🌌 神秘的に</button>
+        <button class="chip" data-tone="背中を押す">✊ 背中を押す</button>
+        <button class="chip" data-tone="落ち着いて">🍃 落ち着いて</button>
       </div>
     </div>
   </div>
 
   <button class="btn-generate" id="btn-template" onclick="generate()">投稿文を生成する</button>
 
-  <div id="results" class="card" style="margin-top:16px;">
-    <div class="section-label">生成された投稿文</div>
+  <div id="results" class="card" style="margin-top:24px;">
+    <div class="card-title">✦ 生成された投稿文</div>
     <div class="result-tab-bar">
-      <button class="result-tab active" onclick="switchTab('x',this)">X</button>
-      <button class="result-tab" onclick="switchTab('insta',this)">Instagram</button>
-      <button class="result-tab" onclick="switchTab('line',this)">LINE配信</button>
+      <button class="result-tab active" onclick="switchTab('x',this)">𝕏 X用</button>
+      <button class="result-tab" onclick="switchTab('insta',this)">📸 Instagram</button>
+      <button class="result-tab" onclick="switchTab('line',this)">💬 LINE配信</button>
     </div>
     <div id="panel-x" class="result-panel active">
       <div class="result-text" id="text-x"></div>
@@ -318,33 +728,48 @@ footer{text-align:center;margin-top:64px;padding-top:32px;border-top:1px solid v
     </div>
   </div>
 
-  <div class="card" id="ai-card" style="margin-top:16px;display:none;">
-    <div class="section-label">AI投稿文生成 <span class="pro-badge">PRO</span></div>
-    <p style="font-size:12px;color:var(--text2);margin-bottom:20px;line-height:1.9;letter-spacing:.04em;">入力内容をもとに、AIがあなたらしい投稿文を自動生成します。</p>
+  <!-- AI生成エリア（Pro版） -->
+  <div class="card" id="ai-card" style="margin-top:24px;display:none;">
+    <div class="card-title">✦ AI投稿文生成<span class="pro-badge">PRO</span></div>
+    <p style="font-size:14px;color:var(--md-sys-color-on-surface-variant);margin-bottom:24px;line-height:1.6;">上の入力内容をもとに、AIがあなたらしい投稿文を自動生成します。</p>
     <div class="platform-btns" id="platform-btns">
       <button class="platform-btn active" data-platform="x" onclick="selectPlatform(this)">
         <span class="p-icon">𝕏</span>X
       </button>
       <button class="platform-btn" data-platform="instagram" onclick="selectPlatform(this)">
-        <span class="p-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></span>Instagram
+        <span class="p-icon">📸</span>Instagram
       </button>
       <button class="platform-btn" data-platform="line" onclick="selectPlatform(this)">
-        <span class="p-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 11.5C21 16.75 16.75 21 11.5 21c-1.34 0-2.62-.28-3.77-.79L3 21l.79-4.73A9.43 9.43 0 0 1 2 11.5C2 6.25 6.25 2 11.5 2S21 6.25 21 11.5z"/></svg></span>LINE
+        <span class="p-icon">💬</span>LINE
       </button>
     </div>
     <button class="btn-generate" onclick="generateAI()">AIで投稿文を生成する</button>
-    <div class="ai-loading" id="ai-loading">生成中...</div>
-    <div class="result-text" id="ai-result" style="display:none;margin-top:12px;"></div>
-    <button class="btn-copy" id="ai-copy" onclick="copyText('ai-result',this)" style="display:none;margin-top:10px;">コピーする</button>
+    <div class="ai-loading" id="ai-loading">🔮 AIが考えています...</div>
+    <div class="result-text" id="ai-result" style="display:none;margin-top:16px;"></div>
+    <button class="btn-copy" id="ai-copy" onclick="copyText('ai-result',this)" style="display:none;margin-top:16px;">コピーする</button>
   </div>
 
-  <footer>占いみっけ &nbsp;|&nbsp; SPC<br>「考えるを、ひとりにしない」</footer>
+  <footer>
+    占いみっけ｜SPC<br>「考えるを、ひとりにしない」
+  </footer>
+
 </div>
 
 <script>
 var UNLOCK_DATE  = new Date('2026-04-01T00:00:00+09:00');
 var WORKERS_URL  = 'https://uranai-mikke.yymmatsu.workers.dev';
 var PRO_PASSWORD = 'uranai2025';
+
+(function(){
+  var s = document.getElementById('stars');
+  for(var i=0;i<80;i++){
+    var el = document.createElement('div');
+    el.className = 'star';
+    var size = Math.random()*2.5+0.5;
+    el.style.cssText = 'width:'+size+'px;height:'+size+'px;top:'+Math.random()*100+'%;left:'+Math.random()*100+'%;--d:'+(Math.random()*3+2)+'s;animation-delay:'+(Math.random()*4)+'s;';
+    s.appendChild(el);
+  }
+})();
 
 (function(){
   if(new Date() >= UNLOCK_DATE){
@@ -386,25 +811,7 @@ function closeModal(id){ document.getElementById(id).classList.remove('open'); }
 document.querySelectorAll('.modal-overlay').forEach(function(o){
   o.addEventListener('click',function(e){ if(e.target===o) o.classList.remove('open'); });
 });
-function toggleTheme(chk){
-  if(!chk.checked){
-    document.body.style.setProperty('--bg','#f5f0ea');
-    document.body.style.setProperty('--bg2','#ffffff');
-    document.body.style.setProperty('--bg3','#f0ece6');
-    document.body.style.setProperty('--text','#1a1510');
-    document.body.style.setProperty('--text2','#6a6058');
-    document.body.style.setProperty('--text3','#aaa098');
-    document.body.style.setProperty('--border','rgba(26,21,16,0.12)');
-  } else {
-    document.body.style.setProperty('--bg','#0c0c0c');
-    document.body.style.setProperty('--bg2','#161616');
-    document.body.style.setProperty('--bg3','#1e1e1e');
-    document.body.style.setProperty('--text','#e8e0d4');
-    document.body.style.setProperty('--text2','#9a9088');
-    document.body.style.setProperty('--text3','#5a5450');
-    document.body.style.setProperty('--border','rgba(232,224,212,0.1)');
-  }
-}
+function toggleTheme(chk){ document.body.classList.toggle('light',!chk.checked); }
 document.getElementById('chips').addEventListener('click',function(e){
   var c=e.target.closest('.chip'); if(c) c.classList.toggle('active');
 });
@@ -488,11 +895,19 @@ function switchTab(key,btn){
 }
 function copyText(id,btn){
   var el=document.getElementById(id); if(!el) return;
-  navigator.clipboard.writeText(el.textContent).then(function(){
-    btn.textContent='コピーしました';
+  var textarea = document.createElement("textarea");
+  textarea.value = el.textContent;
+  document.body.appendChild(textarea);
+  textarea.select();
+  try {
+    document.execCommand('copy');
+    btn.textContent='コピーしました！';
     btn.classList.add('copied');
     setTimeout(function(){ btn.textContent='コピーする'; btn.classList.remove('copied'); },2000);
-  });
+  } catch (err) {
+    console.error('コピーに失敗しました', err);
+  }
+  document.body.removeChild(textarea);
 }
 function selectPlatform(btn){
   document.querySelectorAll('#platform-btns .platform-btn').forEach(function(b){ b.classList.remove('active'); });
@@ -500,7 +915,16 @@ function selectPlatform(btn){
 }
 function generateAI(){
   var pw=sessionStorage.getItem('pro_pw');
-  if(!pw){ alert('パスワード認証が必要です。ページを再読み込みしてください。'); return; }
+  var result=document.getElementById('ai-result');
+  var loading=document.getElementById('ai-loading');
+  var copyBtn=document.getElementById('ai-copy');
+  
+  if(!pw){ 
+    result.textContent = 'パスワード認証が必要です。ページを再読み込みしてください。';
+    result.style.display = 'block';
+    return; 
+  }
+  
   var name=document.getElementById('name').value.trim();
   var theme=document.getElementById('theme').value.trim();
   var bio=document.getElementById('bio').value.trim();
@@ -508,12 +932,11 @@ function generateAI(){
   var tones=getSelected('tone-chips');
   var activeBtn=document.querySelector('#platform-btns .platform-btn.active');
   var platform=activeBtn?activeBtn.dataset.platform:'x';
-  var loading=document.getElementById('ai-loading');
-  var result=document.getElementById('ai-result');
-  var copyBtn=document.getElementById('ai-copy');
+  
   loading.classList.add('show');
   result.style.display='none';
   copyBtn.style.display='none';
+  
   fetch(WORKERS_URL+'/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:pw,name:name||'私',skills:skills,theme:theme,bio:bio,tone:tones[0]||'やさしく',platform:platform})})
   .then(function(r){ return r.json(); })
   .then(function(d){
