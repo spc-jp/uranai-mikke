@@ -6,529 +6,501 @@
 <title>占いみっけ｜鑑定師さんの集客サポートツール</title>
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;800&family=Zen+Kaku+Gothic+New:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
-/* Material Design 3 (M3) Color Tokens 
-  ※元の紫・金の世界観をM3のカラースキーマにマッピング
-*/
+/* ==========================================
+   Claymorphism (クレイモーフィズム) Tokens
+========================================== */
 :root {
   /* ダークテーマ (デフォルト) */
-  --md-sys-color-primary: #E8CC80; /* Gold */
-  --md-sys-color-on-primary: #412D00;
-  --md-sys-color-primary-container: #5D4200;
-  --md-sys-color-on-primary-container: #FFDEA5;
-  --md-sys-color-secondary-container: #4A4458; /* Muted Purple */
-  --md-sys-color-on-secondary-container: #E8DEF8;
-  --md-sys-color-background: #141218;
-  --md-sys-color-on-background: #E6E0E9;
-  --md-sys-color-surface: #141218;
-  --md-sys-color-on-surface: #E6E0E9;
-  --md-sys-color-surface-variant: #49454F;
-  --md-sys-color-on-surface-variant: #CAC4D0;
-  --md-sys-color-outline: #938F99;
-  --md-sys-color-outline-variant: #49454F;
-  --md-sys-color-surface-container: #211F26;
-  --md-sys-color-surface-container-high: #2B2930;
-  --md-sys-color-surface-container-highest: #36343B;
-  --md-sys-color-error: #FFB4AB;
+  --bg: #2a2830;             /* 背景色（少し暖かみのあるダークグレー） */
+  --text: #eaeaec;           /* メインテキスト */
+  --text-muted: #9c9a9f;     /* サブテキスト */
+  --primary: #e8cc80;        /* アクセントカラー（ゴールド） */
+  --primary-on: #412d00;     /* プライマリー上のテキスト */
+  --primary-shadow: rgba(232, 204, 128, 0.4);
+  
+  /* クレイモーフィズム用の影（ダーク） */
+  --s-dark: #1b1a1f;         /* 外側の暗い影 */
+  --s-light: #393641;        /* 外側の明るいハイライト */
+  --si-dark: rgba(27, 26, 31, 0.8);  /* 内側の暗い影 */
+  --si-light: rgba(57, 54, 65, 0.8); /* 内側の明るいハイライト */
+
+  --error: #ffb4ab;
+
+  /* 丸みの設定 */
+  --rad-l: 28px;
+  --rad-m: 16px;
+  --rad-s: 12px;
 }
 
 body.light {
   /* ライトテーマ */
-  --md-sys-color-primary: #7A5510;
-  --md-sys-color-on-primary: #FFFFFF;
-  --md-sys-color-primary-container: #FFDEA5;
-  --md-sys-color-on-primary-container: #261900;
-  --md-sys-color-secondary-container: #E8DEF8;
-  --md-sys-color-on-secondary-container: #1D192B;
-  --md-sys-color-background: #FEF7FF;
-  --md-sys-color-on-background: #1D1B20;
-  --md-sys-color-surface: #FEF7FF;
-  --md-sys-color-on-surface: #1D1B20;
-  --md-sys-color-surface-variant: #E7E0EC;
-  --md-sys-color-on-surface-variant: #49454F;
-  --md-sys-color-outline: #79747E;
-  --md-sys-color-outline-variant: #CAC4D0;
-  --md-sys-color-surface-container: #F3EDF7;
-  --md-sys-color-surface-container-high: #ECE6F0;
-  --md-sys-color-surface-container-highest: #E6E0E9;
-  --md-sys-color-error: #BA1A1A;
+  --bg: #f2efe9;             /* 背景色（少しウォームなオフホワイト） */
+  --text: #413d36;
+  --text-muted: #827e77;
+  --primary: #b8903c;        /* アクセントカラー（少し落ち着いたゴールド） */
+  --primary-on: #ffffff;
+  --primary-shadow: rgba(184, 144, 60, 0.4);
+
+  /* クレイモーフィズム用の影（ライト） */
+  --s-dark: #d0cdc6;
+  --s-light: #ffffff;
+  --si-dark: rgba(208, 205, 198, 0.6);
+  --si-light: rgba(255, 255, 255, 0.8);
+  
+  --error: #ba1a1a;
 }
 
 *{margin:0;padding:0;box-sizing:border-box;}
 body {
-  background: var(--md-sys-color-background);
-  color: var(--md-sys-color-on-background);
+  background: var(--bg);
+  color: var(--text);
   font-family: 'Zen Kaku Gothic New', sans-serif;
   min-height: 100vh;
   overflow-x: hidden;
   line-height: 1.5;
+  transition: background-color 0.3s, color 0.3s;
 }
 
-/* 幻想的な背景グラデーション (M3 Backgroundに馴染ませる) */
+/* 幻想的な背景グラデーション（少し控えめに） */
 body::before {
-  content:'';
-  position:fixed;
-  inset:0;
-  background: radial-gradient(ellipse at 20% 20%, rgba(208,188,255,0.06) 0%, transparent 50%),
-              radial-gradient(ellipse at 80% 80%, rgba(232,204,128,0.04) 0%, transparent 50%);
-  pointer-events:none;
-  z-index:0;
+  content:''; position:fixed; inset:0;
+  background: radial-gradient(ellipse at 20% 20%, rgba(208,188,255,0.04) 0%, transparent 50%),
+              radial-gradient(ellipse at 80% 80%, rgba(232,204,128,0.03) 0%, transparent 50%);
+  pointer-events:none; z-index:0;
 }
 body.light::before {
-  background: radial-gradient(ellipse at 20% 20%, rgba(103,80,164,0.05) 0%, transparent 50%);
+  background: radial-gradient(ellipse at 20% 20%, rgba(103,80,164,0.03) 0%, transparent 50%);
 }
 body.light .stars { display: none; }
 
-/* 星のアニメーション（そのまま維持） */
+/* 星のアニメーション */
 .stars{position:fixed;inset:0;z-index:0;pointer-events:none;}
 .star{position:absolute;background:white;border-radius:50%;animation:twinkle var(--d,3s) ease-in-out infinite alternate;}
-@keyframes twinkle{from{opacity:.1}to{opacity:.9}}
+@keyframes twinkle{from{opacity:.1}to{opacity:.8}}
 
-/* 共通アニメーション（そのまま維持） */
+/* アニメーション */
 @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
 
 /* レイアウト */
 .wrap{position:relative;z-index:1;max-width:680px;margin:0 auto;padding:32px 20px 80px;}
 .main-content{transition:filter .3s;}
-.main-content.locked{filter:blur(6px);pointer-events:none;user-select:none;}
+.main-content.locked{filter:blur(8px);pointer-events:none;user-select:none;}
 
-/* M3: ツールバー (Text Buttons) */
-.toolbar{display:flex;justify-content:flex-end;gap:8px;margin-bottom:24px;}
+/* ツールバー */
+.toolbar{display:flex;justify-content:flex-end;gap:12px;margin-bottom:24px;}
 .tool-btn {
   display:flex;align-items:center;gap:8px;
-  padding:8px 16px;
+  padding:10px 20px;
   border-radius:100px;
   border:none;
-  background:transparent;
-  color:var(--md-sys-color-primary);
+  background: var(--bg);
+  color:var(--text);
   font-family:'Zen Kaku Gothic New',sans-serif;
   font-size:14px;
-  font-weight:500;
+  font-weight:600;
   cursor:pointer;
-  transition:background-color .2s;
+  transition:all .2s;
+  /* 出っ張りクレイ */
+  box-shadow: 4px 4px 8px var(--s-dark), -4px -4px 8px var(--s-light);
 }
-.tool-btn:hover { background: rgba(232,204,128,0.08); }
-.body.light .tool-btn:hover { background: rgba(122,85,16,0.08); }
+.tool-btn:active {
+  /* 押すと凹む */
+  box-shadow: inset 2px 2px 4px var(--si-dark), inset -2px -2px 4px var(--si-light);
+  color: var(--primary);
+}
 .tool-btn svg { width:18px;height:18px;fill:currentColor; }
 
 /* ヘッダー */
-header{text-align:center;margin-bottom:40px;}
+header{text-align:center;margin-bottom:48px;}
 .logo-mark {
-  font-size:48px;
-  margin-bottom:16px;
-  display:block;
-  filter:drop-shadow(0 0 16px rgba(232,204,128,.4));
-  animation:float 4s ease-in-out infinite; /* 動きを維持 */
+  font-size:48px; margin-bottom:16px; display:block;
+  filter:drop-shadow(0 4px 8px var(--primary-shadow));
+  animation:float 4s ease-in-out infinite;
 }
 h1 {
   font-family:'Shippori Mincho',serif;
   font-size:clamp(32px, 6vw, 44px);
   font-weight:800;
   letter-spacing:.08em;
-  color: var(--md-sys-color-primary);
+  color: var(--primary);
   line-height:1.2;
   margin-bottom:12px;
+  /* 文字が少し浮いているように見せるドロップシャドウ */
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
 }
+body.light h1 { text-shadow: 2px 2px 4px rgba(255,255,255,0.8); }
 .tagline {
-  font-size:14px;
-  color:var(--md-sys-color-on-surface-variant);
-  letter-spacing:.1em;
-  font-weight:400;
+  font-size:14px; color:var(--text-muted); letter-spacing:.1em; font-weight:500;
 }
 .divider {
-  width:64px;height:2px;
-  background:var(--md-sys-color-primary);
-  border-radius:2px;
+  width:8px;height:8px; border-radius:50%;
+  background:var(--primary);
   margin:24px auto;
-  opacity: 0.5;
+  box-shadow: 16px 0 0 var(--primary), -16px 0 0 var(--primary);
+  opacity: 0.7;
 }
 
-/* M3: Cards (Filled Card) */
+/* ==========================================
+   クレイモーフィズム カード (出っ張り)
+========================================== */
 .card {
-  background: var(--md-sys-color-surface-container);
-  border-radius: 16px; /* M3規格の角丸 */
-  padding: 32px 24px;
-  margin-bottom: 24px;
+  background: var(--bg);
+  border-radius: var(--rad-l);
+  padding: 36px 28px;
+  margin-bottom: 32px;
   animation: fadeUp .6s ease both;
+  box-shadow: 
+    12px 12px 24px var(--s-dark), 
+    -12px -12px 24px var(--s-light),
+    inset 1px 1px 2px var(--si-light),
+    inset -1px -1px 2px var(--si-dark);
 }
 .card-title {
   font-family:'Shippori Mincho',serif;
   font-size:20px;
-  color:var(--md-sys-color-primary);
-  margin-bottom:24px;
+  color:var(--primary);
+  margin-bottom:28px;
+  font-weight: 800;
   display:flex;align-items:center;gap:12px;
 }
 .card-title::after {
-  content:'';flex:1;height:1px;
-  background:var(--md-sys-color-outline-variant);
+  content:'';flex:1;height:2px;
+  border-radius:2px;
+  background:var(--bg);
+  box-shadow: inset 1px 1px 2px var(--si-dark), inset -1px -1px 2px var(--si-light);
 }
 
-/* M3: Forms (Outlined Text Fields) */
-.field-group { margin-bottom: 24px; }
+/* ==========================================
+   フォーム (凹み)
+========================================== */
+.field-group { margin-bottom: 28px; }
 .field-group:last-child { margin-bottom: 0; }
 label {
-  display:block;
-  font-size:13px;
-  color:var(--md-sys-color-on-surface);
-  margin-bottom:8px;
-  font-weight:500;
+  display:block; font-size:14px; color:var(--text);
+  margin-bottom:12px; font-weight:600; padding-left:4px;
 }
+
 input[type="text"], input[type="password"], textarea, select {
   width:100%;
-  background:var(--md-sys-color-surface);
-  border:1px solid var(--md-sys-color-outline);
-  border-radius:4px; /* M3テキストフィールドの角丸 */
-  padding:16px;
-  color:var(--md-sys-color-on-surface);
+  background:var(--bg);
+  border:none; /* 枠線をなくす */
+  border-radius:var(--rad-m);
+  padding:16px 20px;
+  color:var(--text);
   font-family:'Zen Kaku Gothic New',sans-serif;
-  font-size:16px; /* モバイルでのズーム防止＆M3基準 */
+  font-size:16px;
   outline:none;
   transition:all .2s;
   -webkit-appearance:none;
+  /* 凹みクレイ */
+  box-shadow: 
+    inset 4px 4px 8px var(--si-dark), 
+    inset -4px -4px 8px var(--si-light);
 }
 input:focus, textarea:focus, select:focus {
-  border-color:var(--md-sys-color-primary);
-  border-width:2px;
-  padding:15px; /* ボーダーが太くなる分パディングを減らす */
+  /* フォーカス時は少し光らせる */
+  box-shadow: 
+    inset 4px 4px 8px var(--si-dark), 
+    inset -4px -4px 8px var(--si-light),
+    0 0 0 2px var(--primary-shadow);
 }
-textarea { resize:vertical; min-height:96px; line-height:1.6; }
+textarea { resize:vertical; min-height:100px; line-height:1.6; }
 select {
   cursor:pointer;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23938F99' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;background-position:right 16px center;padding-right:40px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239c9a9f' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 20px center;padding-right:48px;
 }
 body.light select {
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2379747E' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23827e77' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
 }
-select option { background: var(--md-sys-color-surface-container-high); }
-.preset-select { font-size:14px; margin-bottom:12px; }
+select option { background: var(--bg); color:var(--text); }
+.preset-select { font-size:14px; margin-bottom:16px; }
 
-/* M3: Filter Chips */
-.chips { display:flex;flex-wrap:wrap;gap:8px;margin-top:4px;}
+/* ==========================================
+   チップ (出っ張り → アクティブで凹み)
+========================================== */
+.chips { display:flex;flex-wrap:wrap;gap:12px;}
 .chip {
-  padding:8px 16px;
-  border-radius:8px; /* M3規格 */
-  border:1px solid var(--md-sys-color-outline);
-  font-size:14px;
+  padding:10px 18px;
+  border-radius:var(--rad-s);
+  border:none;
+  font-size:14px; font-weight:600;
   cursor:pointer;
-  color:var(--md-sys-color-on-surface-variant);
-  background:transparent;
+  color:var(--text-muted);
+  background:var(--bg);
   font-family:'Zen Kaku Gothic New',sans-serif;
   transition:all .2s;
-  display:flex;align-items:center;gap:6px;
+  /* 出っ張りクレイ */
+  box-shadow: 
+    4px 4px 8px var(--s-dark), 
+    -4px -4px 8px var(--s-light),
+    inset 1px 1px 2px var(--si-light),
+    inset -1px -1px 2px var(--si-dark);
 }
-.chip:hover {
-  background: rgba(232,204,128,0.08); /* state layer */
-  color: var(--md-sys-color-on-surface);
-}
-body.light .chip:hover { background: rgba(122,85,16,0.08); }
+.chip:hover { transform: translateY(-1px); }
+.chip:active { transform: translateY(1px); }
 .chip.active {
-  background: var(--md-sys-color-secondary-container);
-  border-color: transparent;
-  color: var(--md-sys-color-on-secondary-container);
+  /* アクティブで凹む */
+  box-shadow: 
+    inset 3px 3px 6px var(--si-dark), 
+    inset -3px -3px 6px var(--si-light);
+  color: var(--primary);
+  transform: translateY(1px);
 }
 
-/* M3: Filled Button (生成ボタン) */
+/* ==========================================
+   生成ボタン (プライマリー・出っ張り)
+========================================== */
 .btn-generate {
   width:100%;
-  padding:16px 24px;
-  background: var(--md-sys-color-primary);
-  color: var(--md-sys-color-on-primary);
+  padding:18px 24px;
+  background: var(--primary);
+  color: var(--primary-on);
   border:none;
-  border-radius:100px; /* フルラウンド */
+  border-radius:100px;
   font-family:'Shippori Mincho',serif;
-  font-size:18px;
-  font-weight:600;
+  font-size:20px;
+  font-weight:800;
   letter-spacing:.08em;
   cursor:pointer;
   transition:all .2s;
-  box-shadow: 0 1px 3px 1px rgba(0,0,0,0.15), 0 1px 2px 0 rgba(0,0,0,0.3); /* Elevation 1 */
-  margin-top:8px;
-  position: relative;
-  overflow: hidden;
+  /* プライマリー色の出っ張りクレイ */
+  box-shadow: 
+    8px 8px 16px var(--s-dark), 
+    -8px -8px 16px var(--s-light),
+    inset 2px 2px 6px rgba(255,255,255,0.4),
+    inset -2px -2px 6px rgba(0,0,0,0.15);
 }
-.btn-generate::after {
-  content: ''; position: absolute; inset: 0; background: currentColor; opacity: 0; transition: opacity .2s;
+body.light .btn-generate {
+  box-shadow: 
+    8px 8px 16px var(--s-dark), 
+    -8px -8px 16px var(--s-light),
+    inset 2px 2px 6px rgba(255,255,255,0.6),
+    inset -2px -2px 6px rgba(0,0,0,0.1);
 }
-.btn-generate:hover {
-  box-shadow: 0 2px 6px 2px rgba(0,0,0,0.15), 0 1px 2px 0 rgba(0,0,0,0.3); /* Elevation 2 */
+.btn-generate:active {
+  /* 押すと凹む */
+  box-shadow: 
+    inset 4px 4px 8px rgba(0,0,0,0.2), 
+    inset -4px -4px 8px rgba(255,255,255,0.3);
+  transform: translateY(2px);
 }
-.btn-generate:hover::after { opacity: 0.08; /* hover state layer */ }
-.btn-generate:active::after { opacity: 0.12; /* pressed state layer */ }
 
-/* 結果エリア (Tabs) */
+/* 結果エリア */
 #results { display:none; }
 #results.show { display:block; }
 .result-tab-bar {
-  display:flex;
-  border-bottom: 1px solid var(--md-sys-color-outline-variant);
-  margin-bottom:24px;
+  display:flex; gap:12px; margin-bottom:24px;
 }
 .result-tab {
   flex:1;
-  padding:12px;
+  padding:14px;
   border:none;
-  background:transparent;
-  color:var(--md-sys-color-on-surface-variant);
+  border-radius:var(--rad-m);
+  background:var(--bg);
+  color:var(--text-muted);
   font-family:'Zen Kaku Gothic New',sans-serif;
-  font-size:14px;
-  font-weight:500;
-  cursor:pointer;
-  transition:all .2s;
-  border-bottom: 3px solid transparent;
+  font-size:15px; font-weight:700;
+  cursor:pointer; transition:all .2s;
+  /* 出っ張りクレイ */
+  box-shadow: 4px 4px 8px var(--s-dark), -4px -4px 8px var(--s-light);
 }
-.result-tab:hover {
-  background: rgba(232,204,128,0.08);
-  color: var(--md-sys-color-on-surface);
-}
-body.light .result-tab:hover { background: rgba(122,85,16,0.08); }
 .result-tab.active {
-  color: var(--md-sys-color-primary);
-  border-bottom-color: var(--md-sys-color-primary);
+  /* 凹みクレイ */
+  box-shadow: inset 4px 4px 8px var(--si-dark), inset -4px -4px 8px var(--si-light);
+  color: var(--primary);
 }
 .result-panel { display:none; }
-.result-panel.active { display:block; }
+.result-panel.active { display:block; animation: fadeUp .3s ease; }
+
 .result-text {
-  background: var(--md-sys-color-surface);
-  border: 1px solid var(--md-sys-color-outline-variant);
-  border-radius: 12px;
+  background: var(--bg);
+  border-radius: var(--rad-m);
   padding: 24px;
-  font-size:15px;
-  line-height:1.8;
-  white-space:pre-wrap;
-  color:var(--md-sys-color-on-surface);
-  min-height:160px;
+  font-size:15px; line-height:1.8; white-space:pre-wrap;
+  color:var(--text); min-height:160px;
+  /* 凹みクレイ */
+  box-shadow: inset 4px 4px 8px var(--si-dark), inset -4px -4px 8px var(--si-light);
 }
 
-/* M3: Outlined Button (コピーボタン) */
+/* コピーボタン */
 .btn-copy {
-  margin-top:16px;
-  width:100%;
-  padding:12px 24px;
-  background: transparent;
-  border: 1px solid var(--md-sys-color-outline);
+  margin-top:20px;
+  width:100%; padding:14px 24px;
+  background: var(--bg);
+  border: none;
   border-radius: 100px;
-  color: var(--md-sys-color-primary);
+  color: var(--primary);
   font-family:'Zen Kaku Gothic New',sans-serif;
-  font-size:14px;
-  font-weight:500;
-  cursor:pointer;
-  transition:all .2s;
+  font-size:15px; font-weight:700;
+  cursor:pointer; transition:all .2s;
+  box-shadow: 4px 4px 8px var(--s-dark), -4px -4px 8px var(--s-light);
 }
-.btn-copy:hover {
-  background: rgba(232,204,128,0.08);
-  border-color: var(--md-sys-color-primary);
-}
-body.light .btn-copy:hover { background: rgba(122,85,16,0.08); }
+.btn-copy:active { box-shadow: inset 2px 2px 4px var(--si-dark), inset -2px -2px 4px var(--si-light); }
 .btn-copy.copied {
-  background: var(--md-sys-color-primary);
-  color: var(--md-sys-color-on-primary);
-  border-color: var(--md-sys-color-primary);
+  background: var(--primary);
+  color: var(--primary-on);
+  box-shadow: inset 2px 2px 6px rgba(0,0,0,0.2);
 }
 
 /* AI Pro エリア */
 .pro-badge {
-  display:inline-block;
-  font-size:11px;
-  padding:2px 8px;
-  border-radius:4px;
-  background: var(--md-sys-color-primary-container);
-  color: var(--md-sys-color-on-primary-container);
-  font-weight: 700;
-  margin-left:12px;
-  vertical-align:middle;
+  display:inline-block; font-size:11px; padding:4px 10px; border-radius:100px;
+  background: var(--bg); color: var(--primary); font-weight: 800;
+  margin-left:12px; vertical-align:middle;
+  box-shadow: inset 2px 2px 4px var(--si-dark), inset -2px -2px 4px var(--si-light);
 }
-/* M3: Segmented Buttons風のトグル */
-.platform-btns {
-  display:flex;
-  gap:12px;
-  margin-bottom:24px;
-}
+.platform-btns { display:flex; gap:16px; margin-bottom:28px; }
 .platform-btn {
-  flex:1;
-  padding:16px 8px;
-  border-radius:12px;
-  border:1px solid var(--md-sys-color-outline);
-  background:var(--md-sys-color-surface);
-  color:var(--md-sys-color-on-surface-variant);
-  font-family:'Zen Kaku Gothic New',sans-serif;
-  font-size:14px;
-  font-weight:500;
-  cursor:pointer;
-  display:flex;flex-direction:column;align-items:center;gap:8px;
+  flex:1; padding:20px 8px;
+  border-radius:var(--rad-m); border:none;
+  background:var(--bg); color:var(--text-muted);
+  font-family:'Zen Kaku Gothic New',sans-serif; font-size:14px; font-weight:600;
+  cursor:pointer; display:flex;flex-direction:column;align-items:center;gap:12px;
   transition:all .2s;
+  box-shadow: 6px 6px 12px var(--s-dark), -6px -6px 12px var(--s-light);
 }
-.platform-btn .p-icon { font-size:24px; line-height:1; }
-.platform-btn:hover { background: rgba(232,204,128,0.08); color: var(--md-sys-color-on-surface); }
-body.light .platform-btn:hover { background: rgba(122,85,16,0.08); }
+.platform-btn .p-icon { font-size:28px; line-height:1; }
 .platform-btn.active {
-  border-color: transparent;
-  background: var(--md-sys-color-secondary-container);
-  color: var(--md-sys-color-on-secondary-container);
+  box-shadow: inset 4px 4px 8px var(--si-dark), inset -4px -4px 8px var(--si-light);
+  color: var(--primary);
 }
-.ai-loading { text-align:center; color:var(--md-sys-color-on-surface-variant); font-size:14px; padding:24px 0; display:none; }
+.ai-loading { text-align:center; color:var(--primary); font-size:15px; font-weight:bold; padding:24px 0; display:none; animation: float 2s infinite ease-in-out; }
 .ai-loading.show { display:block; }
 
-/* M3: Dialogs (モーダル) */
+/* モーダル */
 .modal-overlay {
   display:none;position:fixed;inset:0;
-  background:rgba(0,0,0,0.6);
-  backdrop-filter:blur(4px);
+  background:rgba(0,0,0,0.5); backdrop-filter:blur(8px);
   z-index:200;align-items:center;justify-content:center;padding:24px;
 }
 .modal-overlay.open { display:flex; }
 .modal {
-  background: var(--md-sys-color-surface-container-high);
-  border-radius:28px;
-  padding:32px 24px;
-  max-width:440px;width:100%;
-  position:relative;
-  max-height:85vh;overflow-y:auto;
-  box-shadow: 0 4px 8px 3px rgba(0,0,0,0.15), 0 1px 3px 0 rgba(0,0,0,0.3); /* Elevation 3 */
+  background: var(--bg);
+  border-radius: var(--rad-l);
+  padding: 40px 32px;
+  max-width:440px;width:100%; position:relative; max-height:85vh;overflow-y:auto;
+  box-shadow: 20px 20px 40px rgba(0,0,0,0.3), -10px -10px 20px rgba(255,255,255,0.05);
+}
+body.light .modal {
+  box-shadow: 20px 20px 40px rgba(0,0,0,0.1), -10px -10px 20px rgba(255,255,255,0.8);
 }
 .modal-title {
-  font-family:'Shippori Mincho',serif;
-  font-size:24px; /* M3 Headline Small */
-  color:var(--md-sys-color-on-surface);
-  margin-bottom:24px;
+  font-family:'Shippori Mincho',serif; font-size:24px; font-weight:800;
+  color:var(--primary); margin-bottom:32px; text-align:center;
 }
 .modal-close {
-  position:absolute;top:20px;right:20px;
-  width:40px;height:40px;
-  border-radius:50%;
-  background:transparent;
-  border:none;
-  color:var(--md-sys-color-on-surface-variant);
-  font-size:20px;
-  cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
-  transition:background-color .2s;
+  position:absolute;top:24px;right:24px;
+  width:44px;height:44px; border-radius:50%; border:none;
+  background:var(--bg); color:var(--text-muted); font-size:20px; font-weight:bold;
+  cursor:pointer; display:flex;align-items:center;justify-content:center;
+  box-shadow: 4px 4px 8px var(--s-dark), -4px -4px 8px var(--s-light);
+  transition:all .2s;
 }
-.modal-close:hover { background: var(--md-sys-color-surface-variant); color:var(--md-sys-color-on-surface); }
+.modal-close:active {
+  box-shadow: inset 2px 2px 4px var(--si-dark), inset -2px -2px 4px var(--si-light);
+  color: var(--error);
+}
 
 /* 使い方 */
-.howto-section { margin-bottom:24px; }
+.howto-section { margin-bottom:28px; }
 .howto-section h3 {
-  font-size:14px;
-  color:var(--md-sys-color-primary);
-  margin-bottom:12px;
-  padding-bottom:8px;
-  border-bottom:1px solid var(--md-sys-color-outline-variant);
+  font-size:15px; color:var(--text); margin-bottom:12px; padding-bottom:12px;
+  border-bottom: 2px solid transparent;
+  box-shadow: 0 2px 0 0 var(--bg), 0 3px 2px -1px var(--si-dark);
 }
 .howto-section ul { list-style:none; }
 .howto-section li {
-  font-size:14px;
-  color:var(--md-sys-color-on-surface);
-  line-height:1.6;
-  padding:4px 0 4px 20px;
-  position:relative;
+  font-size:14px; color:var(--text-muted); line-height:1.6; padding:6px 0 6px 24px; position:relative;
 }
 .howto-section li::before {
-  content:'✦';
-  position:absolute;left:0;top:6px;
-  color:var(--md-sys-color-primary);
-  font-size:12px;
+  content:'✦'; position:absolute;left:0;top:8px; color:var(--primary); font-size:12px;
 }
 
 /* 設定 */
 .setting-row {
   display:flex;align-items:center;justify-content:space-between;
-  padding:16px 0;
-  border-bottom:1px solid var(--md-sys-color-outline-variant);
-  font-size:15px;
-  color:var(--md-sys-color-on-surface);
+  padding:20px 0; font-size:16px; font-weight:600; color:var(--text);
+  border-bottom: 2px solid transparent;
+  box-shadow: 0 2px 0 0 var(--bg), 0 3px 2px -1px var(--si-dark);
 }
-.setting-row:last-child { border-bottom:none; }
+.setting-row:last-child { box-shadow:none; border-bottom:none; }
 
-/* M3: Switch */
-.toggle { position:relative; width:52px; height:32px; display:inline-block; }
+/* クレイ風 Switch */
+.toggle { position:relative; width:64px; height:36px; display:inline-block; }
 .toggle input { position:absolute; opacity:0; width:0; height:0; }
 .toggle-track {
-  position:absolute; inset:0;
-  border-radius:16px;
-  background: var(--md-sys-color-surface-container-highest);
-  border: 2px solid var(--md-sys-color-outline);
-  cursor:pointer;
-  transition: all .2s;
+  position:absolute; inset:0; border-radius:100px; background: var(--bg);
+  cursor:pointer; transition: all .3s;
+  box-shadow: inset 4px 4px 8px var(--si-dark), inset -4px -4px 8px var(--si-light);
 }
 .toggle-thumb {
-  position:absolute; top:6px; left:6px;
-  width:16px; height:16px;
-  border-radius:50%;
-  background: var(--md-sys-color-outline);
-  transition: all .2s cubic-bezier(0.2, 0, 0, 1);
-  pointer-events:none;
+  position:absolute; top:4px; left:4px; width:28px; height:28px;
+  border-radius:50%; background: var(--text-muted); pointer-events:none;
+  transition: all .3s cubic-bezier(0.3, 1.5, 0.7, 1);
+  box-shadow: 2px 2px 4px rgba(0,0,0,0.3), inset 1px 1px 2px rgba(255,255,255,0.2);
 }
+body.light .toggle-thumb { box-shadow: 2px 2px 4px rgba(0,0,0,0.1), inset 1px 1px 2px rgba(255,255,255,0.8); }
+
 .toggle input:checked + .toggle-track {
-  background: var(--md-sys-color-primary);
-  border-color: var(--md-sys-color-primary);
+  background: var(--bg); /* トラックの色は変えず、凹みのまま */
 }
 .toggle input:checked ~ .toggle-thumb {
-  top:2px; left:2px;
-  width:24px; height:24px;
-  transform:translateX(20px);
-  background: var(--md-sys-color-on-primary);
+  transform:translateX(28px);
+  background: var(--primary);
 }
-.setting-action-btn {
-  padding:8px 20px;
-  border-radius:100px;
-  border:1px solid var(--md-sys-color-outline);
-  background:transparent;
-  color:var(--md-sys-color-primary);
-  font-family:'Zen Kaku Gothic New',sans-serif;
-  font-size:14px;
-  font-weight:500;
-  cursor:pointer;
-  transition:all .2s;
-}
-.setting-action-btn:hover { background:rgba(232,204,128,0.08); }
-body.light .setting-action-btn:hover { background: rgba(122,85,16,0.08); }
 
-/* PWゲート (M3 Full Screen or Modal style) */
+.setting-action-btn {
+  padding:10px 24px; border-radius:100px; border:none;
+  background:var(--bg); color:var(--text); font-family:'Zen Kaku Gothic New',sans-serif;
+  font-size:14px; font-weight:700; cursor:pointer; transition:all .2s;
+  box-shadow: 4px 4px 8px var(--s-dark), -4px -4px 8px var(--s-light);
+}
+.setting-action-btn:active {
+  box-shadow: inset 2px 2px 4px var(--si-dark), inset -2px -2px 4px var(--si-light);
+  color:var(--primary);
+}
+
+/* PWゲート */
 .pw-gate {
   display:none;position:fixed;inset:0;
-  background:rgba(20,18,24,0.92); /* M3 Scrim */
-  backdrop-filter:blur(8px);
+  background:rgba(0,0,0,0.6); backdrop-filter:blur(12px);
   z-index:300;align-items:center;justify-content:center;padding:24px;
 }
 .pw-gate.show { display:flex; }
 .pw-gate-box {
-  background: var(--md-sys-color-surface-container-high);
-  border-radius:28px;
-  padding:40px 32px;
-  max-width:400px;width:100%;
-  text-align:center;
+  background: var(--bg); border-radius: var(--rad-l);
+  padding:48px 32px; max-width:400px;width:100%; text-align:center;
   animation:fadeUp .4s ease both;
-  box-shadow: 0 4px 8px 3px rgba(0,0,0,0.15);
+  box-shadow: 20px 20px 40px rgba(0,0,0,0.3), -10px -10px 20px rgba(255,255,255,0.05);
 }
-.pw-gate-icon { font-size:56px; margin-bottom:16px; display:block; filter:drop-shadow(0 0 16px rgba(232,204,128,.4)); }
-.pw-gate-title {
-  font-family:'Shippori Mincho',serif;
-  font-size:28px;
-  color:var(--md-sys-color-primary);
-  margin-bottom:8px;
-}
-.pw-gate-sub { font-size:14px; color:var(--md-sys-color-on-surface-variant); margin-bottom:32px; line-height:1.6; }
-.pw-gate input { margin-bottom:24px; text-align:center; letter-spacing:.2em; }
+body.light .pw-gate-box { box-shadow: 20px 20px 40px rgba(0,0,0,0.1), -10px -10px 20px rgba(255,255,255,0.8); }
+
+.pw-gate-icon { font-size:56px; margin-bottom:20px; display:block; filter:drop-shadow(0 4px 8px var(--primary-shadow)); }
+.pw-gate-title { font-family:'Shippori Mincho',serif; font-size:28px; font-weight:800; color:var(--primary); margin-bottom:12px; }
+.pw-gate-sub { font-size:14px; color:var(--text-muted); margin-bottom:32px; line-height:1.6; }
+.pw-gate input { margin-bottom:24px; text-align:center; letter-spacing:.2em; font-size:18px; }
 .pw-gate-btn {
-  width:100%;padding:16px;
-  background: var(--md-sys-color-primary);
-  color: var(--md-sys-color-on-primary);
-  border:none;border-radius:100px;
-  font-family:'Shippori Mincho',serif;font-size:18px;font-weight:700;
+  width:100%;padding:18px; background: var(--primary); color: var(--primary-on);
+  border:none;border-radius:100px; font-family:'Shippori Mincho',serif;font-size:18px;font-weight:800;
   cursor:pointer;transition:all .2s;
+  box-shadow: 8px 8px 16px var(--s-dark), -8px -8px 16px var(--s-light), inset 2px 2px 6px rgba(255,255,255,0.4);
 }
-.pw-gate-btn:hover { box-shadow: 0 2px 6px 2px rgba(0,0,0,0.15); background: linear-gradient(rgba(255,255,255,0.08), rgba(255,255,255,0.08)), var(--md-sys-color-primary); }
-.pw-gate-error { font-size:13px; color:var(--md-sys-color-error); margin-top:16px; min-height:20px; }
-.pw-gate-free { font-size:12px; color:var(--md-sys-color-outline); margin-top:24px; }
+.pw-gate-btn:active {
+  box-shadow: inset 4px 4px 8px rgba(0,0,0,0.2), inset -4px -4px 8px rgba(255,255,255,0.3);
+  transform: translateY(2px);
+}
+.pw-gate-error { font-size:13px; font-weight:bold; color:var(--error); margin-top:16px; min-height:20px; }
+.pw-gate-free { font-size:12px; color:var(--text-muted); margin-top:24px; }
 
 /* フッター */
-footer { text-align:center; margin-top:56px; font-size:13px; color:var(--md-sys-color-outline); }
+footer { text-align:center; margin-top:56px; font-size:13px; font-weight:bold; color:var(--text-muted); }
 
 @media(max-width:480px){
   .wrap{padding:24px 16px 60px;}
-  .card{padding:24px 20px;}
-  .modal{padding:24px 20px;}
+  .card{padding:28px 20px;}
+  .modal{padding:32px 20px;}
 }
 </style>
 </head>
@@ -694,7 +666,7 @@ footer { text-align:center; margin-top:56px; font-size:13px; color:var(--md-sys-
       <input type="text" id="bio" placeholder="そのまま使ってもOK、〇年の部分など自由に書き換えてください">
     </div>
 
-    <div class="field-group" style="margin-top:32px;">
+    <div class="field-group" style="margin-top:40px;">
       <label>投稿の雰囲気</label>
       <div class="chips" id="tone-chips">
         <button class="chip active" data-tone="やさしく">🌷 やさしく</button>
@@ -707,7 +679,7 @@ footer { text-align:center; margin-top:56px; font-size:13px; color:var(--md-sys-
 
   <button class="btn-generate" id="btn-template" onclick="generate()">投稿文を生成する</button>
 
-  <div id="results" class="card" style="margin-top:24px;">
+  <div id="results" class="card" style="margin-top:32px;">
     <div class="card-title">✦ 生成された投稿文</div>
     <div class="result-tab-bar">
       <button class="result-tab active" onclick="switchTab('x',this)">𝕏 X用</button>
@@ -729,9 +701,9 @@ footer { text-align:center; margin-top:56px; font-size:13px; color:var(--md-sys-
   </div>
 
   <!-- AI生成エリア（Pro版） -->
-  <div class="card" id="ai-card" style="margin-top:24px;display:none;">
+  <div class="card" id="ai-card" style="margin-top:32px;display:none;">
     <div class="card-title">✦ AI投稿文生成<span class="pro-badge">PRO</span></div>
-    <p style="font-size:14px;color:var(--md-sys-color-on-surface-variant);margin-bottom:24px;line-height:1.6;">上の入力内容をもとに、AIがあなたらしい投稿文を自動生成します。</p>
+    <p style="font-size:14px;color:var(--text-muted);margin-bottom:28px;line-height:1.6;font-weight:600;">上の入力内容をもとに、AIがあなたらしい投稿文を自動生成します。</p>
     <div class="platform-btns" id="platform-btns">
       <button class="platform-btn active" data-platform="x" onclick="selectPlatform(this)">
         <span class="p-icon">𝕏</span>X
@@ -745,8 +717,8 @@ footer { text-align:center; margin-top:56px; font-size:13px; color:var(--md-sys-
     </div>
     <button class="btn-generate" onclick="generateAI()">AIで投稿文を生成する</button>
     <div class="ai-loading" id="ai-loading">🔮 AIが考えています...</div>
-    <div class="result-text" id="ai-result" style="display:none;margin-top:16px;"></div>
-    <button class="btn-copy" id="ai-copy" onclick="copyText('ai-result',this)" style="display:none;margin-top:16px;">コピーする</button>
+    <div class="result-text" id="ai-result" style="display:none;margin-top:24px;"></div>
+    <button class="btn-copy" id="ai-copy" onclick="copyText('ai-result',this)" style="display:none;">コピーする</button>
   </div>
 
   <footer>
@@ -756,6 +728,9 @@ footer { text-align:center; margin-top:56px; font-size:13px; color:var(--md-sys-
 </div>
 
 <script>
+// ==========================================
+// JavaScript（機能・ロジック）は一切変更していません
+// ==========================================
 var UNLOCK_DATE  = new Date('2026-04-01T00:00:00+09:00');
 var WORKERS_URL  = 'https://uranai-mikke.yymmatsu.workers.dev';
 var PRO_PASSWORD = 'uranai2025';
