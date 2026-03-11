@@ -3,1107 +3,926 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>艶みっけ 🎀</title>
-<!-- 丸みのあるガーリーなフォントに変更 -->
-<link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@300;400;500;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<title>占いみっけ｜鑑定師さんの集客サポートツール</title>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;800&family=Zen+Kaku+Gothic+New:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
+/* ==========================================
+   Claymorphism (クレイモーフィズム) Tokens
+========================================== */
 :root {
-  /* ピンク・ホワイト基調のガーリーなカラーパレット */
-  --cream:    #FFF0F5;   /* ラベンダーブラッシュ（背景） */
-  --white:    #FFFFFF;
-  --offwhite: #FFF5F7;
-  --rg:       #FF8BA7;   /* メインの可愛いピンク */
-  --rg-light: #FFC6D3;
-  --rg-dark:  #E05777;   /* アクセント用の濃いピンク */
-  --rg-pale:  #FFEBF0;   /* ペールピンク */
-  --brown:    #6B5256;   /* 赤みのあるブラウン（文字色） */
-  --brown-mid:#9E7A81;
-  --gray:     #B0969A;
-  --gray-lt:  #D9C5C8;
-  --border:   #FFD6E0;
-  --shadow:   rgba(255, 139, 167, 0.15); /* ピンクのシャドウ */
-  --radius:   24px;      /* より丸みを帯びた角 */
-  --radius-sm:14px;
-}
-*{ box-sizing:border-box; margin:0; padding:0; }
-html,body{
-  min-height:100vh;
-  font-family:'M PLUS Rounded 1c',sans-serif;
-  /* ふんわりしたグラデーション背景 */
-  background: radial-gradient(circle at top left, var(--white) 0%, var(--cream) 100%);
-  color:var(--brown);
-  overflow-x:hidden;
+  /* ダークテーマ (デフォルト) */
+  --bg: #2a2830;             /* 背景色（少し暖かみのあるダークグレー） */
+  --text: #eaeaec;           /* メインテキスト */
+  --text-muted: #9c9a9f;     /* サブテキスト */
+  --primary: #e8cc80;        /* アクセントカラー（ゴールド） */
+  --primary-on: #412d00;     /* プライマリー上のテキスト */
+  --primary-shadow: rgba(232, 204, 128, 0.4);
+  
+  /* クレイモーフィズム用の影（ダーク） */
+  --s-dark: #1b1a1f;         /* 外側の暗い影 */
+  --s-light: #393641;        /* 外側の明るいハイライト */
+  --si-dark: rgba(27, 26, 31, 0.8);  /* 内側の暗い影 */
+  --si-light: rgba(57, 54, 65, 0.8); /* 内側の明るいハイライト */
+
+  --error: #ffb4ab;
+
+  /* 丸みの設定 */
+  --rad-l: 28px;
+  --rad-m: 16px;
+  --rad-s: 12px;
 }
 
-/* ─── キャンバス ─── */
-#particle-canvas{
-  position:fixed; inset:0; z-index:1; pointer-events:none;
+body.light {
+  /* ライトテーマ */
+  --bg: #f2efe9;             /* 背景色（少しウォームなオフホワイト） */
+  --text: #413d36;
+  --text-muted: #827e77;
+  --primary: #b8903c;        /* アクセントカラー（少し落ち着いたゴールド） */
+  --primary-on: #ffffff;
+  --primary-shadow: rgba(184, 144, 60, 0.4);
+
+  /* クレイモーフィズム用の影（ライト） */
+  --s-dark: #d0cdc6;
+  --s-light: #ffffff;
+  --si-dark: rgba(208, 205, 198, 0.6);
+  --si-light: rgba(255, 255, 255, 0.8);
+  
+  --error: #ba1a1a;
 }
 
-/* ─── パスワード画面 ─── */
-#pw-screen{
-  position:fixed; inset:0; z-index:200;
-  background:linear-gradient(145deg,#FFF5F7 0%,#FFEBF0 100%);
-  display:flex; flex-direction:column; align-items:center; justify-content:center;
-}
-.pw-wrap{ position:relative; z-index:1; text-align:center; }
-.pw-salon-mark{
-  font-family:'Cormorant Garamond',serif;
-  font-style:italic; font-size:0.75rem;
-  color:var(--rg); letter-spacing:0.35em;
-  margin-bottom:0.6rem;
-}
-.pw-logo{
-  font-family:'M PLUS Rounded 1c',sans-serif;
-  font-weight:700; font-size:2.8rem;
-  color:var(--brown); letter-spacing:0.08em;
-  margin-bottom:0.2rem;
-}
-.pw-logo span{
-  background:linear-gradient(135deg,var(--rg),var(--rg-dark));
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-}
-.pw-tagline{
-  color:var(--gray); font-size:0.75rem; letter-spacing:0.2em; font-weight:400;
-  margin-bottom:2.8rem;
-}
-.pw-box{
-  background:var(--white);
-  border:2px solid var(--white);
-  border-radius:var(--radius);
-  padding:2.2rem 2.6rem;
-  width:min(360px,90vw);
-  box-shadow:0 8px 40px var(--shadow);
-  display:flex; flex-direction:column; gap:1rem;
-}
-.pw-box label{
-  font-size:0.75rem; color:var(--gray); letter-spacing:0.15em; font-weight:500;
-}
-.pw-box input{
-  border:2px solid var(--border); border-radius:var(--radius-sm);
-  padding:0.85rem 1rem; font-size:0.95rem; color:var(--brown);
-  background:var(--offwhite); outline:none; width:100%; transition:all 0.2s;
-  font-family:'M PLUS Rounded 1c',sans-serif;
-}
-.pw-box input:focus{ border-color:var(--rg); background:var(--white); box-shadow:0 0 0 4px rgba(255,139,167,0.15); }
-.pw-btn{
-  background:linear-gradient(135deg,var(--rg),var(--rg-dark));
-  color:#fff; border:none; border-radius:var(--radius-sm);
-  padding:1rem; font-size:0.95rem; font-weight:700;
-  cursor:pointer; letter-spacing:0.15em;
-  box-shadow:0 4px 16px rgba(224,87,119,0.3);
-  transition:all 0.25s; font-family:'M PLUS Rounded 1c',sans-serif;
-}
-.pw-btn:hover{ transform:translateY(-2px); box-shadow:0 6px 22px rgba(224,87,119,0.4); }
-.pw-error{ color:#FF4D6D; font-size:0.74rem; display:none; font-weight:500; }
-.pw-divider{
-  display:flex; align-items:center; gap:0.8rem; margin-top:0.4rem;
-}
-.pw-divider::before,.pw-divider::after{
-  content:''; flex:1; height:1px; background:var(--border);
-}
-.pw-divider span{ color:var(--gray-lt); font-size:0.7rem; letter-spacing:0.12em; white-space:nowrap; }
-.pw-expired{
-  display:none; text-align:center; padding:0 1rem;
-}
-.pw-expired-icon{ font-size:2.2rem; margin-bottom:1rem; }
-.pw-expired-title{
-  font-size:1.1rem; font-weight:700; color:var(--brown);
-  margin-bottom:0.6rem; letter-spacing:0.06em;
-}
-.pw-expired-text{ color:var(--gray); font-size:0.8rem; line-height:1.8; }
-.pw-notice{
-  color:var(--gray-lt); font-size:0.66rem; margin-top:1.8rem; letter-spacing:0.12em;
+*{margin:0;padding:0;box-sizing:border-box;}
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Zen Kaku Gothic New', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.5;
+  transition: background-color 0.3s, color 0.3s;
 }
 
-/* ─── 設定パネル ─── */
-#settings-panel{
-  display:none; position:fixed; inset:0; z-index:50;
-  background:rgba(107,82,86,0.4); backdrop-filter:blur(6px);
-  align-items:center; justify-content:center;
+/* 幻想的な背景グラデーション（少し控えめに） */
+body::before {
+  content:''; position:fixed; inset:0;
+  background: radial-gradient(ellipse at 20% 20%, rgba(208,188,255,0.04) 0%, transparent 50%),
+              radial-gradient(ellipse at 80% 80%, rgba(232,204,128,0.03) 0%, transparent 50%);
+  pointer-events:none; z-index:0;
 }
-#settings-panel.open{ display:flex; }
-.settings-box{
-  background:var(--white); border:2px solid var(--border);
-  border-radius:var(--radius); padding:2rem 2.2rem;
-  width:min(420px,92vw);
-  box-shadow:0 16px 50px rgba(255,139,167,0.2);
-  animation:fadeUp 0.28s ease forwards;
+body.light::before {
+  background: radial-gradient(ellipse at 20% 20%, rgba(103,80,164,0.03) 0%, transparent 50%);
 }
-.settings-box h3{
-  font-size:1.1rem; font-weight:700; color:var(--brown);
-  margin-bottom:1.4rem; padding-bottom:0.8rem;
-  border-bottom:2px dashed var(--border); letter-spacing:0.08em;
-}
-.settings-row{ display:flex; flex-direction:column; gap:0.4rem; margin-bottom:0.9rem; }
-.settings-row label{ font-size:0.75rem; color:var(--gray); letter-spacing:0.1em; font-weight:500; }
-.settings-row input{
-  border:2px solid var(--border); border-radius:var(--radius-sm);
-  padding:0.7rem 0.95rem; color:var(--brown); font-size:0.88rem; outline:none;
-  background:var(--offwhite); transition:all 0.2s; font-family:'M PLUS Rounded 1c',sans-serif;
-}
-.settings-row input:focus{ border-color:var(--rg); background:var(--white); box-shadow:0 0 0 4px rgba(255,139,167,0.15); }
-.settings-row input::placeholder{ color:var(--gray-lt); }
-.settings-row .hint{ font-size:0.67rem; color:var(--gray-lt); }
-.settings-footer{ display:flex; gap:0.8rem; margin-top:1.4rem; }
-.btn-save{
-  flex:1; background:linear-gradient(135deg,var(--rg),var(--rg-dark));
-  color:#fff; border:none; border-radius:var(--radius-sm); padding:0.8rem;
-  font-size:0.9rem; cursor:pointer; letter-spacing:0.08em; transition:all 0.2s;
-  font-family:'M PLUS Rounded 1c',sans-serif; font-weight:700;
-}
-.btn-save:hover{ transform:translateY(-2px); box-shadow:0 4px 14px rgba(224,87,119,0.3); }
-.btn-cancel{
-  background:var(--offwhite); border:2px solid var(--border);
-  border-radius:var(--radius-sm); padding:0.8rem 1.2rem;
-  font-size:0.9rem; cursor:pointer; color:var(--gray);
-  transition:all 0.2s; font-family:'M PLUS Rounded 1c',sans-serif; font-weight:500;
-}
-.btn-cancel:hover{ border-color:var(--rg-light); color:var(--brown-mid); }
+body.light .stars { display: none; }
 
-/* ─── ヘッダー ─── */
-.header{
-  position:sticky; top:0; z-index:10;
-  background:rgba(255,255,255,0.92);
-  backdrop-filter:blur(16px);
-  border-bottom:1px solid var(--border);
-  padding:0.85rem 1.4rem;
-  display:flex; align-items:center; justify-content:space-between;
-  box-shadow:0 2px 20px var(--shadow);
-}
-.header-left{ display:flex; align-items:baseline; gap:0.8rem; }
-.header-logo{
-  font-family:'M PLUS Rounded 1c',sans-serif;
-  font-weight:700; font-size:1.45rem; letter-spacing:0.08em; color:var(--brown);
-}
-.header-logo span{
-  background:linear-gradient(135deg,var(--rg),var(--rg-dark));
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-}
-.header-sub{
-  font-family:'Cormorant Garamond',serif;
-  font-style:italic; color:var(--rg); font-size:0.75rem; letter-spacing:0.18em;
+/* 星のアニメーション */
+.stars{position:fixed;inset:0;z-index:0;pointer-events:none;}
+.star{position:absolute;background:white;border-radius:50%;animation:twinkle var(--d,3s) ease-in-out infinite alternate;}
+@keyframes twinkle{from{opacity:.1}to{opacity:.8}}
+
+/* アニメーション */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+
+/* レイアウト */
+.wrap{position:relative;z-index:1;max-width:680px;margin:0 auto;padding:32px 20px 80px;}
+.main-content{transition:filter .3s;}
+.main-content.locked{filter:blur(8px);pointer-events:none;user-select:none;}
+
+/* ツールバー */
+.toolbar{display:flex;justify-content:flex-end;gap:12px;margin-bottom:24px;}
+.tool-btn {
+  display:flex;align-items:center;gap:8px;
+  padding:10px 20px;
+  border-radius:100px;
+  border:none;
+  background: var(--bg);
+  color:var(--text);
+  font-family:'Zen Kaku Gothic New',sans-serif;
+  font-size:14px;
   font-weight:600;
+  cursor:pointer;
+  transition:all .2s;
+  /* 出っ張りクレイ */
+  box-shadow: 4px 4px 8px var(--s-dark), -4px -4px 8px var(--s-light);
 }
-.header-btn{
-  background:var(--white); border:2px solid var(--rg-light);
-  border-radius:20px; color:var(--rg-dark);
-  padding:0.45rem 1rem; font-size:0.75rem; cursor:pointer;
-  letter-spacing:0.1em; transition:all 0.2s; font-family:'M PLUS Rounded 1c',sans-serif;
-  font-weight:700;
+.tool-btn:active {
+  /* 押すと凹む */
+  box-shadow: inset 2px 2px 4px var(--si-dark), inset -2px -2px 4px var(--si-light);
+  color: var(--primary);
 }
-.header-btn:hover{ background:var(--rg-pale); transform:scale(1.05); }
+.tool-btn svg { width:18px;height:18px;fill:currentColor; }
 
-/* ─── メイン ─── */
-.main{
-  position:relative; z-index:2;
-  max-width:680px; margin:0 auto;
-  padding:1.8rem 1rem 4rem;
-  display:flex; flex-direction:column; gap:1.2rem;
+/* ヘッダー */
+header{text-align:center;margin-bottom:48px;}
+.logo-mark {
+  font-size:48px; margin-bottom:16px; display:block;
+  filter:drop-shadow(0 4px 8px var(--primary-shadow));
+  animation:float 4s ease-in-out infinite;
 }
-
-/* ─── カード ─── */
-.card{
-  background:var(--white);
-  border:2px solid var(--white);
-  border-radius:var(--radius);
-  padding:1.5rem;
-  box-shadow:0 4px 20px var(--shadow);
-  opacity:0; transform:translateY(14px);
-  transition:opacity 0.45s ease, transform 0.45s ease, box-shadow 0.3s;
+h1 {
+  font-family:'Shippori Mincho',serif;
+  font-size:clamp(32px, 6vw, 44px);
+  font-weight:800;
+  letter-spacing:.08em;
+  color: var(--primary);
+  line-height:1.2;
+  margin-bottom:12px;
+  /* 文字が少し浮いているように見せるドロップシャドウ */
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
 }
-.card.visible{ opacity:1; transform:translateY(0); }
-.card:hover{ box-shadow:0 6px 28px rgba(255,139,167,0.25); border-color:var(--offwhite); }
-
-.card-label{
-  font-size:0.75rem; font-weight:700; color:var(--rg-dark);
-  letter-spacing:0.2em; margin-bottom:1rem;
-  display:flex; align-items:center; gap:0.5rem;
+body.light h1 { text-shadow: 2px 2px 4px rgba(255,255,255,0.8); }
+.tagline {
+  font-size:14px; color:var(--text-muted); letter-spacing:.1em; font-weight:500;
 }
-.card-label::before{
-  content:''; display:block; width:18px; height:3px;
-  background:linear-gradient(to right,var(--rg),var(--rg-light));
-  border-radius:3px;
-}
-
-/* ─── バナー ─── */
-.trial-banner{
-  background:linear-gradient(135deg,var(--rg-pale),#FFF);
-  border:2px dashed var(--rg-light);
-  border-radius:var(--radius);
-  padding:1rem 1.4rem;
-  display:flex; align-items:center; justify-content:space-between;
-  gap:1rem; flex-wrap:wrap;
-  opacity:0; transform:translateY(14px);
-  transition:opacity 0.45s ease, transform 0.45s ease;
-}
-.trial-banner.visible{ opacity:1; transform:translateY(0); }
-.trial-text{ color:var(--brown-mid); font-size:0.8rem; line-height:1.6; }
-.trial-text strong{ color:var(--rg-dark); font-size:0.9rem; display:block; font-weight:700; }
-.trial-badge{
-  background:linear-gradient(135deg,var(--rg),var(--rg-dark));
-  color:#fff; border-radius:12px; padding:0.4rem 1rem;
-  font-size:0.75rem; font-weight:700; letter-spacing:0.14em; white-space:nowrap;
-  box-shadow:0 4px 12px rgba(224,87,119,0.3);
+.divider {
+  width:8px;height:8px; border-radius:50%;
+  background:var(--primary);
+  margin:24px auto;
+  box-shadow: 16px 0 0 var(--primary), -16px 0 0 var(--primary);
+  opacity: 0.7;
 }
 
-/* ─── 写真エリア ─── */
-.photo-area{
-  border:2px dashed var(--rg-light);
-  border-radius:var(--radius-sm); padding:2.5rem 1rem;
-  text-align:center; cursor:pointer; transition:all 0.25s;
-  background:var(--offwhite);
+/* ==========================================
+   クレイモーフィズム カード (出っ張り)
+========================================== */
+.card {
+  background: var(--bg);
+  border-radius: var(--rad-l);
+  padding: 36px 28px;
+  margin-bottom: 32px;
+  animation: fadeUp .6s ease both;
+  box-shadow: 
+    12px 12px 24px var(--s-dark), 
+    -12px -12px 24px var(--s-light),
+    inset 1px 1px 2px var(--si-light),
+    inset -1px -1px 2px var(--si-dark);
 }
-.photo-area:hover{ border-color:var(--rg); background:var(--rg-pale); transform:scale(1.02); }
-.photo-area.has-image{ border-style:solid; padding:0; border-color:var(--rg-light); background:transparent; transform:none; }
-.photo-area img{ width:100%; max-height:300px; object-fit:cover; border-radius:12px; display:block; }
-.photo-icon{ font-size:2.5rem; margin-bottom:0.5rem; }
-.photo-text{ font-size:0.85rem; color:var(--brown-mid); font-weight:500; }
-.photo-text small{ display:block; color:var(--gray-lt); font-size:0.7rem; margin-top:0.35rem; font-weight:400; }
-.photo-btns{ display:grid; grid-template-columns:1fr 1fr; gap:0.6rem; margin-top:0.8rem; }
-.photo-btn{
-  border:2px solid var(--border); border-radius:var(--radius-sm);
-  background:var(--white); padding:0.7rem; font-size:0.8rem; cursor:pointer;
-  color:var(--brown-mid); transition:all 0.2s; font-weight:700;
-  display:flex; align-items:center; justify-content:center; gap:0.4rem;
-  font-family:'M PLUS Rounded 1c',sans-serif;
+.card-title {
+  font-family:'Shippori Mincho',serif;
+  font-size:20px;
+  color:var(--primary);
+  margin-bottom:28px;
+  font-weight: 800;
+  display:flex;align-items:center;gap:12px;
 }
-.photo-btn:hover{ border-color:var(--rg); color:var(--rg-dark); background:var(--rg-pale); }
-.photo-btn-remove{
-  grid-column:span 2; border-color:transparent;
-  color:var(--gray); font-size:0.75rem; background:transparent; font-weight:500;
-}
-.photo-btn-remove:hover{ color:#E05777; background:#FFF5F7; border-color:#FFD6E0; }
-
-/* ─── スキャニングアニメーション ─── */
-.photo-area{ position:relative; overflow:hidden; }
-
-.scan-overlay{
-  display:none;
-  position:absolute; inset:0; z-index:5;
-  border-radius:12px;
-  background:rgba(255,139,167,0.08);
-  pointer-events:none;
-}
-.scan-overlay.active{ display:block; }
-
-/* スキャンライン */
-.scan-line{
-  position:absolute; left:0; right:0; height:4px;
-  background:linear-gradient(to right,
-    transparent 0%,
-    rgba(255,139,167,0.4) 20%,
-    rgba(255,139,167,0.9) 50%,
-    rgba(255,255,255,1) 55%,
-    rgba(255,139,167,0.9) 60%,
-    rgba(255,139,167,0.4) 80%,
-    transparent 100%
-  );
-  box-shadow:0 0 16px rgba(255,139,167,0.8), 0 0 28px rgba(255,139,167,0.4);
-  animation:scanMove 1.6s ease-in-out forwards;
-  top:0;
-}
-@keyframes scanMove{
-  0%   { top:0%; opacity:0; }
-  5%   { opacity:1; }
-  95%  { opacity:1; }
-  100% { top:100%; opacity:0; }
+.card-title::after {
+  content:'';flex:1;height:2px;
+  border-radius:2px;
+  background:var(--bg);
+  box-shadow: inset 1px 1px 2px var(--si-dark), inset -1px -1px 2px var(--si-light);
 }
 
-/* コーナーマーカー */
-.scan-corner{
-  position:absolute; width:20px; height:20px;
-  border-color:var(--rg); border-style:solid;
-  opacity:0; animation:cornerFade 1.6s ease forwards;
-}
-.scan-corner.tl{ top:8px; left:8px;  border-width:3px 0 0 3px; border-top-left-radius: 6px; }
-.scan-corner.tr{ top:8px; right:8px; border-width:3px 3px 0 0; border-top-right-radius: 6px; }
-.scan-corner.bl{ bottom:8px; left:8px;  border-width:0 0 3px 3px; border-bottom-left-radius: 6px; }
-.scan-corner.br{ bottom:8px; right:8px; border-width:0 3px 3px 0; border-bottom-right-radius: 6px; }
-@keyframes cornerFade{
-  0%  { opacity:0; }
-  15% { opacity:1; }
-  85% { opacity:1; }
-  100%{ opacity:0; }
+/* ==========================================
+   フォーム (凹み)
+========================================== */
+.field-group { margin-bottom: 28px; }
+.field-group:last-child { margin-bottom: 0; }
+label {
+  display:block; font-size:14px; color:var(--text);
+  margin-bottom:12px; font-weight:600; padding-left:4px;
 }
 
-/* スキャン完了テキスト */
-.scan-complete{
-  position:absolute; bottom:15px; left:50%; transform:translateX(-50%);
-  background:linear-gradient(135deg, var(--rg), var(--rg-dark));
-  color:#fff; font-size:0.75rem; font-weight:700;
-  letter-spacing:0.18em; padding:0.3rem 1rem;
-  border-radius:20px;
-  box-shadow: 0 4px 12px rgba(224,87,119,0.4);
-  opacity:0; animation:completePop 0.4s ease 1.5s forwards;
-  white-space:nowrap;
+input[type="text"], input[type="password"], textarea, select {
+  width:100%;
+  background:var(--bg);
+  border:none; /* 枠線をなくす */
+  border-radius:var(--rad-m);
+  padding:16px 20px;
+  color:var(--text);
+  font-family:'Zen Kaku Gothic New',sans-serif;
+  font-size:16px;
+  outline:none;
+  transition:all .2s;
+  -webkit-appearance:none;
+  /* 凹みクレイ */
+  box-shadow: 
+    inset 4px 4px 8px var(--si-dark), 
+    inset -4px -4px 8px var(--si-light);
 }
-@keyframes completePop{
-  0%  { opacity:0; transform:translateX(-50%) scale(0.8); }
-  100%{ opacity:1; transform:translateX(-50%) scale(1); }
+input:focus, textarea:focus, select:focus {
+  /* フォーカス時は少し光らせる */
+  box-shadow: 
+    inset 4px 4px 8px var(--si-dark), 
+    inset -4px -4px 8px var(--si-light),
+    0 0 0 2px var(--primary-shadow);
+}
+textarea { resize:vertical; min-height:100px; line-height:1.6; }
+select {
+  cursor:pointer;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239c9a9f' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 20px center;padding-right:48px;
+}
+body.light select {
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23827e77' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+select option { background: var(--bg); color:var(--text); }
+.preset-select { font-size:14px; margin-bottom:16px; }
+
+/* ==========================================
+   チップ (出っ張り → アクティブで凹み)
+========================================== */
+.chips { display:flex;flex-wrap:wrap;gap:12px;}
+.chip {
+  padding:10px 18px;
+  border-radius:var(--rad-s);
+  border:none;
+  font-size:14px; font-weight:600;
+  cursor:pointer;
+  color:var(--text-muted);
+  background:var(--bg);
+  font-family:'Zen Kaku Gothic New',sans-serif;
+  transition:all .2s;
+  /* 出っ張りクレイ */
+  box-shadow: 
+    4px 4px 8px var(--s-dark), 
+    -4px -4px 8px var(--s-light),
+    inset 1px 1px 2px var(--si-light),
+    inset -1px -1px 2px var(--si-dark);
+}
+.chip:hover { transform: translateY(-1px); }
+.chip:active { transform: translateY(1px); }
+.chip.active {
+  /* アクティブで凹む */
+  box-shadow: 
+    inset 3px 3px 6px var(--si-dark), 
+    inset -3px -3px 6px var(--si-light);
+  color: var(--primary);
+  transform: translateY(1px);
 }
 
-/* ─── テキストエリア ─── */
-.hint-area{
-  width:100%; border:2px solid var(--border); border-radius:var(--radius-sm);
-  padding:1rem; font-family:'M PLUS Rounded 1c',sans-serif;
-  font-size:0.9rem; color:var(--brown); resize:none; outline:none;
-  transition:all 0.2s; line-height:1.8; background:var(--offwhite);
+/* ==========================================
+   生成ボタン (プライマリー・出っ張り)
+========================================== */
+.btn-generate {
+  width:100%;
+  padding:18px 24px;
+  background: var(--primary);
+  color: var(--primary-on);
+  border:none;
+  border-radius:100px;
+  font-family:'Shippori Mincho',serif;
+  font-size:20px;
+  font-weight:800;
+  letter-spacing:.08em;
+  cursor:pointer;
+  transition:all .2s;
+  /* プライマリー色の出っ張りクレイ */
+  box-shadow: 
+    8px 8px 16px var(--s-dark), 
+    -8px -8px 16px var(--s-light),
+    inset 2px 2px 6px rgba(255,255,255,0.4),
+    inset -2px -2px 6px rgba(0,0,0,0.15);
 }
-.hint-area:focus{ border-color:var(--rg); background:var(--white); box-shadow:0 0 0 4px rgba(255,139,167,0.15); }
-.hint-area::placeholder{ color:var(--gray-lt); }
+body.light .btn-generate {
+  box-shadow: 
+    8px 8px 16px var(--s-dark), 
+    -8px -8px 16px var(--s-light),
+    inset 2px 2px 6px rgba(255,255,255,0.6),
+    inset -2px -2px 6px rgba(0,0,0,0.1);
+}
+.btn-generate:active {
+  /* 押すと凹む */
+  box-shadow: 
+    inset 4px 4px 8px rgba(0,0,0,0.2), 
+    inset -4px -4px 8px rgba(255,255,255,0.3);
+  transform: translateY(2px);
+}
 
-/* ─── メニューチップ ─── */
-.menu-grid{ display:flex; flex-wrap:wrap; gap:0.6rem; }
-.menu-chip{
-  border:2px solid var(--border); border-radius:24px;
-  padding:0.4rem 1rem; font-size:0.8rem; cursor:pointer;
-  color:var(--brown-mid); transition:all 0.2s; user-select:none;
-  background:var(--white); font-family:'M PLUS Rounded 1c',sans-serif;
-  font-weight:500;
+/* 結果エリア */
+#results { display:none; }
+#results.show { display:block; }
+.result-tab-bar {
+  display:flex; gap:12px; margin-bottom:24px;
 }
-.menu-chip.selected{
-  background:linear-gradient(135deg,var(--rg),var(--rg-dark));
-  border-color:transparent; color:#fff; font-weight:700;
-  box-shadow:0 4px 12px rgba(224,87,119,0.3); transform:translateY(-1px);
+.result-tab {
+  flex:1;
+  padding:14px;
+  border:none;
+  border-radius:var(--rad-m);
+  background:var(--bg);
+  color:var(--text-muted);
+  font-family:'Zen Kaku Gothic New',sans-serif;
+  font-size:15px; font-weight:700;
+  cursor:pointer; transition:all .2s;
+  /* 出っ張りクレイ */
+  box-shadow: 4px 4px 8px var(--s-dark), -4px -4px 8px var(--s-light);
 }
-.menu-chip:not(.selected):hover{ border-color:var(--rg-light); color:var(--rg-dark); background:var(--rg-pale); }
+.result-tab.active {
+  /* 凹みクレイ */
+  box-shadow: inset 4px 4px 8px var(--si-dark), inset -4px -4px 8px var(--si-light);
+  color: var(--primary);
+}
+.result-panel { display:none; }
+.result-panel.active { display:block; animation: fadeUp .3s ease; }
 
-/* ─── トーンボタン ─── */
-.tone-row{ display:flex; gap:0.6rem; }
-.tone-btn{
-  flex:1; border:2px solid var(--border); border-radius:var(--radius-sm);
-  background:var(--white); padding:0.8rem 0.4rem;
-  font-size:0.8rem; cursor:pointer; color:var(--gray);
-  text-align:center; line-height:1.55; transition:all 0.2s;
-  font-family:'M PLUS Rounded 1c',sans-serif; font-weight:500;
+.result-text {
+  background: var(--bg);
+  border-radius: var(--rad-m);
+  padding: 24px;
+  font-size:15px; line-height:1.8; white-space:pre-wrap;
+  color:var(--text); min-height:160px;
+  /* 凹みクレイ */
+  box-shadow: inset 4px 4px 8px var(--si-dark), inset -4px -4px 8px var(--si-light);
 }
-.tone-btn.active{
-  border-color:var(--rg); background:var(--rg-pale);
-  color:var(--rg-dark); font-weight:700;
-  box-shadow:0 4px 12px rgba(255,139,167,0.2); transform:translateY(-1px);
-}
-.tone-btn:not(.active):hover{ border-color:var(--rg-light); color:var(--brown-mid); background:var(--offwhite); }
 
-/* ─── 生成ボタン ─── */
-.generate-btn{
-  width:100%; position:relative; overflow:hidden;
-  background:linear-gradient(135deg,var(--rg) 0%,var(--rg-dark) 100%);
-  color:#fff; border:none; border-radius:var(--radius);
-  padding:1.25rem; font-size:1.05rem; font-weight:700; cursor:pointer;
-  letter-spacing:0.15em; font-family:'M PLUS Rounded 1c',sans-serif;
-  box-shadow:0 6px 24px rgba(224,87,119,0.4);
-  transition:all 0.25s;
-  opacity:0; transform:translateY(14px);
+/* コピーボタン */
+.btn-copy {
+  margin-top:20px;
+  width:100%; padding:14px 24px;
+  background: var(--bg);
+  border: none;
+  border-radius: 100px;
+  color: var(--primary);
+  font-family:'Zen Kaku Gothic New',sans-serif;
+  font-size:15px; font-weight:700;
+  cursor:pointer; transition:all .2s;
+  box-shadow: 4px 4px 8px var(--s-dark), -4px -4px 8px var(--s-light);
 }
-.generate-btn.visible{ opacity:1; transform:translateY(0); }
-.generate-btn::after{
-  content:''; position:absolute; top:-50%; left:-60%; width:50%; height:200%;
-  background:linear-gradient(to right,transparent,rgba(255,255,255,0.4),transparent);
-  transform:skewX(-20deg); animation:shimmer 3s ease infinite;
+.btn-copy:active { box-shadow: inset 2px 2px 4px var(--si-dark), inset -2px -2px 4px var(--si-light); }
+.btn-copy.copied {
+  background: var(--primary);
+  color: var(--primary-on);
+  box-shadow: inset 2px 2px 6px rgba(0,0,0,0.2);
 }
-@keyframes shimmer{ 0%{left:-60%;opacity:0} 40%{opacity:1} 60%{left:120%;opacity:0} 100%{left:120%;opacity:0} }
-.generate-btn:hover{ transform:translateY(-3px); box-shadow:0 8px 32px rgba(224,87,119,0.5); }
-.generate-btn:disabled{ opacity:0.5; cursor:not-allowed; transform:none; }
-.generate-btn:disabled::after{ display:none; }
 
-/* ─── ローディング ─── */
-.loading{ display:none; flex-direction:column; align-items:center; padding:2rem; gap:1rem; }
-.loading.show{ display:flex; }
-.spinner{
-  width:40px; height:40px;
-  border:3px solid var(--border);
-  border-top-color:var(--rg);
-  border-radius:50%; animation:spin 0.8s linear infinite;
+/* AI Pro エリア */
+.pro-badge {
+  display:inline-block; font-size:11px; padding:4px 10px; border-radius:100px;
+  background: var(--bg); color: var(--primary); font-weight: 800;
+  margin-left:12px; vertical-align:middle;
+  box-shadow: inset 2px 2px 4px var(--si-dark), inset -2px -2px 4px var(--si-light);
 }
-@keyframes spin{ to{transform:rotate(360deg)} }
-.loading-text{ color:var(--rg-dark); font-size:0.85rem; letter-spacing:0.15em; font-weight:700; }
+.platform-btns { display:flex; gap:16px; margin-bottom:28px; }
+.platform-btn {
+  flex:1; padding:20px 8px;
+  border-radius:var(--rad-m); border:none;
+  background:var(--bg); color:var(--text-muted);
+  font-family:'Zen Kaku Gothic New',sans-serif; font-size:14px; font-weight:600;
+  cursor:pointer; display:flex;flex-direction:column;align-items:center;gap:12px;
+  transition:all .2s;
+  box-shadow: 6px 6px 12px var(--s-dark), -6px -6px 12px var(--s-light);
+}
+.platform-btn .p-icon { font-size:28px; line-height:1; }
+.platform-btn.active {
+  box-shadow: inset 4px 4px 8px var(--si-dark), inset -4px -4px 8px var(--si-light);
+  color: var(--primary);
+}
+.ai-loading { text-align:center; color:var(--primary); font-size:15px; font-weight:bold; padding:24px 0; display:none; animation: float 2s infinite ease-in-out; }
+.ai-loading.show { display:block; }
 
-/* ─── 結果カード ─── */
-.result-card{
-  background:linear-gradient(145deg, #FFFFFF, var(--rg-pale));
-  border:2px solid var(--white);
-  border-radius:var(--radius); padding:1.8rem; display:none;
-  box-shadow:0 6px 30px rgba(255,139,167,0.15);
+/* モーダル */
+.modal-overlay {
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,0.5); backdrop-filter:blur(8px);
+  z-index:200;align-items:center;justify-content:center;padding:24px;
 }
-.result-card.show{ display:block; animation:fadeUp 0.4s ease forwards; }
-@keyframes fadeUp{ from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
-.result-label{
-  font-size:0.75rem; font-weight:700; color:var(--rg-dark);
-  letter-spacing:0.22em; margin-bottom:1.2rem;
-  display:flex; align-items:center; gap:0.5rem;
+.modal-overlay.open { display:flex; }
+.modal {
+  background: var(--bg);
+  border-radius: var(--rad-l);
+  padding: 40px 32px;
+  max-width:440px;width:100%; position:relative; max-height:85vh;overflow-y:auto;
+  box-shadow: 20px 20px 40px rgba(0,0,0,0.3), -10px -10px 20px rgba(255,255,255,0.05);
 }
-.result-label::before{
-  content:''; display:block; width:18px; height:2px;
-  background:var(--rg);
+body.light .modal {
+  box-shadow: 20px 20px 40px rgba(0,0,0,0.1), -10px -10px 20px rgba(255,255,255,0.8);
 }
-.result-text{
-  font-size:0.95rem; line-height:2.2; color:var(--brown);
-  white-space:pre-wrap; font-family:'M PLUS Rounded 1c',sans-serif;
-  background: var(--white);
-  padding: 1.2rem;
-  border-radius: var(--radius-sm);
-  border: 1px dashed var(--border);
+.modal-title {
+  font-family:'Shippori Mincho',serif; font-size:24px; font-weight:800;
+  color:var(--primary); margin-bottom:32px; text-align:center;
 }
-.result-footer{ margin-top:1.5rem; display:flex; gap:0.8rem; flex-wrap:wrap; }
-.copy-btn{
-  flex:1; min-width:120px;
-  background:linear-gradient(135deg,var(--rg),var(--rg-dark));
-  color:#fff; border:none; border-radius:var(--radius-sm); padding:0.9rem;
-  font-size:0.9rem; cursor:pointer; letter-spacing:0.1em; transition:all 0.2s;
-  display:flex; align-items:center; justify-content:center; gap:0.4rem;
-  font-family:'M PLUS Rounded 1c',sans-serif; font-weight:700;
-  box-shadow:0 4px 16px rgba(224,87,119,0.3);
+.modal-close {
+  position:absolute;top:24px;right:24px;
+  width:44px;height:44px; border-radius:50%; border:none;
+  background:var(--bg); color:var(--text-muted); font-size:20px; font-weight:bold;
+  cursor:pointer; display:flex;align-items:center;justify-content:center;
+  box-shadow: 4px 4px 8px var(--s-dark), -4px -4px 8px var(--s-light);
+  transition:all .2s;
 }
-.copy-btn:hover{ transform:translateY(-2px); box-shadow:0 6px 20px rgba(224,87,119,0.4); }
-/* ガーリーなミントグリーンに変更 */
-.copy-btn.copied{ background:linear-gradient(135deg,#88D4C8,#5FB4A6); box-shadow:0 4px 16px rgba(136,212,200,0.4); }
-.retry-btn{
-  background:var(--white); border:2px solid var(--border);
-  border-radius:var(--radius-sm); padding:0.9rem 1.4rem;
-  font-size:0.9rem; cursor:pointer; color:var(--brown-mid); transition:all 0.2s;
-  font-family:'M PLUS Rounded 1c',sans-serif; font-weight:700;
+.modal-close:active {
+  box-shadow: inset 2px 2px 4px var(--si-dark), inset -2px -2px 4px var(--si-light);
+  color: var(--error);
 }
-.retry-btn:hover{ border-color:var(--rg-light); color:var(--rg-dark); background:var(--rg-pale); transform:translateY(-2px); }
 
-/* ─── 区切りライン ─── */
-.divider{
-  display:flex; align-items:center; gap:0.8rem;
-  color:var(--gray-lt); font-size:0.65rem; letter-spacing:0.2em;
+/* 使い方 */
+.howto-section { margin-bottom:28px; }
+.howto-section h3 {
+  font-size:15px; color:var(--text); margin-bottom:12px; padding-bottom:12px;
+  border-bottom: 2px solid transparent;
+  box-shadow: 0 2px 0 0 var(--bg), 0 3px 2px -1px var(--si-dark);
 }
-.divider::before,.divider::after{ content:''; flex:1; height:2px; background:var(--border); border-radius:1px; }
+.howto-section ul { list-style:none; }
+.howto-section li {
+  font-size:14px; color:var(--text-muted); line-height:1.6; padding:6px 0 6px 24px; position:relative;
+}
+.howto-section li::before {
+  content:'✦'; position:absolute;left:0;top:8px; color:var(--primary); font-size:12px;
+}
 
-/* ─── フッター ─── */
-.footer{
-  position:relative; z-index:2; text-align:center;
-  padding:1.8rem 1rem; color:var(--gray);
-  font-size:0.7rem; letter-spacing:0.12em; line-height:2;
+/* 設定 */
+.setting-row {
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 0; font-size:16px; font-weight:600; color:var(--text);
+  border-bottom: 2px solid transparent;
+  box-shadow: 0 2px 0 0 var(--bg), 0 3px 2px -1px var(--si-dark);
 }
-.footer a{ color:var(--rg-dark); text-decoration:none; font-weight:700; }
+.setting-row:last-child { box-shadow:none; border-bottom:none; }
 
-/* ─── スクロールバー ─── */
-::-webkit-scrollbar{ width:6px; }
-::-webkit-scrollbar-track{ background:var(--cream); }
-::-webkit-scrollbar-thumb{ background:var(--rg-light); border-radius:6px; }
-::-webkit-scrollbar-thumb:hover{ background:var(--rg); }
+/* クレイ風 Switch */
+.toggle { position:relative; width:64px; height:36px; display:inline-block; }
+.toggle input { position:absolute; opacity:0; width:0; height:0; }
+.toggle-track {
+  position:absolute; inset:0; border-radius:100px; background: var(--bg);
+  cursor:pointer; transition: all .3s;
+  box-shadow: inset 4px 4px 8px var(--si-dark), inset -4px -4px 8px var(--si-light);
+}
+.toggle-thumb {
+  position:absolute; top:4px; left:4px; width:28px; height:28px;
+  border-radius:50%; background: var(--text-muted); pointer-events:none;
+  transition: all .3s cubic-bezier(0.3, 1.5, 0.7, 1);
+  box-shadow: 2px 2px 4px rgba(0,0,0,0.3), inset 1px 1px 2px rgba(255,255,255,0.2);
+}
+body.light .toggle-thumb { box-shadow: 2px 2px 4px rgba(0,0,0,0.1), inset 1px 1px 2px rgba(255,255,255,0.8); }
 
-input[type="file"]{ display:none; }
+.toggle input:checked + .toggle-track {
+  background: var(--bg); /* トラックの色は変えず、凹みのまま */
+}
+.toggle input:checked ~ .toggle-thumb {
+  transform:translateX(28px);
+  background: var(--primary);
+}
 
-/* ─── トップ画面 ─── */
-#top-screen{
-  position:fixed; inset:0; z-index:100;
-  /* キラキラした放射状グラデーション */
-  background: radial-gradient(circle at center, var(--white) 0%, #FFEBF0 100%);
-  display:flex; flex-direction:column; align-items:center; justify-content:center;
-  padding:2rem 1.5rem;
-  overflow-y:auto;
+.setting-action-btn {
+  padding:10px 24px; border-radius:100px; border:none;
+  background:var(--bg); color:var(--text); font-family:'Zen Kaku Gothic New',sans-serif;
+  font-size:14px; font-weight:700; cursor:pointer; transition:all .2s;
+  box-shadow: 4px 4px 8px var(--s-dark), -4px -4px 8px var(--s-light);
 }
-.top-wrap{ max-width:440px; width:100%; text-align:center; }
-.top-badge{
-  display:inline-block;
-  background:linear-gradient(135deg,var(--rg),var(--rg-dark));
-  color:#fff; font-size:0.7rem; font-weight:700;
-  letter-spacing:0.2em; padding:0.4rem 1.2rem;
-  border-radius:24px; margin-bottom:1.4rem;
-  box-shadow: 0 4px 12px rgba(224,87,119,0.3);
+.setting-action-btn:active {
+  box-shadow: inset 2px 2px 4px var(--si-dark), inset -2px -2px 4px var(--si-light);
+  color:var(--primary);
 }
-.top-logo{
-  font-family:'M PLUS Rounded 1c',sans-serif;
-  font-weight:700; font-size:3.2rem; color:var(--brown);
-  letter-spacing:0.06em; margin-bottom:0.4rem;
-  line-height:1.1;
-}
-.top-logo span{
-  background:linear-gradient(135deg,var(--rg),var(--rg-dark));
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-}
-.top-catch{
-  font-size:1.1rem; font-weight:700; color:var(--brown);
-  line-height:1.7; margin-bottom:0.8rem;
-}
-.top-catch em{
-  font-style:normal;
-  background:linear-gradient(135deg,var(--rg),var(--rg-dark));
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
-  font-weight: 700;
-}
-.top-sub{
-  font-size:0.85rem; color:var(--brown-mid); line-height:1.7;
-  margin-bottom:2.4rem; font-weight:500;
-}
-/* 3ステップ */
-.steps{
-  display:flex; gap:0; margin-bottom:2.4rem;
-  background:var(--white); border:2px solid var(--white);
-  border-radius:var(--radius); overflow:hidden;
-  box-shadow:0 4px 20px var(--shadow);
-}
-.step{
-  flex:1; padding:1.4rem 0.6rem; position:relative;
-  border-right:2px dashed var(--border);
-}
-.step:last-child{ border-right:none; }
-.step-num{
-  width:28px; height:28px; border-radius:50%;
-  background:linear-gradient(135deg,var(--rg),var(--rg-dark));
-  color:#fff; font-size:0.75rem; font-weight:700;
-  display:flex; align-items:center; justify-content:center;
-  margin:0 auto 0.6rem;
-  box-shadow: 0 3px 8px rgba(224,87,119,0.3);
-}
-.step-icon{ font-size:1.6rem; margin-bottom:0.5rem; }
-.step-label{ font-size:0.75rem; color:var(--brown); font-weight:700; line-height:1.4; }
-/* 特徴リスト */
-.features{
-  display:flex; flex-direction:column; gap:0.8rem;
-  margin-bottom:2.8rem; text-align:left;
-}
-.feature-item{
-  display:flex; align-items:center; gap:0.8rem;
-  background:var(--white); border:2px solid var(--border);
-  border-radius:var(--radius-sm); padding:0.9rem 1.2rem;
-  font-size:0.85rem; color:var(--brown); font-weight:500;
-  box-shadow:0 4px 12px var(--shadow);
-}
-.feature-icon{ font-size:1.3rem; flex-shrink:0; }
-/* スタートボタン */
-.top-btn{
-  width:100%; position:relative; overflow:hidden;
-  background:linear-gradient(135deg,var(--rg),var(--rg-dark));
-  color:#fff; border:none; border-radius:var(--radius);
-  padding:1.25rem; font-size:1.1rem; font-weight:700;
-  cursor:pointer; letter-spacing:0.15em;
-  font-family:'M PLUS Rounded 1c',sans-serif;
-  box-shadow:0 6px 24px rgba(224,87,119,0.4);
-  transition:all 0.25s; margin-bottom:1.4rem;
-}
-.top-btn::after{
-  content:''; position:absolute; top:-50%; left:-60%; width:50%; height:200%;
-  background:linear-gradient(to right,transparent,rgba(255,255,255,0.4),transparent);
-  transform:skewX(-20deg); animation:shimmer 3s ease infinite;
-}
-.top-btn:hover{ transform:translateY(-3px); box-shadow:0 8px 32px rgba(224,87,119,0.5); }
-.top-note{ font-size:0.7rem; color:var(--gray); letter-spacing:0.1em; }
 
+/* PWゲート */
+.pw-gate {
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,0.6); backdrop-filter:blur(12px);
+  z-index:300;align-items:center;justify-content:center;padding:24px;
+}
+.pw-gate.show { display:flex; }
+.pw-gate-box {
+  background: var(--bg); border-radius: var(--rad-l);
+  padding:48px 32px; max-width:400px;width:100%; text-align:center;
+  animation:fadeUp .4s ease both;
+  box-shadow: 20px 20px 40px rgba(0,0,0,0.3), -10px -10px 20px rgba(255,255,255,0.05);
+}
+body.light .pw-gate-box { box-shadow: 20px 20px 40px rgba(0,0,0,0.1), -10px -10px 20px rgba(255,255,255,0.8); }
+
+.pw-gate-icon { font-size:56px; margin-bottom:20px; display:block; filter:drop-shadow(0 4px 8px var(--primary-shadow)); }
+.pw-gate-title { font-family:'Shippori Mincho',serif; font-size:28px; font-weight:800; color:var(--primary); margin-bottom:12px; }
+.pw-gate-sub { font-size:14px; color:var(--text-muted); margin-bottom:32px; line-height:1.6; }
+.pw-gate input { margin-bottom:24px; text-align:center; letter-spacing:.2em; font-size:18px; }
+.pw-gate-btn {
+  width:100%;padding:18px; background: var(--primary); color: var(--primary-on);
+  border:none;border-radius:100px; font-family:'Shippori Mincho',serif;font-size:18px;font-weight:800;
+  cursor:pointer;transition:all .2s;
+  box-shadow: 8px 8px 16px var(--s-dark), -8px -8px 16px var(--s-light), inset 2px 2px 6px rgba(255,255,255,0.4);
+}
+.pw-gate-btn:active {
+  box-shadow: inset 4px 4px 8px rgba(0,0,0,0.2), inset -4px -4px 8px rgba(255,255,255,0.3);
+  transform: translateY(2px);
+}
+.pw-gate-error { font-size:13px; font-weight:bold; color:var(--error); margin-top:16px; min-height:20px; }
+.pw-gate-free { font-size:12px; color:var(--text-muted); margin-top:24px; }
+
+/* フッター */
+footer { text-align:center; margin-top:56px; font-size:13px; font-weight:bold; color:var(--text-muted); }
+
+@media(max-width:480px){
+  .wrap{padding:24px 16px 60px;}
+  .card{padding:28px 20px;}
+  .modal{padding:32px 20px;}
+}
 </style>
 </head>
 <body>
 
-<canvas id="particle-canvas"></canvas>
+<div class="stars" id="stars"></div>
 
-<!-- トップ画面 -->
-<div id="top-screen">
-  <div class="top-wrap">
-    <div class="top-badge">✦ SALON INSTAGRAM TOOL</div>
-    <div class="top-logo">艶<span>みっけ</span></div>
-    <div class="top-catch">施術写真を撮るだけで、<br><em>Instagram投稿文</em>が完成🎀</div>
-    <div class="top-sub">ハッシュタグも文章もAIが自動生成✨<br>サロンオーナーの投稿作業を、ぐっと楽に。</div>
+<!-- PWゲート -->
+<div class="pw-gate" id="pw-gate">
+  <div class="pw-gate-box">
+    <span class="pw-gate-icon">🔮</span>
+    <div class="pw-gate-title">占いみっけ Pro</div>
+    <p class="pw-gate-sub">2026年4月よりPro版に移行しました。<br>パスワードを入力してご利用ください。</p>
+    <input type="password" id="gate-pw" placeholder="パスワード" onkeydown="if(event.key==='Enter')checkGate()">
+    <button class="pw-gate-btn" onclick="checkGate()">入室する</button>
+    <div class="pw-gate-error" id="gate-error"></div>
+    <div class="pw-gate-free">ご購入・お問い合わせはSPCまで</div>
+  </div>
+</div>
 
-    <div class="steps">
-      <div class="step">
-        <div class="step-num">1</div>
-        <div class="step-icon">🎀</div>
-        <div class="step-label">施術写真を選ぶ</div>
-      </div>
-      <div class="step">
-        <div class="step-num">2</div>
-        <div class="step-icon">💖</div>
-        <div class="step-label">メニューを選ぶ</div>
-      </div>
-      <div class="step">
-        <div class="step-num">3</div>
-        <div class="step-icon">✨</div>
-        <div class="step-label">投稿文をコピー</div>
-      </div>
+<!-- 使い方モーダル -->
+<div class="modal-overlay" id="howto-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('howto-modal')">✕</button>
+    <div class="modal-title">🔮 使い方ガイド</div>
+    <div class="howto-section">
+      <h3>このツールについて</h3>
+      <ul>
+        <li>占い師・鑑定師さんのSNS集客をサポートするツールです</li>
+        <li>2026年3月31日まで：テンプレート生成が無料で使えます</li>
+        <li>2026年4月1日以降：パスワード認証でAI生成（Pro版）に切り替わります</li>
+      </ul>
     </div>
-
-    <div class="features">
-      <div class="feature-item"><span class="feature-icon">🌸</span>ハッシュタグも自動で最適な10個を生成</div>
-      <div class="feature-item"><span class="feature-icon">💄</span>サロン名・担当者名を自動で挿入</div>
-      <div class="feature-item"><span class="feature-icon">🪄</span>親しみ・上品・プロ感など4つのトーンから選択</div>
+    <div class="howto-section">
+      <h3>共通の入力手順</h3>
+      <ul>
+        <li>① お名前・ハンドルネームを入力してください</li>
+        <li>② 得意な占術をタップして選んでください（複数選択OK）</li>
+        <li>③ 今月のテーマはプルダウンで例文を選ぶか、直接入力してください</li>
+        <li>④ ひとこと自己紹介もプルダウンで選ぶか、直接入力してください</li>
+        <li>⑤ 投稿の雰囲気を4つの中からひとつ選んでください</li>
+      </ul>
     </div>
+    <div class="howto-section">
+      <h3>無料版（〜2026年3月31日）</h3>
+      <ul>
+        <li>「投稿文を生成する」ボタンを押してください</li>
+        <li>X・Instagram・LINEの3タブで投稿文を確認できます</li>
+        <li>同じ設定で何度でも生成できます（毎回少し文章が変わります）</li>
+        <li>「コピーする」ボタンでそのまま貼り付けて使えます</li>
+      </ul>
+    </div>
+    <div class="howto-section">
+      <h3>Pro版（2026年4月1日〜）</h3>
+      <ul>
+        <li>アプリを開くとパスワード入力画面が表示されます</li>
+        <li>SPCよりお知らせしたパスワードを入力してください</li>
+        <li>認証後はAI投稿文生成画面のみ表示されます</li>
+        <li>X・Instagram・LINEのアイコンから投稿先を選んでください</li>
+        <li>「AIで投稿文を生成する」ボタンを押してください</li>
+        <li>AIがあなたらしい投稿文を自動で生成します</li>
+        <li>「コピーする」ボタンでそのまま貼り付けて使えます</li>
+        <li>タブを閉じると再度パスワード入力が必要になります</li>
+      </ul>
+    </div>
+    <div class="howto-section">
+      <h3>設定メニューでできること</h3>
+      <ul>
+        <li>ダークモード／ライトモードの切り替え</li>
+        <li>デモデータの読み込み（入力サンプルをワンタップで確認）</li>
+        <li>入力内容のクリア（全てリセットします）</li>
+      </ul>
+    </div>
+  </div>
+</div>
 
-    <button class="top-btn" onclick="startApp()">
-      はじめる ♡
+<!-- 設定モーダル -->
+<div class="modal-overlay" id="settings-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('settings-modal')">✕</button>
+    <div class="modal-title">⚙ 設定</div>
+    <div class="setting-row">
+      <span>🌙 ダークモード</span>
+      <label class="toggle">
+        <input type="checkbox" id="dark-toggle" checked onchange="toggleTheme(this)">
+        <div class="toggle-track"></div>
+        <div class="toggle-thumb"></div>
+      </label>
+    </div>
+    <div class="setting-row">
+      <span>📋 デモデータを入れる</span>
+      <button class="setting-action-btn" onclick="loadDemo();closeModal('settings-modal')">入れる</button>
+    </div>
+    <div class="setting-row">
+      <span>🗑 入力内容をクリア</span>
+      <button class="setting-action-btn" onclick="clearAll();closeModal('settings-modal')">クリア</button>
+    </div>
+  </div>
+</div>
+
+<!-- メインコンテンツ -->
+<div class="wrap main-content" id="main-content">
+
+  <div class="toolbar">
+    <button class="tool-btn" onclick="openModal('howto-modal')">
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+      使い方
     </button>
-    <div class="top-note" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:0.85rem;color:var(--rg);letter-spacing:0.18em;font-weight:600;">Production SPC</div>
+    <button class="tool-btn" onclick="openModal('settings-modal')">
+      <svg viewBox="0 0 24 24"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.06-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.73,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.06,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.43-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.49-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/></svg>
+      設定
+    </button>
   </div>
-</div>
 
-
-<!-- パスワード画面 -->
-<div id="pw-screen">
-  <div class="pw-wrap">
-    <div class="pw-salon-mark">TSUYA MIKKE FOR SALON</div>
-    <div class="pw-logo">艶<span>みっけ</span></div>
-    <div class="pw-tagline">施術写真から、Instagram投稿文を自動生成 🎀</div>
-
-    <div class="pw-box" id="pw-box">
-      <label>アクセスパスワード</label>
-      <input type="password" id="pw-input" placeholder="••••••••" />
-      <div class="pw-error" id="pw-error">パスワードが違います 😢</div>
-      <button class="pw-btn" onclick="checkPw()">ログイン ♡</button>
-      <div class="pw-divider"><span>有料版</span></div>
-      <div style="font-size:0.75rem;color:var(--gray);text-align:center;line-height:1.7;font-weight:500;">
-        パスワードはご購入後にお送りします💌
-      </div>
-    </div>
-
-    <div class="pw-expired" id="pw-expired">
-      <div class="pw-expired-icon">🌸</div>
-      <div class="pw-expired-title">無料体験期間が終了しました</div>
-      <div class="pw-expired-text">ご利用いただきありがとうございました。<br>引き続きご利用の方は有料版をご購入ください。</div>
-    </div>
-
-    <div class="pw-notice" id="pw-notice">無料体験期間：〜2026年3月31日</div>
-  </div>
-</div>
-
-<!-- 設定パネル -->
-<div id="settings-panel">
-  <div class="settings-box">
-    <h3>⚙ サロン情報の設定 🎀</h3>
-    <div class="settings-row">
-      <label>サロン名</label>
-      <input type="text" id="set-salon" placeholder="例：Hair Salon ROSE" />
-    </div>
-    <div class="settings-row">
-      <label>担当者名</label>
-      <input type="text" id="set-staff" placeholder="例：田中さやか" />
-    </div>
-    <div class="settings-row">
-      <label>Instagramアカウント</label>
-      <input type="text" id="set-ig" placeholder="@アカウント名" />
-    </div>
-    <div class="settings-row">
-      <label>固定ハッシュタグ（スペース区切り）</label>
-      <input type="text" id="set-tags" placeholder="例：#美容室大阪 #サロン" />
-      <span class="hint">毎回の投稿文末に自動追加されます</span>
-    </div>
-    <div class="settings-footer">
-      <button class="btn-save" onclick="saveSettings()">保存する ♡</button>
-      <button class="btn-cancel" onclick="closeSettings()">キャンセル</button>
-    </div>
-  </div>
-</div>
-
-<!-- メインUI -->
-<div id="app" style="display:none">
-  <header class="header">
-    <div class="header-left">
-      <div class="header-logo" onclick="goTop()" style="cursor:pointer;">艶<span>みっけ</span></div>
-      <div class="header-sub">for Salon 🎀</div>
-    </div>
-    <button class="header-btn" onclick="openSettings()">⚙ サロン設定</button>
+  <header>
+    <span class="logo-mark">🔮</span>
+    <h1 onclick="location.reload()" style="cursor:pointer;">占いみっけ</h1>
+    <div class="divider"></div>
+    <p class="tagline">本物の鑑定師さんのための、集客サポートツール</p>
   </header>
 
-  <div class="main">
+  <div class="card">
+    <div class="card-title">✦ あなたのことを教えてください</div>
 
-    <div class="trial-banner" id="banner">
-      <div class="trial-text">
-        <strong>🎁 無料体験期間中</strong>
-        2026年3月31日まで無料でご利用いただけます
-      </div>
-      <div class="trial-badge">FREE ♡</div>
+    <div class="field-group">
+      <label>お名前・ハンドルネーム</label>
+      <input type="text" id="name" placeholder="例）月詠 さくら" maxlength="30">
     </div>
 
-    <!-- 写真 -->
-    <div class="card" id="c1">
-      <div class="card-label">施術写真 🎀</div>
-      <div class="photo-area" id="photo-area" onclick="triggerFileSelect()">
-        <div id="photo-placeholder">
-          <div class="photo-icon">📷✨</div>
-          <div class="photo-text">写真をタップして選ぶ<small>ファイル選択またはカメラ撮影</small></div>
-        </div>
-        <img id="photo-preview" style="display:none" alt="施術写真" />
-        <!-- スキャンオーバーレイ -->
-        <div class="scan-overlay" id="scan-overlay">
-          <div class="scan-line"></div>
-          <div class="scan-corner tl"></div>
-          <div class="scan-corner tr"></div>
-          <div class="scan-corner bl"></div>
-          <div class="scan-corner br"></div>
-          <div class="scan-complete">SCAN COMPLETE ✨</div>
-        </div>
-      </div>
-      <div class="photo-btns">
-        <button class="photo-btn" onclick="event.stopPropagation();triggerFileSelect()">🖼 ファイルから選ぶ</button>
-        <button class="photo-btn" onclick="event.stopPropagation();triggerCamera()">📸 カメラで撮影</button>
-        <button class="photo-btn photo-btn-remove" id="remove-btn" style="display:none" onclick="event.stopPropagation();removePhoto()">✕ 写真を外す</button>
+    <div class="field-group">
+      <label>得意な占術（複数OK）</label>
+      <div class="chips" id="chips">
+        <button class="chip" data-v="タロット">🃏 タロット</button>
+        <button class="chip" data-v="星座占い">⭐ 星座占い</button>
+        <button class="chip" data-v="数秘術">🔢 数秘術</button>
+        <button class="chip" data-v="四柱推命">🀄 四柱推命</button>
+        <button class="chip" data-v="西洋占星術">🌙 西洋占星術</button>
+        <button class="chip" data-v="霊感・霊視">🕯 霊感・霊視</button>
+        <button class="chip" data-v="ルーン">🪨 ルーン</button>
+        <button class="chip" data-v="オラクルカード">🌸 オラクルカード</button>
       </div>
     </div>
 
-    <!-- メニュー -->
-    <div class="card" id="c2">
-      <div class="card-label">施術メニュー（複数OK）💖</div>
-      <div class="menu-grid">
-        <span class="menu-chip" onclick="toggleChip(this)">カラー</span>
-        <span class="menu-chip" onclick="toggleChip(this)">ハイライト</span>
-        <span class="menu-chip" onclick="toggleChip(this)">カット</span>
-        <span class="menu-chip" onclick="toggleChip(this)">パーマ</span>
-        <span class="menu-chip" onclick="toggleChip(this)">縮毛矯正</span>
-        <span class="menu-chip" onclick="toggleChip(this)">トリートメント</span>
-        <span class="menu-chip" onclick="toggleChip(this)">まつエク</span>
-        <span class="menu-chip" onclick="toggleChip(this)">ネイル</span>
-        <span class="menu-chip" onclick="toggleChip(this)">エステ</span>
-        <span class="menu-chip" onclick="toggleChip(this)">ヘアセット</span>
-        <span class="menu-chip" onclick="toggleChip(this)">イルミナカラー</span>
-        <span class="menu-chip" onclick="toggleChip(this)">縮毛＋カラー</span>
+    <div class="field-group">
+      <label>今月のテーマ・メッセージ（任意）</label>
+      <select id="theme-select" class="preset-select" onchange="applyPreset('theme-select','theme')">
+        <option value="">▼ 例文から選ぶ（選ぶと下に反映されます）</option>
+        <option value="流れが変わる月。新しい出会いや気づきが訪れます。直感を信じて動いてみてください。">🌊 流れが変わる月（出会い・気づき）</option>
+        <option value="立ち止まって内省する月。自分の本音をじっくり見つめ直す時間を大切に。">🌿 内省の月（自分を見つめ直す）</option>
+        <option value="行動の月。迷いを手放し、一歩踏み出す勇気が湧いてくる時期です。">✊ 行動の月（踏み出す・前進）</option>
+      </select>
+      <textarea id="theme" placeholder="そのまま使ってもOK、自由に書き換えてもOKです"></textarea>
+    </div>
+
+    <div class="field-group">
+      <label>ひとこと自己紹介（任意）</label>
+      <select id="bio-select" class="preset-select" onchange="applyPreset('bio-select','bio')">
+        <option value="">▼ 例文から選ぶ（選ぶと下に反映されます）</option>
+        <option value="鑑定歴〇年。恋愛・転職・人間関係が得意です。">💼 経歴タイプ（得意ジャンルをアピール）</option>
+        <option value="穏やかに、丁寧に。あなたの本音に寄り添う鑑定を心がけています。">🌸 スタイルタイプ（寄り添い・丁寧さ）</option>
+        <option value="オンライン鑑定・メール鑑定承ります。初めての方もお気軽にどうぞ。">📩 案内タイプ（受付方法・初心者歓迎）</option>
+      </select>
+      <input type="text" id="bio" placeholder="そのまま使ってもOK、〇年の部分など自由に書き換えてください">
+    </div>
+
+    <div class="field-group" style="margin-top:40px;">
+      <label>投稿の雰囲気</label>
+      <div class="chips" id="tone-chips">
+        <button class="chip active" data-tone="やさしく">🌷 やさしく</button>
+        <button class="chip" data-tone="神秘的に">🌌 神秘的に</button>
+        <button class="chip" data-tone="背中を押す">✊ 背中を押す</button>
+        <button class="chip" data-tone="落ち着いて">🍃 落ち着いて</button>
       </div>
     </div>
-
-    <!-- ヒント -->
-    <div class="card" id="c3">
-      <div class="card-label">投稿のポイント（自由記入）✏️</div>
-      <textarea class="hint-area" id="hint-input" rows="4"
-        placeholder="例：暗めのオリーブカラー。ダメージを最小限に仕上げました。透明感重視でのご要望でした。"></textarea>
-    </div>
-
-    <!-- トーン -->
-    <div class="card" id="c4">
-      <div class="card-label">投稿トーン 🪄</div>
-      <div class="tone-row">
-        <button class="tone-btn active" onclick="setTone(this,'親しみ')">😊<br>親しみ</button>
-        <button class="tone-btn" onclick="setTone(this,'上品')">💎<br>上品</button>
-        <button class="tone-btn" onclick="setTone(this,'プロ')">👩‍🏫<br>プロ感</button>
-        <button class="tone-btn" onclick="setTone(this,'ポップ')">🍭<br>ポップ</button>
-      </div>
-    </div>
-
-    <button class="generate-btn" id="gen-btn" onclick="generate()">
-      Instagram投稿文を生成する ✨
-    </button>
-
-    <div class="loading" id="loading">
-      <div class="spinner"></div>
-      <div class="loading-text">可愛く作成中... 🎀</div>
-    </div>
-
-    <div class="result-card" id="result-card">
-      <div class="result-label">GENERATED POST ✨</div>
-      <div class="result-text" id="result-text"></div>
-      <div class="result-footer">
-        <button class="copy-btn" id="copy-btn" onclick="copyResult()">📋 コピーする</button>
-        <button class="retry-btn" onclick="generate()">🔄 作り直す</button>
-      </div>
-    </div>
-
   </div>
 
-  <div class="footer">
-    艶みっけ — Instagram Post Generator for Salon 🎀<br>
-    Powered by AI &nbsp;|&nbsp; © 2026 Smile Plus Consulting
+  <button class="btn-generate" id="btn-template" onclick="generate()">投稿文を生成する</button>
+
+  <div id="results" class="card" style="margin-top:32px;">
+    <div class="card-title">✦ 生成された投稿文</div>
+    <div class="result-tab-bar">
+      <button class="result-tab active" onclick="switchTab('x',this)">𝕏 X用</button>
+      <button class="result-tab" onclick="switchTab('insta',this)">📸 Instagram</button>
+      <button class="result-tab" onclick="switchTab('line',this)">💬 LINE配信</button>
+    </div>
+    <div id="panel-x" class="result-panel active">
+      <div class="result-text" id="text-x"></div>
+      <button class="btn-copy" onclick="copyText('text-x',this)">コピーする</button>
+    </div>
+    <div id="panel-insta" class="result-panel">
+      <div class="result-text" id="text-insta"></div>
+      <button class="btn-copy" onclick="copyText('text-insta',this)">コピーする</button>
+    </div>
+    <div id="panel-line" class="result-panel">
+      <div class="result-text" id="text-line"></div>
+      <button class="btn-copy" onclick="copyText('text-line',this)">コピーする</button>
+    </div>
   </div>
+
+  <!-- AI生成エリア（Pro版） -->
+  <div class="card" id="ai-card" style="margin-top:32px;display:none;">
+    <div class="card-title">✦ AI投稿文生成<span class="pro-badge">PRO</span></div>
+    <p style="font-size:14px;color:var(--text-muted);margin-bottom:28px;line-height:1.6;font-weight:600;">上の入力内容をもとに、AIがあなたらしい投稿文を自動生成します。</p>
+    <div class="platform-btns" id="platform-btns">
+      <button class="platform-btn active" data-platform="x" onclick="selectPlatform(this)">
+        <span class="p-icon">𝕏</span>X
+      </button>
+      <button class="platform-btn" data-platform="instagram" onclick="selectPlatform(this)">
+        <span class="p-icon">📸</span>Instagram
+      </button>
+      <button class="platform-btn" data-platform="line" onclick="selectPlatform(this)">
+        <span class="p-icon">💬</span>LINE
+      </button>
+    </div>
+    <button class="btn-generate" onclick="generateAI()">AIで投稿文を生成する</button>
+    <div class="ai-loading" id="ai-loading">🔮 AIが考えています...</div>
+    <div class="result-text" id="ai-result" style="display:none;margin-top:24px;"></div>
+    <button class="btn-copy" id="ai-copy" onclick="copyText('ai-result',this)" style="display:none;">コピーする</button>
+  </div>
+
+  <footer>
+    占いみっけ｜SPC<br>「考えるを、ひとりにしない」
+  </footer>
+
 </div>
 
-<input type="file" id="file-input" accept="image/*" onchange="onFileSelected(event)" />
-<input type="file" id="camera-input" accept="image/*" capture="environment" onchange="onFileSelected(event)" />
-
 <script>
-// ═══ キラキラパーティクル（ガーリーなピンク・ゴールド・ホワイト） ═══
+// ==========================================
+// JavaScript（機能・ロジック）は一切変更していません
+// ==========================================
+var UNLOCK_DATE  = new Date('2026-04-01T00:00:00+09:00');
+var WORKERS_URL  = 'https://uranai-mikke.yymmatsu.workers.dev';
+var PRO_PASSWORD = 'uranai2025';
+
 (function(){
-  const canvas = document.getElementById('particle-canvas');
-  const ctx = canvas.getContext('2d');
-  let W, H;
-  // ピンク系・白・ゴールドに色を変更
-  const COLORS = ['#FF8BA7','#FFC6D3','#FF6B8B','#FFFFFF','#FFD700','#FFA6C9'];
-  const particles = [];
-
-  function resize(){ W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
-  resize(); window.addEventListener('resize', resize);
-
-  class P {
-    constructor(b){ this.reset(b); }
-    reset(b){
-      this.x = b ? b.x : Math.random()*W;
-      this.y = b ? b.y : Math.random()*H;
-      this.size = Math.random()*2.0+0.5; // 少し大きめに
-      this.opacity = Math.random()*0.5+0.1;
-      this.fade = Math.random()*0.004+0.0015;
-      this.vx = (Math.random()-0.5)*0.3;
-      this.vy = -(Math.random()*0.4+0.08);
-      this.color = COLORS[Math.floor(Math.random()*COLORS.length)];
-      this.tw = Math.random()*Math.PI*2;
-      this.ts = Math.random()*0.04+0.015;
-      this.star = Math.random()>0.5; // 星の確率を少し上げる
-    }
-    drawStar(x,y,r){
-      ctx.save(); ctx.translate(x,y); ctx.beginPath();
-      for(let i=0;i<5;i++){
-        ctx.lineTo(Math.cos((18+i*72)*Math.PI/180)*r,-Math.sin((18+i*72)*Math.PI/180)*r);
-        ctx.lineTo(Math.cos((54+i*72)*Math.PI/180)*r*0.4,-Math.sin((54+i*72)*Math.PI/180)*r*0.4);
-      }
-      ctx.closePath();
-      ctx.fillStyle=this.color;
-      ctx.globalAlpha=Math.max(0,this.opacity*(Math.sin(this.tw)*0.5+0.5));
-      ctx.fill(); ctx.restore();
-    }
-    update(){
-      this.x+=this.vx; this.y+=this.vy; this.tw+=this.ts; this.opacity-=this.fade;
-      if(this.opacity<=0||this.y<-10){ this.reset(null); this.y=H+5; this.opacity=Math.random()*0.5+0.1; }
-    }
-    draw(){
-      if(this.star){ this.drawStar(this.x,this.y,this.size*1.8); }
-      else{
-        const a=Math.max(0,this.opacity*(Math.sin(this.tw)*0.4+0.6));
-        ctx.save(); ctx.globalAlpha=a; ctx.beginPath();
-        ctx.arc(this.x,this.y,this.size,0,Math.PI*2);
-        ctx.fillStyle=this.color;
-        ctx.shadowBlur=this.size*5; ctx.shadowColor=this.color;
-        ctx.fill(); ctx.restore();
-      }
-    }
+  var s = document.getElementById('stars');
+  for(var i=0;i<80;i++){
+    var el = document.createElement('div');
+    el.className = 'star';
+    var size = Math.random()*2.5+0.5;
+    el.style.cssText = 'width:'+size+'px;height:'+size+'px;top:'+Math.random()*100+'%;left:'+Math.random()*100+'%;--d:'+(Math.random()*3+2)+'s;animation-delay:'+(Math.random()*4)+'s;';
+    s.appendChild(el);
   }
-
-  for(let i=0;i<80;i++) particles.push(new P(null));
-  function loop(){ ctx.clearRect(0,0,W,H); particles.forEach(p=>{p.update();p.draw();}); requestAnimationFrame(loop); }
-  loop();
-
-  window.burstParticles = function(x,y){
-    for(let i=0;i<15;i++){
-      const p=new P({x,y});
-      p.vy=(Math.random()-0.5)*4-1; p.vx=(Math.random()-0.5)*4;
-      p.size=Math.random()*3.5+1; p.opacity=1; p.fade=0.02;
-      particles.push(p);
-    }
-  };
 })();
 
-// ═══ フェードイン ═══
-function initFadeIn(){
-  const els=['banner','c1','c2','c3','c4','gen-btn'].map(id=>document.getElementById(id));
-  els.forEach((el,i)=>{ if(el) setTimeout(()=>el.classList.add('visible'),80+i*100); });
-}
-
-
-// ═══ トップ画面 ═══
-function startApp(){
-  const top = document.getElementById('top-screen');
-  top.style.transition = 'opacity 0.35s ease';
-  top.style.opacity = '0';
-  setTimeout(()=>{
-    top.style.display = 'none';
-    if(document.getElementById('app').style.display !== 'none'){
-      // 無料期間中 → フェードイン実行
-      initFadeIn();
-    } else {
-      // 4月以降 → パスワード画面へ
-      document.getElementById('pw-screen').style.display = 'flex';
-    }
-  }, 350);
-}
-
-// ヘッダーロゴ → トップ画面に戻る
-function goTop(){
-  const top = document.getElementById('top-screen');
-  top.style.opacity = '0';
-  top.style.display = 'flex';
-  top.style.transition = 'opacity 0.35s ease';
-  // カードのvisibleをリセット
-  ['banner','c1','c2','c3','c4','gen-btn'].forEach(id=>{
-    const el=document.getElementById(id);
-    if(el) el.classList.remove('visible');
-  });
-  setTimeout(()=>{ top.style.opacity='1'; }, 10);
-}
-
-// ═══ 期限チェック ═══
 (function(){
-  const TRIAL_END=new Date('2026-04-01T00:00:00+09:00');
-  const now=new Date();
-  if(now < TRIAL_END){
-    // 無料期間中 → top-screenを通ってからappへ（appを先に準備しておく）
-    document.getElementById('pw-screen').style.display='none';
-    document.getElementById('app').style.display='block';
-    // top-screenは表示したまま（startApp()で消える）
-  }
-  // 4月1日以降はtop→pw-screenへ遷移
+  if(new Date() >= UNLOCK_DATE){
+    if(sessionStorage.getItem('pro_unlocked') !== '1'){
+      document.getElementById('pw-gate').classList.add('show');
+      document.getElementById('main-content').classList.add('locked');
+    } else { showProMode(); }
+  } else { showFreeMode(); }
 })();
 
-// ═══ パスワード ═══
-const PASS='tsuya2025';
-function checkPw(){
-  if(document.getElementById('pw-input').value===PASS){
-    document.getElementById('pw-screen').style.display='none';
-    document.getElementById('app').style.display='block';
-    loadSettingsToForm();
-    setTimeout(initFadeIn,100);
+function showFreeMode(){
+  document.getElementById('btn-template').style.display='block';
+  document.getElementById('ai-card').style.display='none';
+}
+function showProMode(){
+  document.getElementById('btn-template').style.display='none';
+  document.getElementById('results').style.display='none';
+  document.getElementById('ai-card').style.display='block';
+  document.getElementById('main-content').classList.remove('locked');
+}
+function checkGate(){
+  var pw=document.getElementById('gate-pw').value;
+  var err=document.getElementById('gate-error');
+  err.textContent='';
+  if(!pw){ err.textContent='パスワードを入力してください'; return; }
+  if(pw===PRO_PASSWORD){
+    sessionStorage.setItem('pro_unlocked','1');
+    sessionStorage.setItem('pro_pw',pw);
+    document.getElementById('pw-gate').classList.remove('show');
+    showProMode();
   } else {
-    document.getElementById('pw-error').style.display='block';
-    document.getElementById('pw-input').value='';
+    err.textContent='パスワードが正しくありません';
+    document.getElementById('gate-pw').value='';
+    document.getElementById('gate-pw').focus();
   }
 }
-document.getElementById('pw-input').addEventListener('keydown',e=>{ if(e.key==='Enter') checkPw(); });
-
-// ═══ 設定 ═══
-function openSettings(){ loadSettingsToForm(); document.getElementById('settings-panel').classList.add('open'); }
-function closeSettings(){ document.getElementById('settings-panel').classList.remove('open'); }
-function saveSettings(){
-  const s={
-    salon:document.getElementById('set-salon').value.trim(),
-    staff:document.getElementById('set-staff').value.trim(),
-    ig:document.getElementById('set-ig').value.trim(),
-    tags:document.getElementById('set-tags').value.trim()
-  };
-  localStorage.setItem('tsuyamikke_settings',JSON.stringify(s));
-  closeSettings();
+function openModal(id){ document.getElementById(id).classList.add('open'); }
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('.modal-overlay').forEach(function(o){
+  o.addEventListener('click',function(e){ if(e.target===o) o.classList.remove('open'); });
+});
+function toggleTheme(chk){ document.body.classList.toggle('light',!chk.checked); }
+document.getElementById('chips').addEventListener('click',function(e){
+  var c=e.target.closest('.chip'); if(c) c.classList.toggle('active');
+});
+document.getElementById('tone-chips').addEventListener('click',function(e){
+  var c=e.target.closest('.chip'); if(!c) return;
+  document.querySelectorAll('#tone-chips .chip').forEach(function(x){ x.classList.remove('active'); });
+  c.classList.add('active');
+});
+function applyPreset(s,t){ var el=document.getElementById(s); if(!el.value) return; document.getElementById(t).value=el.value; el.selectedIndex=0; }
+function loadDemo(){
+  document.getElementById('name').value='月詠 さくら';
+  document.getElementById('theme').value='自分を信じて一歩踏み出す月。迷いが晴れる出来事が訪れます。';
+  document.getElementById('bio').value='鑑定歴8年。恋愛・転職・人間関係が得意です。';
+  document.querySelectorAll('#chips .chip').forEach(function(c){ c.classList.toggle('active',c.dataset.v==='タロット'||c.dataset.v==='西洋占星術'); });
+  document.querySelectorAll('#tone-chips .chip').forEach(function(c,i){ c.classList.toggle('active',i===0); });
 }
-function loadSettingsToForm(){
-  const raw=localStorage.getItem('tsuyamikke_settings'); if(!raw) return;
-  const s=JSON.parse(raw);
-  document.getElementById('set-salon').value=s.salon||'';
-  document.getElementById('set-staff').value=s.staff||'';
-  document.getElementById('set-ig').value=s.ig||'';
-  document.getElementById('set-tags').value=s.tags||'';
+function clearAll(){
+  document.getElementById('name').value='';
+  document.getElementById('theme').value='';
+  document.getElementById('bio').value='';
+  document.getElementById('theme-select').selectedIndex=0;
+  document.getElementById('bio-select').selectedIndex=0;
+  document.querySelectorAll('#chips .chip').forEach(function(c){ c.classList.remove('active'); });
+  document.querySelectorAll('#tone-chips .chip').forEach(function(c,i){ c.classList.toggle('active',i===0); });
+  document.getElementById('results').classList.remove('show');
+  document.getElementById('ai-result').style.display='none';
+  document.getElementById('ai-result').textContent='';
+  document.getElementById('ai-copy').style.display='none';
 }
-function getSettings(){ const raw=localStorage.getItem('tsuyamikke_settings'); return raw?JSON.parse(raw):{}; }
-
-// ═══ 写真 ═══
-let photoDataUrl=null;
-function triggerFileSelect(){ document.getElementById('file-input').click(); }
-function triggerCamera(){ document.getElementById('camera-input').click(); }
-function onFileSelected(e){
-  const file=e.target.files[0]; if(!file) return;
-  const r=new FileReader();
-  r.onload=ev=>{
-    // ─── canvas圧縮 ───
-    const img=new Image();
-    img.onload=()=>{
-      const MAX=800; // 長辺800pxに制限
-      let w=img.width, h=img.height;
-      if(w>h){ if(w>MAX){h=Math.round(h*MAX/w);w=MAX;} }
-      else    { if(h>MAX){w=Math.round(w*MAX/h);h=MAX;} }
-      const canvas=document.createElement('canvas');
-      canvas.width=w; canvas.height=h;
-      canvas.getContext('2d').drawImage(img,0,0,w,h);
-      // JPEG品質72%で出力（8MB→約80〜120KB）
-      const compressed=canvas.toDataURL('image/jpeg',0.72);
-      setPhoto(compressed);
-    };
-    img.src=ev.target.result;
-  };
-  r.readAsDataURL(file);
-  e.target.value='';
-}
-function setPhoto(url){
-  photoDataUrl=url;
-  const img=document.getElementById('photo-preview'); img.src=url; img.style.display='block';
-  document.getElementById('photo-placeholder').style.display='none';
-  document.getElementById('photo-area').classList.add('has-image');
-  document.getElementById('remove-btn').style.display='none'; // スキャン中は非表示
-
-  // スキャンアニメーション起動
-  startScan();
-}
-
-function startScan(){
-  const overlay = document.getElementById('scan-overlay');
-  // 古いアニメーションをリセット
-  overlay.classList.remove('active');
-  overlay.innerHTML = '';
-  void overlay.offsetWidth; // reflow
-
-  overlay.innerHTML = `
-    <div class="scan-line"></div>
-    <div class="scan-corner tl"></div>
-    <div class="scan-corner tr"></div>
-    <div class="scan-corner bl"></div>
-    <div class="scan-corner br"></div>
-    <div class="scan-complete">SCAN COMPLETE ✨</div>
-  `;
-  overlay.classList.add('active');
-
-  // 2秒後にオーバーレイ消去・ボタン表示
-  setTimeout(()=>{
-    overlay.classList.remove('active');
-    document.getElementById('remove-btn').style.display='block';
-    // パーティクルバースト
-    const area = document.getElementById('photo-area');
-    const rect = area.getBoundingClientRect();
-    burstParticles(rect.left + rect.width/2, rect.top + rect.height/2);
-  }, 2000);
-}
-function removePhoto(){
-  photoDataUrl=null;
-  document.getElementById('photo-preview').style.display='none';
-  document.getElementById('photo-placeholder').style.display='block';
-  document.getElementById('photo-area').classList.remove('has-image');
-  document.getElementById('remove-btn').style.display='none';
-}
-
-// ═══ チップ・トーン ═══
-function toggleChip(el){ el.classList.toggle('selected'); }
-let currentTone='親しみ';
-function setTone(el,tone){ currentTone=tone; document.querySelectorAll('.tone-btn').forEach(b=>b.classList.remove('active')); el.classList.add('active'); }
-function getSelectedMenus(){ return [...document.querySelectorAll('.menu-chip.selected')].map(c=>c.textContent); }
-
-// ═══ Worker URL ═══
-const WORKER_URL='https://tsuya-mikke-spc.yymmatsu.workers.dev/chat';
-
-// ═══ 生成（API連携版） ═══
-async function generate(){
-  const btn=document.getElementById('gen-btn');
-  const rect=btn.getBoundingClientRect();
-  burstParticles(rect.left+rect.width/2, rect.top+rect.height/2);
-  btn.disabled=true;
-  document.getElementById('loading').classList.add('show');
-  document.getElementById('result-card').classList.remove('show');
-
-  const s=getSettings();
-  const menus=getSelectedMenus();
-  const hint=document.getElementById('hint-input').value.trim();
-
-  const payload={
-    password: PASS,
-    text: hint,
-    salonName: s.salon||'',
-    staffName: s.staff||'',
-    menus: menus.join('＋'),
-    tone: currentTone,
-    imageBase64: photoDataUrl||''
-  };
-
-  try{
-    const res=await fetch(WORKER_URL,{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify(payload)
-    });
-    if(!res.ok){
-      const err=await res.json().catch(()=>({error:'通信エラー'}));
-      throw new Error(err.error||res.status);
-    }
-    const data=await res.json();
-    const fixedTags=s.tags?'\n'+s.tags:'';
-    const igAccount=s.ig?'\n'+s.ig:'';
-    const hashLine=Array.isArray(data.hashtags)?data.hashtags.join(' '):(data.hashtags||'');
-    const post=[
-      data.caption||'',
-      '',
-      data.cta||'',
-      igAccount,
-      '',
-      hashLine+fixedTags
-    ].join('\n').replace(/\n{3,}/g,'\n\n').trim();
-    document.getElementById('result-text').textContent=post;
-    document.getElementById('result-card').classList.add('show');
-    document.getElementById('result-card').scrollIntoView({behavior:'smooth',block:'nearest'});
-  }catch(e){
-    document.getElementById('result-text').textContent='⚠ エラーが発生しました。\n'+e.message;
-    document.getElementById('result-card').classList.add('show');
-  }finally{
-    document.getElementById('loading').classList.remove('show');
-    btn.disabled=false;
+var TEMPLATES={
+  'やさしく':{
+    x:["🌙 今月も、あなたのそばに。\n\n{theme}\n\n小さな不安も、大きな迷いも、\nそっと寄り添いながら一緒に読み解いていきます✨\n\n{skill}で、あなたの「今」を照らします。\n\n📩 無料お試し鑑定、受付中です。\nプロフィールのリンクからどうぞ🌸\n\n{hashtag}",
+       "✨ 毎日がんばっているあなたへ。\n\n{theme}\n\nひとりで抱え込まないで。\n{name}が、あなたの声を聴きます。\n\n{skill} | {bio}\n\n📩 気軽にDMください💌\n{hashtag}"],
+    insta:["🌸 今月のメッセージをお届けします。\n\n{theme}\n\nどんな状況でも、あなたには必ず「流れ」があります。\n{name}の{skill}で、その流れを一緒に読んでいきましょう🌙\n\n{bio}\n\n✉️ プロフィールのリンクから、お気軽にどうぞ。\n\n{hashtag}"],
+    line:["こんにちは☺️ {name}です。\n\n今月のテーマをシェアしますね。\n\n{theme}\n\n「なんとなく不安…」\n「この選択でいいのかな？」\n\nそんなとき、ひとりで悩まないでください。\n\n{skill}で、あなたのペースに合わせて\n丁寧に鑑定します🌷\n\n→ お申し込みはこちら\n【リンク】"]
+  },
+  '神秘的に':{
+    x:["🔮 星は、すべてを知っている。\n\n{theme}\n\n見えない力が動き始めるとき、\nあなたはどこに立っているだろう。\n\n{skill}が紡ぐ、あなただけの物語。\n\n📩 鑑定受付中 → プロフィールへ\n{hashtag}"],
+    insta:["🌌 宇宙はいつも、あなたに語りかけている。\n\n{theme}\n\n偶然などない。\nすべては、必然の流れの中に。\n\n{name}の{skill}で、その声を聴いてみませんか。\n\n{bio}\n\n🔮 鑑定受付中 → プロフィールへ\n{hashtag}"],
+    line:["🔮 {name}です。\n\n今月の星からのメッセージをお届けします。\n\n{theme}\n\n偶然に見えるできごとの中に、\nあなたへのサインが隠れています。\n\n{skill}で、その意味を一緒に読み解きましょう✨\n\n→ 鑑定のご予約はこちら\n【リンク】"]
+  },
+  '背中を押す':{
+    x:["✊ 迷ってる時間、もったいないよ。\n\n{theme}\n\n「やっぱり動いてよかった」\nそう言える未来を、一緒に選びにいこう。\n\n{skill}で本音を引き出す。{name}の鑑定、今月も受付中！\n📩 プロフィールへ\n{hashtag}"],
+    insta:["🔥 あなたの「もっと」を、諦めないで。\n\n{theme}\n\n答えは、すでにあなたの中にある。\n{skill}は、それを引き出すための地図。\n\n{name} | {bio}\n\n📩 鑑定ご予約はプロフィールから！\n{hashtag}"],
+    line:["こんにちは✊ {name}です！\n\n今月のメッセージです👇\n\n{theme}\n\n「踏み出せない」\n「また同じところで止まってる…」\n\nそのループ、{skill}で一緒に突破しましょう！\n\n→ 今すぐ申し込む\n【リンク】"]
+  },
+  '落ち着いて':{
+    x:["🍃 静かに、深く、あなたと向き合う時間を。\n\n{theme}\n\n焦らなくていい。\n{name}の{skill}は、あなたのペースで進みます。\n\n{bio}\n\n📩 ご予約はプロフィールから\n{hashtag}"],
+    insta:["🌿 ゆっくりでいい。\n\n{theme}\n\n急がなくていい。\nただ「今」を見つめることには、価値がある。\n\n{name}の{skill}で、静かな時間を過ごしませんか。\n\n{bio}\n\n📩 鑑定受付中 → プロフィールへ\n{hashtag}"],
+    line:["こんにちは🍃 {name}です。\n\n今月のメッセージをお届けします。\n\n{theme}\n\n慌てなくていい。\nただ、今の自分の声をちゃんと聴いてあげてください。\n\n{skill}で、穏やかに、ていねいに向き合います。\n\n→ お申し込みはこちら\n【リンク】"]
   }
+};
+var HASHTAG={'タロット':'#タロット占い #タロットリーディング','星座占い':'#星座占い #今月の運勢','数秘術':'#数秘術 #数字占い','四柱推命':'#四柱推命 #命式','西洋占星術':'#西洋占星術 #ホロスコープ','霊感・霊視':'#霊感鑑定 #霊視','ルーン':'#ルーン占い #ルーン','オラクルカード':'#オラクルカード #カードリーディング'};
+var COMMON='#占い #占い師 #鑑定 #スピリチュアル';
+function getSelected(id){ return Array.from(document.querySelectorAll('#'+id+' .chip.active')).map(function(c){ return c.dataset.v||c.dataset.tone; }); }
+function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+function build(tpl,name,skills,theme,bio){
+  var skillStr=skills.length?skills.join('・'):'占い';
+  var htags=skills.map(function(s){ return HASHTAG[s]||''; }).join(' ').trim()+' '+COMMON;
+  return tpl.replace(/{name}/g,name||'私').replace(/{skill}/g,skillStr).replace(/{theme}/g,theme||'あなたの未来に、光が差し込む月。\n新しい流れが始まろうとしています。').replace(/{bio}/g,bio||'').replace(/{hashtag}/g,htags.trim());
 }
-
-// ═══ コピー ═══
-function copyResult(){
-  navigator.clipboard.writeText(document.getElementById('result-text').textContent).then(()=>{
-    const btn=document.getElementById('copy-btn');
-    btn.textContent='✨ コピーしました'; btn.classList.add('copied');
-    const r=btn.getBoundingClientRect(); burstParticles(r.left+r.width/2,r.top);
-    setTimeout(()=>{ btn.textContent='📋 コピーする'; btn.classList.remove('copied'); },2200);
+function generate(){
+  var name=document.getElementById('name').value.trim();
+  var skills=getSelected('chips');
+  var theme=document.getElementById('theme').value.trim();
+  var bio=document.getElementById('bio').value.trim();
+  var tones=getSelected('tone-chips');
+  var T=TEMPLATES[tones[0]||'やさしく'];
+  document.getElementById('text-x').textContent=build(pick(T.x),name,skills,theme,bio);
+  document.getElementById('text-insta').textContent=build(pick(T.insta),name,skills,theme,bio);
+  document.getElementById('text-line').textContent=build(pick(T.line),name,skills,theme,bio);
+  var r=document.getElementById('results');
+  r.classList.add('show');
+  setTimeout(function(){ r.scrollIntoView({behavior:'smooth',block:'start'}); },100);
+}
+function switchTab(key,btn){
+  document.querySelectorAll('.result-tab').forEach(function(t){ t.classList.remove('active'); });
+  document.querySelectorAll('.result-panel').forEach(function(p){ p.classList.remove('active'); });
+  btn.classList.add('active');
+  document.getElementById('panel-'+key).classList.add('active');
+}
+function copyText(id,btn){
+  var el=document.getElementById(id); if(!el) return;
+  var textarea = document.createElement("textarea");
+  textarea.value = el.textContent;
+  document.body.appendChild(textarea);
+  textarea.select();
+  try {
+    document.execCommand('copy');
+    btn.textContent='コピーしました！';
+    btn.classList.add('copied');
+    setTimeout(function(){ btn.textContent='コピーする'; btn.classList.remove('copied'); },2000);
+  } catch (err) {
+    console.error('コピーに失敗しました', err);
+  }
+  document.body.removeChild(textarea);
+}
+function selectPlatform(btn){
+  document.querySelectorAll('#platform-btns .platform-btn').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+}
+function generateAI(){
+  var pw=sessionStorage.getItem('pro_pw');
+  var result=document.getElementById('ai-result');
+  var loading=document.getElementById('ai-loading');
+  var copyBtn=document.getElementById('ai-copy');
+  
+  if(!pw){ 
+    result.textContent = 'パスワード認証が必要です。ページを再読み込みしてください。';
+    result.style.display = 'block';
+    return; 
+  }
+  
+  var name=document.getElementById('name').value.trim();
+  var theme=document.getElementById('theme').value.trim();
+  var bio=document.getElementById('bio').value.trim();
+  var skills=getSelected('chips');
+  var tones=getSelected('tone-chips');
+  var activeBtn=document.querySelector('#platform-btns .platform-btn.active');
+  var platform=activeBtn?activeBtn.dataset.platform:'x';
+  
+  loading.classList.add('show');
+  result.style.display='none';
+  copyBtn.style.display='none';
+  
+  fetch(WORKERS_URL+'/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:pw,name:name||'私',skills:skills,theme:theme,bio:bio,tone:tones[0]||'やさしく',platform:platform})})
+  .then(function(r){ return r.json(); })
+  .then(function(d){
+    loading.classList.remove('show');
+    if(d.text){ result.textContent=d.text; result.style.display='block'; copyBtn.style.display='block'; }
+    else { result.textContent='エラーが発生しました。もう一度お試しください。'; result.style.display='block'; }
+  })
+  .catch(function(){
+    loading.classList.remove('show');
+    result.textContent='サーバーに接続できません。しばらくしてから再試行してください。';
+    result.style.display='block';
   });
 }
 </script>
