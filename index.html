@@ -40,6 +40,7 @@
   --si-light: rgba(57, 54, 65, 0.8); /* 内側の明るいハイライト */
 
   --error: #ffb4ab;
+  --error-on: #410002;
 
   /* 丸みの設定 */
   --rad-l: 28px;
@@ -63,6 +64,7 @@ body.light {
   --si-light: rgba(255, 255, 255, 0.8);
   
   --error: #ba1a1a;
+  --error-on: #ffffff;
 }
 
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -99,8 +101,6 @@ body.light .stars { display: none; }
 
 /* レイアウト */
 .wrap{position:relative;z-index:1;max-width:680px;margin:0 auto;padding:32px 20px 80px;}
-.main-content{transition:filter .3s;}
-.main-content.locked{filter:blur(8px);pointer-events:none;user-select:none;}
 
 /* ツールバー */
 .toolbar{display:flex;justify-content:flex-end;gap:12px;margin-bottom:24px;}
@@ -116,15 +116,43 @@ body.light .stars { display: none; }
   font-weight:600;
   cursor:pointer;
   transition:all .2s;
-  /* 出っ張りクレイ */
   box-shadow: 4px 4px 8px var(--s-dark), -4px -4px 8px var(--s-light);
 }
 .tool-btn:active {
-  /* 押すと凹む */
   box-shadow: inset 2px 2px 4px var(--si-dark), inset -2px -2px 4px var(--si-light);
   color: var(--primary);
 }
 .tool-btn svg { width:18px;height:18px;fill:currentColor; }
+
+/* 無料体験バナー (Sticky & Claymorphism) */
+.free-banner {
+  position: sticky;
+  top: 16px;
+  z-index: 150;
+  background: var(--primary);
+  color: var(--primary-on);
+  padding: 16px 24px;
+  border-radius: 100px;
+  font-family: 'Zen Kaku Gothic New', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+  box-shadow: 6px 6px 12px var(--s-dark), -6px -6px 12px var(--s-light), inset 2px 2px 6px rgba(255,255,255,0.4);
+  cursor: pointer;
+  margin-bottom: 32px;
+  transition: all 0.2s ease;
+  display: none; /* 初期非表示 */
+  line-height: 1.4;
+}
+.free-banner:active {
+  box-shadow: inset 4px 4px 8px rgba(0,0,0,0.2), inset -4px -4px 8px rgba(255,255,255,0.3);
+  transform: translateY(2px);
+}
+.free-banner.is-empty {
+  background: var(--error);
+  color: var(--error-on);
+  box-shadow: 6px 6px 12px var(--s-dark), -6px -6px 12px var(--s-light), inset 2px 2px 4px rgba(255,255,255,0.3);
+}
 
 /* ヘッダー */
 header{text-align:center;margin-bottom:48px;}
@@ -141,7 +169,6 @@ h1 {
   color: var(--primary);
   line-height:1.2;
   margin-bottom:12px;
-  /* 文字が少し浮いているように見せるドロップシャドウ */
   text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
 }
 body.light h1 { text-shadow: 2px 2px 4px rgba(255,255,255,0.8); }
@@ -199,7 +226,7 @@ label {
 input[type="text"], input[type="password"], textarea, select {
   width:100%;
   background:var(--bg);
-  border:none; /* 枠線をなくす */
+  border:none; 
   border-radius:var(--rad-m);
   padding:16px 20px;
   color:var(--text);
@@ -208,13 +235,11 @@ input[type="text"], input[type="password"], textarea, select {
   outline:none;
   transition:all .2s;
   -webkit-appearance:none;
-  /* 凹みクレイ */
   box-shadow: 
     inset 4px 4px 8px var(--si-dark), 
     inset -4px -4px 8px var(--si-light);
 }
 input:focus, textarea:focus, select:focus {
-  /* フォーカス時は少し光らせる */
   box-shadow: 
     inset 4px 4px 8px var(--si-dark), 
     inset -4px -4px 8px var(--si-light),
@@ -246,7 +271,6 @@ select option { background: var(--bg); color:var(--text); }
   background:var(--bg);
   font-family:'Zen Kaku Gothic New',sans-serif;
   transition:all .2s;
-  /* 出っ張りクレイ */
   box-shadow: 
     4px 4px 8px var(--s-dark), 
     -4px -4px 8px var(--s-light),
@@ -256,7 +280,6 @@ select option { background: var(--bg); color:var(--text); }
 .chip:hover { transform: translateY(-1px); }
 .chip:active { transform: translateY(1px); }
 .chip.active {
-  /* アクティブで凹む */
   box-shadow: 
     inset 3px 3px 6px var(--si-dark), 
     inset -3px -3px 6px var(--si-light);
@@ -280,7 +303,6 @@ select option { background: var(--bg); color:var(--text); }
   letter-spacing:.08em;
   cursor:pointer;
   transition:all .2s;
-  /* プライマリー色の出っ張りクレイ */
   box-shadow: 
     8px 8px 16px var(--s-dark), 
     -8px -8px 16px var(--s-light),
@@ -295,7 +317,6 @@ body.light .btn-generate {
     inset -2px -2px 6px rgba(0,0,0,0.1);
 }
 .btn-generate:active {
-  /* 押すと凹む */
   box-shadow: 
     inset 4px 4px 8px rgba(0,0,0,0.2), 
     inset -4px -4px 8px rgba(255,255,255,0.3);
@@ -318,11 +339,9 @@ body.light .btn-generate {
   font-family:'Zen Kaku Gothic New',sans-serif;
   font-size:15px; font-weight:700;
   cursor:pointer; transition:all .2s;
-  /* 出っ張りクレイ */
   box-shadow: 4px 4px 8px var(--s-dark), -4px -4px 8px var(--s-light);
 }
 .result-tab.active {
-  /* 凹みクレイ */
   box-shadow: inset 4px 4px 8px var(--si-dark), inset -4px -4px 8px var(--si-light);
   color: var(--primary);
 }
@@ -335,7 +354,6 @@ body.light .btn-generate {
   padding: 24px;
   font-size:15px; line-height:1.8; white-space:pre-wrap;
   color:var(--text); min-height:160px;
-  /* 凹みクレイ */
   box-shadow: inset 4px 4px 8px var(--si-dark), inset -4px -4px 8px var(--si-light);
 }
 
@@ -459,7 +477,7 @@ body.light .modal {
 body.light .toggle-thumb { box-shadow: 2px 2px 4px rgba(0,0,0,0.1), inset 1px 1px 2px rgba(255,255,255,0.8); }
 
 .toggle input:checked + .toggle-track {
-  background: var(--bg); /* トラックの色は変えず、凹みのまま */
+  background: var(--bg);
 }
 .toggle input:checked ~ .toggle-thumb {
   transform:translateX(28px);
@@ -485,7 +503,7 @@ body.light .toggle-thumb { box-shadow: 2px 2px 4px rgba(0,0,0,0.1), inset 1px 1p
 }
 .pw-gate.show { display:flex; }
 .pw-gate-box {
-  background: var(--bg); border-radius: var(--rad-l);
+  background: var(--bg); border-radius: var(--rad-l); position: relative;
   padding:48px 32px; max-width:400px;width:100%; text-align:center;
   animation:fadeUp .4s ease both;
   box-shadow: 20px 20px 40px rgba(0,0,0,0.3), -10px -10px 20px rgba(255,255,255,0.05);
@@ -526,6 +544,8 @@ footer { text-align:center; margin-top:56px; font-size:13px; font-weight:bold; c
 <!-- PWゲート -->
 <div class="pw-gate" id="pw-gate">
   <div class="pw-gate-box">
+    <!-- 閉じるボタン追加 -->
+    <button class="modal-close" style="top:20px; right:20px;" onclick="closeGate()">✕</button>
     <span class="pw-gate-icon">🔮</span>
     <div class="pw-gate-title">占いみっけ Pro</div>
     <p class="pw-gate-sub">2026年4月よりPro版に移行しました。<br>パスワードを入力してご利用ください。</p>
@@ -629,6 +649,9 @@ footer { text-align:center; margin-top:56px; font-size:13px; font-weight:bold; c
       設定
     </button>
   </div>
+
+  <!-- 無料体験バナー -->
+  <div class="free-banner" id="free-banner" onclick="openGate()"></div>
 
   <header>
     <span class="logo-mark">🔮</span>
@@ -744,11 +767,12 @@ footer { text-align:center; margin-top:56px; font-size:13px; font-weight:bold; c
 
 <script>
 // ==========================================
-// JavaScript（機能・ロジック）は一切変更していません
+// 定数と初期化
 // ==========================================
-var UNLOCK_DATE  = new Date('2026-04-01T00:00:00+09:00');
-var WORKERS_URL  = 'https://uranai-mikke.yymmatsu.workers.dev';
-var PRO_PASSWORD = 'uranai2025';
+var UNLOCK_DATE    = new Date('2026-04-01T00:00:00+09:00');
+var WORKERS_URL    = 'https://uranai-mikke.yymmatsu.workers.dev';
+var PRO_PASSWORD   = 'uranai2025';
+var MAX_FREE_TRIAL = 3;
 
 (function(){
   var s = document.getElementById('stars');
@@ -763,45 +787,106 @@ var PRO_PASSWORD = 'uranai2025';
 
 (function(){
   if(new Date() >= UNLOCK_DATE){
-    if(sessionStorage.getItem('pro_unlocked') !== '1'){
-      document.getElementById('pw-gate').classList.add('show');
-      document.getElementById('main-content').classList.add('locked');
-    } else { showProMode(); }
-  } else { showFreeMode(); }
+    // 4月1日以降：ProモードのUIを基本表示（AIボタンなどを見せる）
+    showProMode();
+    // 認証状況に応じてバナーの表示内容を更新
+    updateBanner();
+  } else {
+    // 4月1日以前：完全無料のテンプレート生成のみ
+    showFreeMode();
+  }
 })();
+
+// ==========================================
+// 状態管理・バナー制御
+// ==========================================
+function getFreeTrialCount() {
+  return parseInt(localStorage.getItem('free_ai_count') || '0', 10);
+}
+
+function incrementFreeTrialCount() {
+  var count = getFreeTrialCount();
+  localStorage.setItem('free_ai_count', count + 1);
+}
+
+function updateBanner() {
+  var banner = document.getElementById('free-banner');
+  if(!banner) return;
+  
+  // 認証済みの場合はバナーを非表示
+  if (sessionStorage.getItem('pro_unlocked') === '1') {
+    banner.style.display = 'none';
+    return;
+  }
+  
+  // 4月1日以前の場合はバナーを非表示
+  if (new Date() < UNLOCK_DATE) {
+    banner.style.display = 'none';
+    return;
+  }
+  
+  banner.style.display = 'flex';
+  var count = getFreeTrialCount();
+  var remain = MAX_FREE_TRIAL - count;
+  
+  banner.className = 'free-banner'; // クラスリセット
+  
+  if (count === 0) {
+    banner.innerHTML = '🎁 今なら3回まで無料でお試しいただけます（登録不要）';
+  } else if (remain > 0) {
+    banner.innerHTML = '🎁 無料体験 残り' + remain + '回（全3回）';
+  } else {
+    banner.className = 'free-banner is-empty';
+    banner.innerHTML = '⚠️ 無料体験が終了しました<br>ご購入はこちら→';
+  }
+}
 
 function showFreeMode(){
   document.getElementById('btn-template').style.display='block';
   document.getElementById('ai-card').style.display='none';
 }
+
 function showProMode(){
   document.getElementById('btn-template').style.display='none';
   document.getElementById('results').style.display='none';
   document.getElementById('ai-card').style.display='block';
-  document.getElementById('main-content').classList.remove('locked');
 }
+
+function openGate(){
+  document.getElementById('pw-gate').classList.add('show');
+}
+function closeGate(){
+  document.getElementById('pw-gate').classList.remove('show');
+}
+
 function checkGate(){
   var pw=document.getElementById('gate-pw').value;
   var err=document.getElementById('gate-error');
   err.textContent='';
   if(!pw){ err.textContent='パスワードを入力してください'; return; }
+  
   if(pw===PRO_PASSWORD){
     sessionStorage.setItem('pro_unlocked','1');
     sessionStorage.setItem('pro_pw',pw);
-    document.getElementById('pw-gate').classList.remove('show');
-    showProMode();
+    closeGate();
+    updateBanner(); // 認証成功時にバナーを消す
   } else {
     err.textContent='パスワードが正しくありません';
     document.getElementById('gate-pw').value='';
     document.getElementById('gate-pw').focus();
   }
 }
+
 function openModal(id){ document.getElementById(id).classList.add('open'); }
 function closeModal(id){ document.getElementById(id).classList.remove('open'); }
 document.querySelectorAll('.modal-overlay').forEach(function(o){
   o.addEventListener('click',function(e){ if(e.target===o) o.classList.remove('open'); });
 });
 function toggleTheme(chk){ document.body.classList.toggle('light',!chk.checked); }
+
+// ==========================================
+// フォーム・テンプレート生成
+// ==========================================
 document.getElementById('chips').addEventListener('click',function(e){
   var c=e.target.closest('.chip'); if(c) c.classList.toggle('active');
 });
@@ -831,6 +916,7 @@ function clearAll(){
   document.getElementById('ai-result').textContent='';
   document.getElementById('ai-copy').style.display='none';
 }
+
 var TEMPLATES={
   'やさしく':{
     x:["🌙 今月も、あなたのそばに。\n\n{theme}\n\n小さな不安も、大きな迷いも、\nそっと寄り添いながら一緒に読み解いていきます✨\n\n{skill}で、あなたの「今」を照らします。\n\n📩 無料お試し鑑定、受付中です。\nプロフィールのリンクからどうぞ🌸\n\n{hashtag}",
@@ -899,19 +985,23 @@ function copyText(id,btn){
   }
   document.body.removeChild(textarea);
 }
+
+// ==========================================
+// AI生成（Pro版）のロジック
+// ==========================================
 function selectPlatform(btn){
   document.querySelectorAll('#platform-btns .platform-btn').forEach(function(b){ b.classList.remove('active'); });
   btn.classList.add('active');
 }
+
 function generateAI(){
-  var pw=sessionStorage.getItem('pro_pw');
-  var result=document.getElementById('ai-result');
-  var loading=document.getElementById('ai-loading');
-  var copyBtn=document.getElementById('ai-copy');
+  var pw = sessionStorage.getItem('pro_pw') || '';
+  var unlocked = sessionStorage.getItem('pro_unlocked') === '1';
+  var remain = MAX_FREE_TRIAL - getFreeTrialCount();
   
-  if(!pw){ 
-    result.textContent = 'パスワード認証が必要です。ページを再読み込みしてください。';
-    result.style.display = 'block';
+  // 未認証 かつ 無料体験を使い切っている場合はゲートを開いて終了
+  if(!unlocked && remain <= 0){ 
+    openGate();
     return; 
   }
   
@@ -923,16 +1013,37 @@ function generateAI(){
   var activeBtn=document.querySelector('#platform-btns .platform-btn.active');
   var platform=activeBtn?activeBtn.dataset.platform:'x';
   
+  var result=document.getElementById('ai-result');
+  var loading=document.getElementById('ai-loading');
+  var copyBtn=document.getElementById('ai-copy');
+  
   loading.classList.add('show');
   result.style.display='none';
   copyBtn.style.display='none';
   
-  fetch(WORKERS_URL+'/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:pw,name:name||'私',skills:skills,theme:theme,bio:bio,tone:tones[0]||'やさしく',platform:platform})})
+  fetch(WORKERS_URL+'/generate',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({password:pw,name:name||'私',skills:skills,theme:theme,bio:bio,tone:tones[0]||'やさしく',platform:platform})
+  })
   .then(function(r){ return r.json(); })
   .then(function(d){
     loading.classList.remove('show');
-    if(d.text){ result.textContent=d.text; result.style.display='block'; copyBtn.style.display='block'; }
-    else { result.textContent='エラーが発生しました。もう一度お試しください。'; result.style.display='block'; }
+    if(d.text){ 
+      result.textContent=d.text; 
+      result.style.display='block'; 
+      copyBtn.style.display='block'; 
+      
+      // 生成成功時に無料回数を減らしてバナー更新
+      if(!unlocked) {
+        incrementFreeTrialCount();
+        updateBanner();
+      }
+    }
+    else { 
+      result.textContent='エラーが発生しました。もう一度お試しください。'; 
+      result.style.display='block'; 
+    }
   })
   .catch(function(){
     loading.classList.remove('show');
