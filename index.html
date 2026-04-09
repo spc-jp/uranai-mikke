@@ -29,6 +29,7 @@
   --si-light: rgba(57, 54, 65, 0.8);
   --error: #ffb4ab;
   --error-on: #410002;
+  --primary-bg: rgba(232, 204, 128, 0.15); /* 選択時の背景色（ダーク） */
   --rad-l: 28px;
   --rad-m: 16px;
   --rad-s: 12px;
@@ -46,6 +47,7 @@ body.light {
   --si-light: rgba(255, 255, 255, 0.8);
   --error: #ba1a1a;
   --error-on: #ffffff;
+  --primary-bg: rgba(184, 144, 60, 0.12); /* 選択時の背景色（ライト） */
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 body {
@@ -127,7 +129,7 @@ select option { background:var(--bg); color:var(--text); }
 }
 .chip:hover { transform:translateY(-1px); }
 .chip:active { transform:translateY(1px); }
-.chip.active { box-shadow: inset 3px 3px 6px var(--si-dark), inset -3px -3px 6px var(--si-light); color:var(--primary); transform:translateY(1px); }
+.chip.active { box-shadow: inset 3px 3px 6px var(--si-dark), inset -3px -3px 6px var(--si-light); color:var(--primary); transform:translateY(1px); background:var(--primary-bg); }
 .btn-generate {
   width:100%; padding:18px 24px; background:var(--primary); color:var(--primary-on);
   border:none; border-radius:100px; font-family:'Shippori Mincho',serif;
