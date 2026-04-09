@@ -4,12 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>占いみっけ｜鑑定師さんの集客サポートツール</title>
-
-<!-- Favicon -->
 <link rel="icon" href="favicon.png" type="image/png">
 <link rel="apple-touch-icon" href="favicon.png">
-
-<!-- OGP / Twitter Card -->
 <meta property="og:title" content="占いみっけ｜鑑定師さんの集客サポートツール">
 <meta property="og:description" content="本物の鑑定師さんのための、集客サポートツール">
 <meta property="og:type" content="website">
@@ -18,534 +14,217 @@
 <meta name="twitter:title" content="占いみっけ｜鑑定師さんの集客サポートツール">
 <meta name="twitter:description" content="本物の鑑定師さんのための、集客サポートツール">
 <meta name="twitter:image" content="ogp.jpg">
-
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;800&family=Zen+Kaku+Gothic+New:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
-/* ==========================================
-   Claymorphism (クレイモーフィズム) Tokens
-========================================== */
 :root {
-  /* ダークテーマ (デフォルト) */
-  --bg: #2a2830;             /* 背景色（少し暖かみのあるダークグレー） */
-  --text: #eaeaec;           /* メインテキスト */
-  --text-muted: #9c9a9f;     /* サブテキスト */
-  --primary: #e8cc80;        /* アクセントカラー（ゴールド） */
-  --primary-on: #412d00;     /* プライマリー上のテキスト */
+  --bg: #2a2830;
+  --text: #eaeaec;
+  --text-muted: #9c9a9f;
+  --primary: #e8cc80;
+  --primary-on: #412d00;
   --primary-shadow: rgba(232, 204, 128, 0.4);
-  
-  /* クレイモーフィズム用の影（ダーク） */
-  --s-dark: #1b1a1f;         /* 外側の暗い影 */
-  --s-light: #393641;        /* 外側の明るいハイライト */
-  --si-dark: rgba(27, 26, 31, 0.8);  /* 内側の暗い影 */
-  --si-light: rgba(57, 54, 65, 0.8); /* 内側の明るいハイライト */
-
+  --s-dark: #1b1a1f;
+  --s-light: #393641;
+  --si-dark: rgba(27, 26, 31, 0.8);
+  --si-light: rgba(57, 54, 65, 0.8);
   --error: #ffb4ab;
   --error-on: #410002;
-
-  /* 丸みの設定 */
   --rad-l: 28px;
   --rad-m: 16px;
   --rad-s: 12px;
 }
-
 body.light {
-  /* ライトテーマ */
-  --bg: #f2efe9;             /* 背景色（少しウォームなオフホワイト） */
+  --bg: #f2efe9;
   --text: #413d36;
   --text-muted: #827e77;
-  --primary: #b8903c;        /* アクセントカラー（少し落ち着いたゴールド） */
+  --primary: #b8903c;
   --primary-on: #ffffff;
   --primary-shadow: rgba(184, 144, 60, 0.4);
-
-  /* クレイモーフィズム用の影（ライト） */
   --s-dark: #d0cdc6;
   --s-light: #ffffff;
   --si-dark: rgba(208, 205, 198, 0.6);
   --si-light: rgba(255, 255, 255, 0.8);
-  
   --error: #ba1a1a;
   --error-on: #ffffff;
 }
-
 *{margin:0;padding:0;box-sizing:border-box;}
 body {
-  background: var(--bg);
-  color: var(--text);
+  background: var(--bg); color: var(--text);
   font-family: 'Zen Kaku Gothic New', sans-serif;
-  min-height: 100vh;
-  overflow-x: hidden;
-  line-height: 1.5;
-  transition: background-color 0.3s, color 0.3s;
+  min-height: 100vh; overflow-x: hidden;
+  line-height: 1.5; transition: background-color 0.3s, color 0.3s;
 }
-
-/* 幻想的な背景グラデーション（少し控えめに） */
 body::before {
   content:''; position:fixed; inset:0;
   background: radial-gradient(ellipse at 20% 20%, rgba(208,188,255,0.04) 0%, transparent 50%),
               radial-gradient(ellipse at 80% 80%, rgba(232,204,128,0.03) 0%, transparent 50%);
   pointer-events:none; z-index:0;
 }
-body.light::before {
-  background: radial-gradient(ellipse at 20% 20%, rgba(103,80,164,0.03) 0%, transparent 50%);
-}
+body.light::before { background: radial-gradient(ellipse at 20% 20%, rgba(103,80,164,0.03) 0%, transparent 50%); }
 body.light .stars { display: none; }
-
-/* 星のアニメーション */
 .stars{position:fixed;inset:0;z-index:0;pointer-events:none;}
 .star{position:absolute;background:white;border-radius:50%;animation:twinkle var(--d,3s) ease-in-out infinite alternate;}
 @keyframes twinkle{from{opacity:.1}to{opacity:.8}}
-
-/* アニメーション */
 @keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
-
-/* レイアウト */
 .wrap{position:relative;z-index:1;max-width:680px;margin:0 auto;padding:32px 20px 80px;}
-
-/* ツールバー */
 .toolbar{display:flex;justify-content:flex-end;gap:12px;margin-bottom:24px;}
 .tool-btn {
-  display:flex;align-items:center;gap:8px;
-  padding:10px 20px;
-  border-radius:100px;
-  border:none;
-  background: var(--bg);
-  color:var(--text);
-  font-family:'Zen Kaku Gothic New',sans-serif;
-  font-size:14px;
-  font-weight:600;
-  cursor:pointer;
-  transition:all .2s;
+  display:flex;align-items:center;gap:8px; padding:10px 20px;
+  border-radius:100px; border:none; background:var(--bg); color:var(--text);
+  font-family:'Zen Kaku Gothic New',sans-serif; font-size:14px; font-weight:600;
+  cursor:pointer; transition:all .2s;
   box-shadow: 4px 4px 8px var(--s-dark), -4px -4px 8px var(--s-light);
 }
-.tool-btn:active {
-  box-shadow: inset 2px 2px 4px var(--si-dark), inset -2px -2px 4px var(--si-light);
-  color: var(--primary);
-}
+.tool-btn:active { box-shadow: inset 2px 2px 4px var(--si-dark), inset -2px -2px 4px var(--si-light); color:var(--primary); }
 .tool-btn svg { width:18px;height:18px;fill:currentColor; }
-
-/* 無料体験バナー (Sticky & Claymorphism) */
 .free-banner {
-  position: sticky;
-  top: 16px;
-  z-index: 150;
-  background: var(--primary);
-  color: var(--primary-on);
-  padding: 16px 24px;
-  border-radius: 100px;
-  font-family: 'Zen Kaku Gothic New', sans-serif;
-  font-size: 14px;
-  font-weight: 700;
-  text-align: center;
+  position:sticky; top:16px; z-index:150;
+  background:var(--primary); color:var(--primary-on);
+  padding:16px 24px; border-radius:100px;
+  font-family:'Zen Kaku Gothic New',sans-serif; font-size:14px; font-weight:700;
+  text-align:center;
   box-shadow: 6px 6px 12px var(--s-dark), -6px -6px 12px var(--s-light), inset 2px 2px 6px rgba(255,255,255,0.4);
-  cursor: pointer;
-  margin-bottom: 32px;
-  transition: all 0.2s ease;
-  display: none; /* 初期非表示 */
-  line-height: 1.4;
+  cursor:pointer; margin-bottom:32px; transition:all 0.2s ease;
+  display:none; line-height:1.4;
 }
-.free-banner:active {
-  box-shadow: inset 4px 4px 8px rgba(0,0,0,0.2), inset -4px -4px 8px rgba(255,255,255,0.3);
-  transform: translateY(2px);
-}
-.free-banner.is-empty {
-  background: var(--error);
-  color: var(--error-on);
-  box-shadow: 6px 6px 12px var(--s-dark), -6px -6px 12px var(--s-light), inset 2px 2px 4px rgba(255,255,255,0.3);
-}
-
-/* ヘッダー */
+.free-banner:active { box-shadow: inset 4px 4px 8px rgba(0,0,0,0.2), inset -4px -4px 8px rgba(255,255,255,0.3); transform:translateY(2px); }
+.free-banner.is-empty { background:var(--error); color:var(--error-on); box-shadow: 6px 6px 12px var(--s-dark), -6px -6px 12px var(--s-light), inset 2px 2px 4px rgba(255,255,255,0.3); }
 header{text-align:center;margin-bottom:48px;}
-.logo-mark {
-  font-size:48px; margin-bottom:16px; display:block;
-  filter:drop-shadow(0 4px 8px var(--primary-shadow));
-  animation:float 4s ease-in-out infinite;
-}
-h1 {
-  font-family:'Shippori Mincho',serif;
-  font-size:clamp(32px, 6vw, 44px);
-  font-weight:800;
-  letter-spacing:.08em;
-  color: var(--primary);
-  line-height:1.2;
-  margin-bottom:12px;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-}
+.logo-mark { font-size:48px; margin-bottom:16px; display:block; filter:drop-shadow(0 4px 8px var(--primary-shadow)); animation:float 4s ease-in-out infinite; }
+h1 { font-family:'Shippori Mincho',serif; font-size:clamp(32px,6vw,44px); font-weight:800; letter-spacing:.08em; color:var(--primary); line-height:1.2; margin-bottom:12px; text-shadow: 2px 2px 4px rgba(0,0,0,0.2); }
 body.light h1 { text-shadow: 2px 2px 4px rgba(255,255,255,0.8); }
-.tagline {
-  font-size:14px; color:var(--text-muted); letter-spacing:.1em; font-weight:500;
-}
-.divider {
-  width:8px;height:8px; border-radius:50%;
-  background:var(--primary);
-  margin:24px auto;
-  box-shadow: 16px 0 0 var(--primary), -16px 0 0 var(--primary);
-  opacity: 0.7;
-}
-
-/* ==========================================
-   クレイモーフィズム カード (出っ張り)
-========================================== */
+.tagline { font-size:14px; color:var(--text-muted); letter-spacing:.1em; font-weight:500; }
+.divider { width:8px;height:8px; border-radius:50%; background:var(--primary); margin:24px auto; box-shadow: 16px 0 0 var(--primary), -16px 0 0 var(--primary); opacity:0.7; }
 .card {
-  background: var(--bg);
-  border-radius: var(--rad-l);
-  padding: 36px 28px;
-  margin-bottom: 32px;
-  animation: fadeUp .6s ease both;
-  box-shadow: 
-    12px 12px 24px var(--s-dark), 
-    -12px -12px 24px var(--s-light),
-    inset 1px 1px 2px var(--si-light),
-    inset -1px -1px 2px var(--si-dark);
+  background:var(--bg); border-radius:var(--rad-l); padding:36px 28px; margin-bottom:32px;
+  animation:fadeUp .6s ease both;
+  box-shadow: 12px 12px 24px var(--s-dark), -12px -12px 24px var(--s-light), inset 1px 1px 2px var(--si-light), inset -1px -1px 2px var(--si-dark);
 }
-.card-title {
-  font-family:'Shippori Mincho',serif;
-  font-size:20px;
-  color:var(--primary);
-  margin-bottom:28px;
-  font-weight: 800;
-  display:flex;align-items:center;gap:12px;
-}
-.card-title::after {
-  content:'';flex:1;height:2px;
-  border-radius:2px;
-  background:var(--bg);
-  box-shadow: inset 1px 1px 2px var(--si-dark), inset -1px -1px 2px var(--si-light);
-}
-
-/* ==========================================
-   フォーム (凹み)
-========================================== */
-.field-group { margin-bottom: 28px; }
-.field-group:last-child { margin-bottom: 0; }
-label {
-  display:block; font-size:14px; color:var(--text);
-  margin-bottom:12px; font-weight:600; padding-left:4px;
-}
-
+.card-title { font-family:'Shippori Mincho',serif; font-size:20px; color:var(--primary); margin-bottom:28px; font-weight:800; display:flex;align-items:center;gap:12px; }
+.card-title::after { content:'';flex:1;height:2px; border-radius:2px; background:var(--bg); box-shadow: inset 1px 1px 2px var(--si-dark), inset -1px -1px 2px var(--si-light); }
+.field-group { margin-bottom:28px; }
+.field-group:last-child { margin-bottom:0; }
+label { display:block; font-size:14px; color:var(--text); margin-bottom:12px; font-weight:600; padding-left:4px; }
 input[type="text"], input[type="password"], textarea, select {
-  width:100%;
-  background:var(--bg);
-  border:none; 
-  border-radius:var(--rad-m);
-  padding:16px 20px;
-  color:var(--text);
-  font-family:'Zen Kaku Gothic New',sans-serif;
-  font-size:16px;
-  outline:none;
-  transition:all .2s;
-  -webkit-appearance:none;
-  box-shadow: 
-    inset 4px 4px 8px var(--si-dark), 
-    inset -4px -4px 8px var(--si-light);
+  width:100%; background:var(--bg); border:none; border-radius:var(--rad-m); padding:16px 20px;
+  color:var(--text); font-family:'Zen Kaku Gothic New',sans-serif; font-size:16px;
+  outline:none; transition:all .2s; -webkit-appearance:none;
+  box-shadow: inset 4px 4px 8px var(--si-dark), inset -4px -4px 8px var(--si-light);
 }
-input:focus, textarea:focus, select:focus {
-  box-shadow: 
-    inset 4px 4px 8px var(--si-dark), 
-    inset -4px -4px 8px var(--si-light),
-    0 0 0 2px var(--primary-shadow);
-}
+input:focus, textarea:focus, select:focus { box-shadow: inset 4px 4px 8px var(--si-dark), inset -4px -4px 8px var(--si-light), 0 0 0 2px var(--primary-shadow); }
 textarea { resize:vertical; min-height:100px; line-height:1.6; }
-select {
-  cursor:pointer;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239c9a9f' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;background-position:right 20px center;padding-right:48px;
-}
-body.light select {
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23827e77' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-}
-select option { background: var(--bg); color:var(--text); }
+select { cursor:pointer; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239c9a9f' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat:no-repeat;background-position:right 20px center;padding-right:48px; }
+body.light select { background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23827e77' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); }
+select option { background:var(--bg); color:var(--text); }
 .preset-select { font-size:14px; margin-bottom:16px; }
-
-/* ==========================================
-   チップ (出っ張り → アクティブで凹み)
-========================================== */
-.chips { display:flex;flex-wrap:wrap;gap:12px;}
+.chips { display:flex;flex-wrap:wrap;gap:12px; }
 .chip {
-  padding:10px 18px;
-  border-radius:var(--rad-s);
-  border:none;
-  font-size:14px; font-weight:600;
-  cursor:pointer;
-  color:var(--text-muted);
-  background:var(--bg);
-  font-family:'Zen Kaku Gothic New',sans-serif;
-  transition:all .2s;
-  box-shadow: 
-    4px 4px 8px var(--s-dark), 
-    -4px -4px 8px var(--s-light),
-    inset 1px 1px 2px var(--si-light),
-    inset -1px -1px 2px var(--si-dark);
+  padding:10px 18px; border-radius:var(--rad-s); border:none;
+  font-size:14px; font-weight:600; cursor:pointer; color:var(--text-muted); background:var(--bg);
+  font-family:'Zen Kaku Gothic New',sans-serif; transition:all .2s;
+  box-shadow: 4px 4px 8px var(--s-dark), -4px -4px 8px var(--s-light), inset 1px 1px 2px var(--si-light), inset -1px -1px 2px var(--si-dark);
 }
-.chip:hover { transform: translateY(-1px); }
-.chip:active { transform: translateY(1px); }
-.chip.active {
-  box-shadow: 
-    inset 3px 3px 6px var(--si-dark), 
-    inset -3px -3px 6px var(--si-light);
-  color: var(--primary);
-  transform: translateY(1px);
-}
-
-/* ==========================================
-   生成ボタン (プライマリー・出っ張り)
-========================================== */
+.chip:hover { transform:translateY(-1px); }
+.chip:active { transform:translateY(1px); }
+.chip.active { box-shadow: inset 3px 3px 6px var(--si-dark), inset -3px -3px 6px var(--si-light); color:var(--primary); transform:translateY(1px); }
 .btn-generate {
-  width:100%;
-  padding:18px 24px;
-  background: var(--primary);
-  color: var(--primary-on);
-  border:none;
-  border-radius:100px;
-  font-family:'Shippori Mincho',serif;
-  font-size:20px;
-  font-weight:800;
-  letter-spacing:.08em;
-  cursor:pointer;
-  transition:all .2s;
-  box-shadow: 
-    8px 8px 16px var(--s-dark), 
-    -8px -8px 16px var(--s-light),
-    inset 2px 2px 6px rgba(255,255,255,0.4),
-    inset -2px -2px 6px rgba(0,0,0,0.15);
+  width:100%; padding:18px 24px; background:var(--primary); color:var(--primary-on);
+  border:none; border-radius:100px; font-family:'Shippori Mincho',serif;
+  font-size:20px; font-weight:800; letter-spacing:.08em; cursor:pointer; transition:all .2s;
+  box-shadow: 8px 8px 16px var(--s-dark), -8px -8px 16px var(--s-light), inset 2px 2px 6px rgba(255,255,255,0.4), inset -2px -2px 6px rgba(0,0,0,0.15);
 }
-body.light .btn-generate {
-  box-shadow: 
-    8px 8px 16px var(--s-dark), 
-    -8px -8px 16px var(--s-light),
-    inset 2px 2px 6px rgba(255,255,255,0.6),
-    inset -2px -2px 6px rgba(0,0,0,0.1);
-}
-.btn-generate:active {
-  box-shadow: 
-    inset 4px 4px 8px rgba(0,0,0,0.2), 
-    inset -4px -4px 8px rgba(255,255,255,0.3);
-  transform: translateY(2px);
-}
+body.light .btn-generate { box-shadow: 8px 8px 16px var(--s-dark), -8px -8px 16px var(--s-light), inset 2px 2px 6px rgba(255,255,255,0.6), inset -2px -2px 6px rgba(0,0,0,0.1); }
+.btn-generate:active { box-shadow: inset 4px 4px 8px rgba(0,0,0,0.2), inset -4px -4px 8px rgba(255,255,255,0.3); transform:translateY(2px); }
 
-/* 結果エリア */
+/* ラッキーアイテム */
+.lucky-card {
+  background:var(--bg); border-radius:var(--rad-m); padding:20px 24px; margin-bottom:24px;
+  display:none;
+  box-shadow: inset 3px 3px 6px var(--si-dark), inset -3px -3px 6px var(--si-light);
+}
+.lucky-card.show { display:block; animation:fadeUp .4s ease; }
+.lucky-title { font-family:'Shippori Mincho',serif; font-size:14px; color:var(--primary); font-weight:800; margin-bottom:14px; letter-spacing:.06em; }
+.lucky-items { display:flex; flex-wrap:wrap; gap:10px; }
+.lucky-item {
+  padding:8px 16px; border-radius:100px; background:var(--bg);
+  font-size:13px; font-weight:700; color:var(--text); white-space:nowrap;
+  box-shadow: 4px 4px 8px var(--s-dark), -4px -4px 8px var(--s-light), inset 1px 1px 2px var(--si-light), inset -1px -1px 2px var(--si-dark);
+}
+.lucky-item span { color:var(--primary); }
+
+/* 結果 */
 #results { display:none; }
 #results.show { display:block; }
-.result-tab-bar {
-  display:flex; gap:12px; margin-bottom:24px;
-}
-.result-tab {
-  flex:1;
-  padding:14px;
-  border:none;
-  border-radius:var(--rad-m);
-  background:var(--bg);
-  color:var(--text-muted);
-  font-family:'Zen Kaku Gothic New',sans-serif;
-  font-size:15px; font-weight:700;
-  cursor:pointer; transition:all .2s;
-  box-shadow: 4px 4px 8px var(--s-dark), -4px -4px 8px var(--s-light);
-}
-.result-tab.active {
-  box-shadow: inset 4px 4px 8px var(--si-dark), inset -4px -4px 8px var(--si-light);
-  color: var(--primary);
-}
+.result-tab-bar { display:flex; gap:12px; margin-bottom:24px; }
+.result-tab { flex:1; padding:14px; border:none; border-radius:var(--rad-m); background:var(--bg); color:var(--text-muted); font-family:'Zen Kaku Gothic New',sans-serif; font-size:15px; font-weight:700; cursor:pointer; transition:all .2s; box-shadow: 4px 4px 8px var(--s-dark), -4px -4px 8px var(--s-light); }
+.result-tab.active { box-shadow: inset 4px 4px 8px var(--si-dark), inset -4px -4px 8px var(--si-light); color:var(--primary); }
 .result-panel { display:none; }
-.result-panel.active { display:block; animation: fadeUp .3s ease; }
-
-.result-text {
-  background: var(--bg);
-  border-radius: var(--rad-m);
-  padding: 24px;
-  font-size:15px; line-height:1.8; white-space:pre-wrap;
-  color:var(--text); min-height:160px;
-  box-shadow: inset 4px 4px 8px var(--si-dark), inset -4px -4px 8px var(--si-light);
-}
-
-/* コピーボタン */
-.btn-copy {
-  margin-top:20px;
-  width:100%; padding:14px 24px;
-  background: var(--bg);
-  border: none;
-  border-radius: 100px;
-  color: var(--primary);
-  font-family:'Zen Kaku Gothic New',sans-serif;
-  font-size:15px; font-weight:700;
-  cursor:pointer; transition:all .2s;
-  box-shadow: 4px 4px 8px var(--s-dark), -4px -4px 8px var(--s-light);
-}
+.result-panel.active { display:block; animation:fadeUp .3s ease; }
+.result-text { background:var(--bg); border-radius:var(--rad-m); padding:24px; font-size:15px; line-height:1.8; white-space:pre-wrap; color:var(--text); min-height:160px; box-shadow: inset 4px 4px 8px var(--si-dark), inset -4px -4px 8px var(--si-light); }
+.btn-copy { margin-top:20px; width:100%; padding:14px 24px; background:var(--bg); border:none; border-radius:100px; color:var(--primary); font-family:'Zen Kaku Gothic New',sans-serif; font-size:15px; font-weight:700; cursor:pointer; transition:all .2s; box-shadow: 4px 4px 8px var(--s-dark), -4px -4px 8px var(--s-light); }
 .btn-copy:active { box-shadow: inset 2px 2px 4px var(--si-dark), inset -2px -2px 4px var(--si-light); }
-.btn-copy.copied {
-  background: var(--primary);
-  color: var(--primary-on);
-  box-shadow: inset 2px 2px 6px rgba(0,0,0,0.2);
-}
+.btn-copy.copied { background:var(--primary); color:var(--primary-on); box-shadow: inset 2px 2px 6px rgba(0,0,0,0.2); }
 
-/* AI Pro エリア */
-.pro-badge {
-  display:inline-block; font-size:11px; padding:4px 10px; border-radius:100px;
-  background: var(--bg); color: var(--primary); font-weight: 800;
-  margin-left:12px; vertical-align:middle;
-  box-shadow: inset 2px 2px 4px var(--si-dark), inset -2px -2px 4px var(--si-light);
-}
+/* AI Pro */
+.pro-badge { display:inline-block; font-size:11px; padding:4px 10px; border-radius:100px; background:var(--bg); color:var(--primary); font-weight:800; margin-left:12px; vertical-align:middle; box-shadow: inset 2px 2px 4px var(--si-dark), inset -2px -2px 4px var(--si-light); }
 .platform-btns { display:flex; gap:16px; margin-bottom:28px; }
-.platform-btn {
-  flex:1; padding:20px 8px;
-  border-radius:var(--rad-m); border:none;
-  background:var(--bg); color:var(--text-muted);
-  font-family:'Zen Kaku Gothic New',sans-serif; font-size:14px; font-weight:600;
-  cursor:pointer; display:flex;flex-direction:column;align-items:center;gap:12px;
-  transition:all .2s;
-  box-shadow: 6px 6px 12px var(--s-dark), -6px -6px 12px var(--s-light);
-}
+.platform-btn { flex:1; padding:20px 8px; border-radius:var(--rad-m); border:none; background:var(--bg); color:var(--text-muted); font-family:'Zen Kaku Gothic New',sans-serif; font-size:14px; font-weight:600; cursor:pointer; display:flex;flex-direction:column;align-items:center;gap:12px; transition:all .2s; box-shadow: 6px 6px 12px var(--s-dark), -6px -6px 12px var(--s-light); }
 .platform-btn .p-icon { font-size:28px; line-height:1; }
-.platform-btn.active {
-  box-shadow: inset 4px 4px 8px var(--si-dark), inset -4px -4px 8px var(--si-light);
-  color: var(--primary);
-}
-.ai-loading { text-align:center; color:var(--primary); font-size:15px; font-weight:bold; padding:24px 0; display:none; animation: float 2s infinite ease-in-out; }
+.platform-btn.active { box-shadow: inset 4px 4px 8px var(--si-dark), inset -4px -4px 8px var(--si-light); color:var(--primary); }
+.ai-loading { text-align:center; color:var(--primary); font-size:15px; font-weight:bold; padding:24px 0; display:none; animation:float 2s infinite ease-in-out; }
 .ai-loading.show { display:block; }
 
 /* モーダル */
-.modal-overlay {
-  display:none;position:fixed;inset:0;
-  background:rgba(0,0,0,0.5); backdrop-filter:blur(8px);
-  z-index:200;align-items:center;justify-content:center;padding:24px;
-}
+.modal-overlay { display:none;position:fixed;inset:0; background:rgba(0,0,0,0.5); backdrop-filter:blur(8px); z-index:200;align-items:center;justify-content:center;padding:24px; }
 .modal-overlay.open { display:flex; }
-.modal {
-  background: var(--bg);
-  border-radius: var(--rad-l);
-  padding: 40px 32px;
-  max-width:440px;width:100%; position:relative; max-height:85vh;overflow-y:auto;
-  box-shadow: 20px 20px 40px rgba(0,0,0,0.3), -10px -10px 20px rgba(255,255,255,0.05);
-}
-body.light .modal {
-  box-shadow: 20px 20px 40px rgba(0,0,0,0.1), -10px -10px 20px rgba(255,255,255,0.8);
-}
-.modal-title {
-  font-family:'Shippori Mincho',serif; font-size:24px; font-weight:800;
-  color:var(--primary); margin-bottom:32px; text-align:center;
-}
-.modal-close {
-  position:absolute;top:24px;right:24px;
-  width:44px;height:44px; border-radius:50%; border:none;
-  background:var(--bg); color:var(--text-muted); font-size:20px; font-weight:bold;
-  cursor:pointer; display:flex;align-items:center;justify-content:center;
-  box-shadow: 4px 4px 8px var(--s-dark), -4px -4px 8px var(--s-light);
-  transition:all .2s;
-}
-.modal-close:active {
-  box-shadow: inset 2px 2px 4px var(--si-dark), inset -2px -2px 4px var(--si-light);
-  color: var(--error);
-}
-
-/* 使い方 */
+.modal { background:var(--bg); border-radius:var(--rad-l); padding:40px 32px; max-width:440px;width:100%; position:relative; max-height:85vh;overflow-y:auto; box-shadow: 20px 20px 40px rgba(0,0,0,0.3), -10px -10px 20px rgba(255,255,255,0.05); }
+body.light .modal { box-shadow: 20px 20px 40px rgba(0,0,0,0.1), -10px -10px 20px rgba(255,255,255,0.8); }
+.modal-title { font-family:'Shippori Mincho',serif; font-size:24px; font-weight:800; color:var(--primary); margin-bottom:32px; text-align:center; }
+.modal-close { position:absolute;top:24px;right:24px; width:44px;height:44px; border-radius:50%; border:none; background:var(--bg); color:var(--text-muted); font-size:20px; font-weight:bold; cursor:pointer; display:flex;align-items:center;justify-content:center; box-shadow: 4px 4px 8px var(--s-dark), -4px -4px 8px var(--s-light); transition:all .2s; }
+.modal-close:active { box-shadow: inset 2px 2px 4px var(--si-dark), inset -2px -2px 4px var(--si-light); color:var(--error); }
 .howto-section { margin-bottom:28px; }
-.howto-section h3 {
-  font-size:15px; color:var(--text); margin-bottom:12px; padding-bottom:12px;
-  border-bottom: 2px solid transparent;
-  box-shadow: 0 2px 0 0 var(--bg), 0 3px 2px -1px var(--si-dark);
-}
+.howto-section h3 { font-size:15px; color:var(--text); margin-bottom:12px; padding-bottom:12px; border-bottom:2px solid transparent; box-shadow: 0 2px 0 0 var(--bg), 0 3px 2px -1px var(--si-dark); }
 .howto-section ul { list-style:none; }
-.howto-section li {
-  font-size:14px; color:var(--text-muted); line-height:1.6; padding:6px 0 6px 24px; position:relative;
-}
-.howto-section li::before {
-  content:'✦'; position:absolute;left:0;top:8px; color:var(--primary); font-size:12px;
-}
-
-/* 設定 */
-.setting-row {
-  display:flex;align-items:center;justify-content:space-between;
-  padding:20px 0; font-size:16px; font-weight:600; color:var(--text);
-  border-bottom: 2px solid transparent;
-  box-shadow: 0 2px 0 0 var(--bg), 0 3px 2px -1px var(--si-dark);
-}
+.howto-section li { font-size:14px; color:var(--text-muted); line-height:1.6; padding:6px 0 6px 24px; position:relative; }
+.howto-section li::before { content:'✦'; position:absolute;left:0;top:8px; color:var(--primary); font-size:12px; }
+.setting-row { display:flex;align-items:center;justify-content:space-between; padding:20px 0; font-size:16px; font-weight:600; color:var(--text); border-bottom:2px solid transparent; box-shadow: 0 2px 0 0 var(--bg), 0 3px 2px -1px var(--si-dark); }
 .setting-row:last-child { box-shadow:none; border-bottom:none; }
-
-/* クレイ風 Switch */
 .toggle { position:relative; width:64px; height:36px; display:inline-block; }
 .toggle input { position:absolute; opacity:0; width:0; height:0; }
-.toggle-track {
-  position:absolute; inset:0; border-radius:100px; background: var(--bg);
-  cursor:pointer; transition: all .3s;
-  box-shadow: inset 4px 4px 8px var(--si-dark), inset -4px -4px 8px var(--si-light);
-}
-.toggle-thumb {
-  position:absolute; top:4px; left:4px; width:28px; height:28px;
-  border-radius:50%; background: var(--text-muted); pointer-events:none;
-  transition: all .3s cubic-bezier(0.3, 1.5, 0.7, 1);
-  box-shadow: 2px 2px 4px rgba(0,0,0,0.3), inset 1px 1px 2px rgba(255,255,255,0.2);
-}
+.toggle-track { position:absolute; inset:0; border-radius:100px; background:var(--bg); cursor:pointer; transition:all .3s; box-shadow: inset 4px 4px 8px var(--si-dark), inset -4px -4px 8px var(--si-light); }
+.toggle-thumb { position:absolute; top:4px; left:4px; width:28px; height:28px; border-radius:50%; background:var(--text-muted); pointer-events:none; transition:all .3s cubic-bezier(0.3,1.5,0.7,1); box-shadow: 2px 2px 4px rgba(0,0,0,0.3), inset 1px 1px 2px rgba(255,255,255,0.2); }
 body.light .toggle-thumb { box-shadow: 2px 2px 4px rgba(0,0,0,0.1), inset 1px 1px 2px rgba(255,255,255,0.8); }
-
-.toggle input:checked + .toggle-track {
-  background: var(--bg);
-}
-.toggle input:checked ~ .toggle-thumb {
-  transform:translateX(28px);
-  background: var(--primary);
-}
-
-.setting-action-btn {
-  padding:10px 24px; border-radius:100px; border:none;
-  background:var(--bg); color:var(--text); font-family:'Zen Kaku Gothic New',sans-serif;
-  font-size:14px; font-weight:700; cursor:pointer; transition:all .2s;
-  box-shadow: 4px 4px 8px var(--s-dark), -4px -4px 8px var(--s-light);
-}
-.setting-action-btn:active {
-  box-shadow: inset 2px 2px 4px var(--si-dark), inset -2px -2px 4px var(--si-light);
-  color:var(--primary);
-}
-
-/* PWゲート */
-.pw-gate {
-  display:none;position:fixed;inset:0;
-  background:rgba(0,0,0,0.6); backdrop-filter:blur(12px);
-  z-index:300;align-items:center;justify-content:center;padding:24px;
-}
+.toggle input:checked + .toggle-track { background:var(--bg); }
+.toggle input:checked ~ .toggle-thumb { transform:translateX(28px); background:var(--primary); }
+.setting-action-btn { padding:10px 24px; border-radius:100px; border:none; background:var(--bg); color:var(--text); font-family:'Zen Kaku Gothic New',sans-serif; font-size:14px; font-weight:700; cursor:pointer; transition:all .2s; box-shadow: 4px 4px 8px var(--s-dark), -4px -4px 8px var(--s-light); }
+.setting-action-btn:active { box-shadow: inset 2px 2px 4px var(--si-dark), inset -2px -2px 4px var(--si-light); color:var(--primary); }
+.pw-gate { display:none;position:fixed;inset:0; background:rgba(0,0,0,0.6); backdrop-filter:blur(12px); z-index:300;align-items:center;justify-content:center;padding:24px; }
 .pw-gate.show { display:flex; }
-.pw-gate-box {
-  background: var(--bg); border-radius: var(--rad-l); position: relative;
-  padding:48px 32px; max-width:400px;width:100%; text-align:center;
-  animation:fadeUp .4s ease both;
-  box-shadow: 20px 20px 40px rgba(0,0,0,0.3), -10px -10px 20px rgba(255,255,255,0.05);
-}
+.pw-gate-box { background:var(--bg); border-radius:var(--rad-l); position:relative; padding:48px 32px; max-width:400px;width:100%; text-align:center; animation:fadeUp .4s ease both; box-shadow: 20px 20px 40px rgba(0,0,0,0.3), -10px -10px 20px rgba(255,255,255,0.05); }
 body.light .pw-gate-box { box-shadow: 20px 20px 40px rgba(0,0,0,0.1), -10px -10px 20px rgba(255,255,255,0.8); }
-
 .pw-gate-icon { font-size:56px; margin-bottom:20px; display:block; filter:drop-shadow(0 4px 8px var(--primary-shadow)); }
 .pw-gate-title { font-family:'Shippori Mincho',serif; font-size:28px; font-weight:800; color:var(--primary); margin-bottom:12px; }
 .pw-gate-sub { font-size:14px; color:var(--text-muted); margin-bottom:32px; line-height:1.6; }
 .pw-gate input { margin-bottom:24px; text-align:center; letter-spacing:.2em; font-size:18px; }
-.pw-gate-btn {
-  width:100%;padding:18px; background: var(--primary); color: var(--primary-on);
-  border:none;border-radius:100px; font-family:'Shippori Mincho',serif;font-size:18px;font-weight:800;
-  cursor:pointer;transition:all .2s;
-  box-shadow: 8px 8px 16px var(--s-dark), -8px -8px 16px var(--s-light), inset 2px 2px 6px rgba(255,255,255,0.4);
-}
-.pw-gate-btn:active {
-  box-shadow: inset 4px 4px 8px rgba(0,0,0,0.2), inset -4px -4px 8px rgba(255,255,255,0.3);
-  transform: translateY(2px);
-}
+.pw-gate-btn { width:100%;padding:18px; background:var(--primary); color:var(--primary-on); border:none;border-radius:100px; font-family:'Shippori Mincho',serif;font-size:18px;font-weight:800; cursor:pointer;transition:all .2s; box-shadow: 8px 8px 16px var(--s-dark), -8px -8px 16px var(--s-light), inset 2px 2px 6px rgba(255,255,255,0.4); }
+.pw-gate-btn:active { box-shadow: inset 4px 4px 8px rgba(0,0,0,0.2), inset -4px -4px 8px rgba(255,255,255,0.3); transform:translateY(2px); }
 .pw-gate-error { font-size:13px; font-weight:bold; color:var(--error); margin-top:16px; min-height:20px; }
 .pw-gate-free { font-size:12px; color:var(--text-muted); margin-top:24px; }
-
-/* フッター */
 footer { text-align:center; margin-top:56px; font-size:13px; font-weight:bold; color:var(--text-muted); }
-
 @media(max-width:480px){
-  .wrap{padding:24px 16px 60px;}
-  .card{padding:28px 20px;}
-  .modal{padding:32px 20px;}
+  .wrap{padding:24px 16px 60px;} .card{padding:28px 20px;} .modal{padding:32px 20px;}
+  .lucky-items{gap:8px;} .lucky-item{font-size:12px;padding:7px 12px;}
 }
 </style>
 </head>
 <body>
-
 <div class="stars" id="stars"></div>
 
 <!-- PWゲート -->
 <div class="pw-gate" id="pw-gate">
   <div class="pw-gate-box">
-    <!-- 閉じるボタン追加 -->
-    <button class="modal-close" style="top:20px; right:20px;" onclick="closeGate()">✕</button>
+    <button class="modal-close" style="top:20px;right:20px;" onclick="closeGate()">✕</button>
     <span class="pw-gate-icon">🔮</span>
     <div class="pw-gate-title">占いみっけ Pro</div>
     <p class="pw-gate-sub">2026年4月よりPro版に移行しました。<br>パスワードを入力してご利用ください。</p>
@@ -570,43 +249,32 @@ footer { text-align:center; margin-top:56px; font-size:13px; font-weight:bold; c
       </ul>
     </div>
     <div class="howto-section">
-      <h3>共通の入力手順</h3>
+      <h3>入力手順</h3>
       <ul>
         <li>① お名前・ハンドルネームを入力してください</li>
-        <li>② 得意な占術をタップして選んでください（複数選択OK）</li>
-        <li>③ 今月のテーマはプルダウンで例文を選ぶか、直接入力してください</li>
-        <li>④ ひとこと自己紹介もプルダウンで選ぶか、直接入力してください</li>
-        <li>⑤ 投稿の雰囲気を4つの中からひとつ選んでください</li>
+        <li>② 得意な占術をタップして選んでください（複数OK）</li>
+        <li>③ 投稿の期間（今日・今週・今月）を選んでください</li>
+        <li>④ 運勢カテゴリを選んでください（複数OK）</li>
+        <li>⑤ 対象者（星座・数秘ナンバー）を任意で選べます</li>
+        <li>⑥ テーマをプルダウンで選ぶか、直接入力してください</li>
+        <li>⑦ 投稿の雰囲気を4つから選んでください</li>
+        <li>⑧「投稿文を生成する」を押してください</li>
       </ul>
     </div>
     <div class="howto-section">
-      <h3>無料版（〜2026年3月31日）</h3>
+      <h3>生成できる投稿</h3>
       <ul>
-        <li>「投稿文を生成する」ボタンを押してください</li>
-        <li>X・Instagram・LINEの3タブで投稿文を確認できます</li>
-        <li>同じ設定で何度でも生成できます（毎回少し文章が変わります）</li>
+        <li>X・Instagram・LINE配信の3パターンを一度に生成</li>
+        <li>ラッキーカラー・フード・アクションも自動生成されます</li>
         <li>「コピーする」ボタンでそのまま貼り付けて使えます</li>
-      </ul>
-    </div>
-    <div class="howto-section">
-      <h3>Pro版（2026年4月1日〜）</h3>
-      <ul>
-        <li>アプリを開くとパスワード入力画面が表示されます</li>
-        <li>SPCよりお知らせしたパスワードを入力してください</li>
-        <li>認証後はAI投稿文生成画面のみ表示されます</li>
-        <li>X・Instagram・LINEのアイコンから投稿先を選んでください</li>
-        <li>「AIで投稿文を生成する」ボタンを押してください</li>
-        <li>AIがあなたらしい投稿文を自動で生成します</li>
-        <li>「コピーする」ボタンでそのまま貼り付けて使えます</li>
-        <li>タブを閉じると再度パスワード入力が必要になります</li>
       </ul>
     </div>
     <div class="howto-section">
       <h3>設定メニューでできること</h3>
       <ul>
         <li>ダークモード／ライトモードの切り替え</li>
-        <li>デモデータの読み込み（入力サンプルをワンタップで確認）</li>
-        <li>入力内容のクリア（全てリセットします）</li>
+        <li>デモデータの読み込み（ワンタップで入力サンプルを確認）</li>
+        <li>入力内容のクリア（全てリセット）</li>
       </ul>
     </div>
   </div>
@@ -637,20 +305,18 @@ footer { text-align:center; margin-top:56px; font-size:13px; font-weight:bold; c
 </div>
 
 <!-- メインコンテンツ -->
-<div class="wrap main-content" id="main-content">
-
+<div class="wrap" id="main-content">
   <div class="toolbar">
     <button class="tool-btn" onclick="openModal('howto-modal')">
       <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
       使い方
     </button>
     <button class="tool-btn" onclick="openModal('settings-modal')">
-      <svg viewBox="0 0 24 24"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.73,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.06,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.43-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.49-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.73,8.87C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.06,0.94l-2.03,1.58c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.43-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.49-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/></svg>
       設定
     </button>
   </div>
 
-  <!-- 無料体験バナー -->
   <div class="free-banner" id="free-banner" onclick="openGate()"></div>
 
   <header>
@@ -682,13 +348,71 @@ footer { text-align:center; margin-top:56px; font-size:13px; font-weight:bold; c
       </div>
     </div>
 
+    <!-- ① 期間軸 -->
     <div class="field-group">
-      <label>今月のテーマ・メッセージ（任意）</label>
+      <label>📅 投稿の期間</label>
+      <div class="chips" id="period-chips">
+        <button class="chip" data-period="今日">📅 今日</button>
+        <button class="chip" data-period="今週">📆 今週</button>
+        <button class="chip active" data-period="今月">🗓 今月</button>
+      </div>
+    </div>
+
+    <!-- ② 運勢カテゴリ -->
+    <div class="field-group">
+      <label>🌟 運勢カテゴリ（複数OK）</label>
+      <div class="chips" id="category-chips">
+        <button class="chip active" data-cat="総合運">✨ 総合運</button>
+        <button class="chip" data-cat="恋愛運">💕 恋愛運</button>
+        <button class="chip" data-cat="仕事運">💼 仕事運</button>
+        <button class="chip" data-cat="金運">💰 金運</button>
+        <button class="chip" data-cat="健康運">🌿 健康運</button>
+      </div>
+    </div>
+
+    <!-- ③ 星座・数秘ナンバー -->
+    <div class="field-group">
+      <label>🔮 投稿の対象者（任意）</label>
+      <select id="target-select">
+        <option value="">▼ 全体向け（指定しない）</option>
+        <optgroup label="── 星座 ──">
+          <option value="牡羊座">♈ 牡羊座</option>
+          <option value="牡牛座">♉ 牡牛座</option>
+          <option value="双子座">♊ 双子座</option>
+          <option value="蟹座">♋ 蟹座</option>
+          <option value="獅子座">♌ 獅子座</option>
+          <option value="乙女座">♍ 乙女座</option>
+          <option value="天秤座">♎ 天秤座</option>
+          <option value="蠍座">♏ 蠍座</option>
+          <option value="射手座">♐ 射手座</option>
+          <option value="山羊座">♑ 山羊座</option>
+          <option value="水瓶座">♒ 水瓶座</option>
+          <option value="魚座">♓ 魚座</option>
+        </optgroup>
+        <optgroup label="── 数秘ナンバー ──">
+          <option value="数秘1">🔢 数秘1（リーダーシップの魂）</option>
+          <option value="数秘2">🔢 数秘2（協調の魂）</option>
+          <option value="数秘3">🔢 数秘3（表現の魂）</option>
+          <option value="数秘4">🔢 数秘4（安定の魂）</option>
+          <option value="数秘5">🔢 数秘5（自由の魂）</option>
+          <option value="数秘6">🔢 数秘6（愛と奉仕の魂）</option>
+          <option value="数秘7">🔢 数秘7（探求の魂）</option>
+          <option value="数秘8">🔢 数秘8（豊かさの魂）</option>
+          <option value="数秘9">🔢 数秘9（完成の魂）</option>
+        </optgroup>
+      </select>
+    </div>
+
+    <div class="field-group">
+      <label>テーマ・メッセージ（任意）</label>
       <select id="theme-select" class="preset-select" onchange="applyPreset('theme-select','theme')">
         <option value="">▼ 例文から選ぶ（選ぶと下に反映されます）</option>
-        <option value="流れが変わる月。新しい出会いや気づきが訪れます。直感を信じて動いてみてください。">🌊 流れが変わる月（出会い・気づき）</option>
-        <option value="立ち止まって内省する月。自分の本音をじっくり見つめ直す時間を大切に。">🌿 内省の月（自分を見つめ直す）</option>
-        <option value="行動の月。迷いを手放し、一歩踏み出す勇気が湧いてくる時期です。">✊ 行動の月（踏み出す・前進）</option>
+        <option value="流れが変わる。新しい出会いや気づきが訪れます。直感を信じて動いてみてください。">🌊 流れが変わる（出会い・気づき）</option>
+        <option value="立ち止まって内省する時期。自分の本音をじっくり見つめ直す時間を大切に。">🌿 内省（自分を見つめ直す）</option>
+        <option value="行動の時。迷いを手放し、一歩踏み出す勇気が湧いてくる時期です。">✊ 行動（踏み出す・前進）</option>
+        <option value="新しいご縁が結ばれる予感。笑顔でいることが、素敵な出会いを引き寄せます。">💕 ご縁・出会い</option>
+        <option value="金運が上昇気流に乗る時期。感謝の気持ちでお金と向き合うと、豊かさが循環します。">💰 金運上昇</option>
+        <option value="体と心のバランスを整えることが大切な時期。無理せず、丁寧に過ごしてください。">🌿 健康・整える</option>
       </select>
       <textarea id="theme" placeholder="そのまま使ってもOK、自由に書き換えてもOKです"></textarea>
     </div>
@@ -697,9 +421,9 @@ footer { text-align:center; margin-top:56px; font-size:13px; font-weight:bold; c
       <label>ひとこと自己紹介（任意）</label>
       <select id="bio-select" class="preset-select" onchange="applyPreset('bio-select','bio')">
         <option value="">▼ 例文から選ぶ（選ぶと下に反映されます）</option>
-        <option value="鑑定歴〇年。恋愛・転職・人間関係が得意です。">💼 経歴タイプ（得意ジャンルをアピール）</option>
-        <option value="穏やかに、丁寧に。あなたの本音に寄り添う鑑定を心がけています。">🌸 スタイルタイプ（寄り添い・丁寧さ）</option>
-        <option value="オンライン鑑定・メール鑑定承ります。初めての方もお気軽にどうぞ。">📩 案内タイプ（受付方法・初心者歓迎）</option>
+        <option value="鑑定歴〇年。恋愛・転職・人間関係が得意です。">💼 経歴タイプ</option>
+        <option value="穏やかに、丁寧に。あなたの本音に寄り添う鑑定を心がけています。">🌸 スタイルタイプ</option>
+        <option value="オンライン鑑定・メール鑑定承ります。初めての方もお気軽にどうぞ。">📩 案内タイプ</option>
       </select>
       <input type="text" id="bio" placeholder="そのまま使ってもOK、〇年の部分など自由に書き換えてください">
     </div>
@@ -719,6 +443,17 @@ footer { text-align:center; margin-top:56px; font-size:13px; font-weight:bold; c
 
   <div id="results" class="card" style="margin-top:32px;">
     <div class="card-title">✦ 生成された投稿文</div>
+
+    <!-- ④ ラッキーアイテム表示 -->
+    <div class="lucky-card" id="lucky-display">
+      <div class="lucky-title">✦ 今回のラッキーアイテム</div>
+      <div class="lucky-items">
+        <div class="lucky-item">🌈 カラー：<span id="lucky-color-text"></span></div>
+        <div class="lucky-item">🍀 フード：<span id="lucky-food-text"></span></div>
+        <div class="lucky-item">✨ アクション：<span id="lucky-action-text"></span></div>
+      </div>
+    </div>
+
     <div class="result-tab-bar">
       <button class="result-tab active" onclick="switchTab('x',this)">𝕏 X用</button>
       <button class="result-tab" onclick="switchTab('insta',this)">📸 Instagram</button>
@@ -743,15 +478,9 @@ footer { text-align:center; margin-top:56px; font-size:13px; font-weight:bold; c
     <div class="card-title">✦ AI投稿文生成<span class="pro-badge">PRO</span></div>
     <p style="font-size:14px;color:var(--text-muted);margin-bottom:28px;line-height:1.6;font-weight:600;">上の入力内容をもとに、AIがあなたらしい投稿文を自動生成します。</p>
     <div class="platform-btns" id="platform-btns">
-      <button class="platform-btn active" data-platform="x" onclick="selectPlatform(this)">
-        <span class="p-icon">𝕏</span>X
-      </button>
-      <button class="platform-btn" data-platform="instagram" onclick="selectPlatform(this)">
-        <span class="p-icon">📸</span>Instagram
-      </button>
-      <button class="platform-btn" data-platform="line" onclick="selectPlatform(this)">
-        <span class="p-icon">💬</span>LINE
-      </button>
+      <button class="platform-btn active" data-platform="x" onclick="selectPlatform(this)"><span class="p-icon">𝕏</span>X</button>
+      <button class="platform-btn" data-platform="instagram" onclick="selectPlatform(this)"><span class="p-icon">📸</span>Instagram</button>
+      <button class="platform-btn" data-platform="line" onclick="selectPlatform(this)"><span class="p-icon">💬</span>LINE</button>
     </div>
     <button class="btn-generate" onclick="generateAI()">AIで投稿文を生成する</button>
     <div class="ai-loading" id="ai-loading">🔮 AIが考えています...</div>
@@ -759,210 +488,237 @@ footer { text-align:center; margin-top:56px; font-size:13px; font-weight:bold; c
     <button class="btn-copy" id="ai-copy" onclick="copyText('ai-result',this)" style="display:none;">コピーする</button>
   </div>
 
-  <footer>
-    占いみっけ｜SPC<br>「考えるを、ひとりにしない」
-  </footer>
-
+  <footer>占いみっけ｜SPC<br>「考えるを、ひとりにしない」</footer>
 </div>
 
 <script>
-// ==========================================
-// 定数と初期化
-// ==========================================
 var UNLOCK_DATE    = new Date('2026-04-01T00:00:00+09:00');
 var WORKERS_URL    = 'https://uranai-mikke.yymmatsu.workers.dev';
 var PRO_PASSWORD   = 'uranai2025';
 var MAX_FREE_TRIAL = 3;
 
+// 星を生成
 (function(){
-  var s = document.getElementById('stars');
+  var s=document.getElementById('stars');
   for(var i=0;i<80;i++){
-    var el = document.createElement('div');
-    el.className = 'star';
-    var size = Math.random()*2.5+0.5;
-    el.style.cssText = 'width:'+size+'px;height:'+size+'px;top:'+Math.random()*100+'%;left:'+Math.random()*100+'%;--d:'+(Math.random()*3+2)+'s;animation-delay:'+(Math.random()*4)+'s;';
+    var el=document.createElement('div'); el.className='star';
+    var sz=Math.random()*2.5+0.5;
+    el.style.cssText='width:'+sz+'px;height:'+sz+'px;top:'+Math.random()*100+'%;left:'+Math.random()*100+'%;--d:'+(Math.random()*3+2)+'s;animation-delay:'+(Math.random()*4)+'s;';
     s.appendChild(el);
   }
 })();
 
+// 初期モード判定
 (function(){
-  if(new Date() >= UNLOCK_DATE){
-    // 4月1日以降：ProモードのUIを基本表示（AIボタンなどを見せる）
-    showProMode();
-    // 認証状況に応じてバナーの表示内容を更新
-    updateBanner();
-  } else {
-    // 4月1日以前：完全無料のテンプレート生成のみ
-    showFreeMode();
-  }
+  if(new Date()>=UNLOCK_DATE){ showProMode(); updateBanner(); }
+  else { showFreeMode(); }
 })();
 
-// ==========================================
-// 状態管理・バナー制御
-// ==========================================
-function getFreeTrialCount() {
-  return parseInt(localStorage.getItem('free_ai_count') || '0', 10);
-}
+// ラッキーアイテムデータ
+var LUCKY_COLORS  = ['白','金','銀','赤','ピンク','青','紫','緑','黄','オレンジ','ベージュ','水色','ラベンダー','珊瑚色'];
+var LUCKY_FOODS   = ['チョコレート','ハーブティー','いちご','みかん','ナッツ','豆腐','はちみつ','抹茶スイーツ','さくらんぼ','りんご','チーズ','ヨーグルト','バナナ','グリーンスムージー'];
+var LUCKY_ACTIONS = ['朝日を浴びる','深呼吸を3回する','花を一輪飾る','散歩に出かける','手書きのメモを書く','窓を開けて換気する','新しいルートを歩く','お気に入りの香りを使う','ストレッチをする','空を見上げる'];
+function pickRand(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
 
-function incrementFreeTrialCount() {
-  var count = getFreeTrialCount();
-  localStorage.setItem('free_ai_count', count + 1);
+// バナー・モード管理
+function getFreeTrialCount(){ return parseInt(localStorage.getItem('free_ai_count')||'0',10); }
+function incrementFreeTrialCount(){ localStorage.setItem('free_ai_count',getFreeTrialCount()+1); }
+function updateBanner(){
+  var b=document.getElementById('free-banner'); if(!b) return;
+  if(sessionStorage.getItem('pro_unlocked')==='1'){ b.style.display='none'; return; }
+  if(new Date()<UNLOCK_DATE){ b.style.display='none'; return; }
+  b.style.display='flex';
+  var cnt=getFreeTrialCount(), rem=MAX_FREE_TRIAL-cnt;
+  b.className='free-banner';
+  if(cnt===0){ b.innerHTML='🎁 今なら3回まで無料でお試しいただけます（登録不要）'; }
+  else if(rem>0){ b.innerHTML='🎁 無料体験 残り'+rem+'回（全3回）'; }
+  else{ b.className='free-banner is-empty'; b.innerHTML='⚠️ 無料体験が終了しました<br>ご購入はこちら→'; }
 }
-
-function updateBanner() {
-  var banner = document.getElementById('free-banner');
-  if(!banner) return;
-  
-  // 認証済みの場合はバナーを非表示
-  if (sessionStorage.getItem('pro_unlocked') === '1') {
-    banner.style.display = 'none';
-    return;
-  }
-  
-  // 4月1日以前の場合はバナーを非表示
-  if (new Date() < UNLOCK_DATE) {
-    banner.style.display = 'none';
-    return;
-  }
-  
-  banner.style.display = 'flex';
-  var count = getFreeTrialCount();
-  var remain = MAX_FREE_TRIAL - count;
-  
-  banner.className = 'free-banner'; // クラスリセット
-  
-  if (count === 0) {
-    banner.innerHTML = '🎁 今なら3回まで無料でお試しいただけます（登録不要）';
-  } else if (remain > 0) {
-    banner.innerHTML = '🎁 無料体験 残り' + remain + '回（全3回）';
-  } else {
-    banner.className = 'free-banner is-empty';
-    banner.innerHTML = '⚠️ 無料体験が終了しました<br>ご購入はこちら→';
-  }
-}
-
-function showFreeMode(){
-  document.getElementById('btn-template').style.display='block';
-  document.getElementById('ai-card').style.display='none';
-}
-
-function showProMode(){
-  document.getElementById('btn-template').style.display='none';
-  document.getElementById('results').style.display='none';
-  document.getElementById('ai-card').style.display='block';
-}
-
-function openGate(){
-  document.getElementById('pw-gate').classList.add('show');
-}
-function closeGate(){
-  document.getElementById('pw-gate').classList.remove('show');
-}
-
+function showFreeMode(){ document.getElementById('btn-template').style.display='block'; document.getElementById('ai-card').style.display='none'; }
+function showProMode(){ document.getElementById('btn-template').style.display='none'; document.getElementById('results').style.display='none'; document.getElementById('ai-card').style.display='block'; }
+function openGate(){ document.getElementById('pw-gate').classList.add('show'); }
+function closeGate(){ document.getElementById('pw-gate').classList.remove('show'); }
 function checkGate(){
   var pw=document.getElementById('gate-pw').value;
-  var err=document.getElementById('gate-error');
-  err.textContent='';
+  var err=document.getElementById('gate-error'); err.textContent='';
   if(!pw){ err.textContent='パスワードを入力してください'; return; }
-  
-  if(pw===PRO_PASSWORD){
-    sessionStorage.setItem('pro_unlocked','1');
-    sessionStorage.setItem('pro_pw',pw);
-    closeGate();
-    updateBanner(); // 認証成功時にバナーを消す
-  } else {
-    err.textContent='パスワードが正しくありません';
-    document.getElementById('gate-pw').value='';
-    document.getElementById('gate-pw').focus();
-  }
+  if(pw===PRO_PASSWORD){ sessionStorage.setItem('pro_unlocked','1'); sessionStorage.setItem('pro_pw',pw); closeGate(); updateBanner(); }
+  else{ err.textContent='パスワードが正しくありません'; document.getElementById('gate-pw').value=''; document.getElementById('gate-pw').focus(); }
 }
-
 function openModal(id){ document.getElementById(id).classList.add('open'); }
 function closeModal(id){ document.getElementById(id).classList.remove('open'); }
-document.querySelectorAll('.modal-overlay').forEach(function(o){
-  o.addEventListener('click',function(e){ if(e.target===o) o.classList.remove('open'); });
-});
+document.querySelectorAll('.modal-overlay').forEach(function(o){ o.addEventListener('click',function(e){ if(e.target===o) o.classList.remove('open'); }); });
 function toggleTheme(chk){ document.body.classList.toggle('light',!chk.checked); }
 
-// ==========================================
-// フォーム・テンプレート生成
-// ==========================================
-document.getElementById('chips').addEventListener('click',function(e){
-  var c=e.target.closest('.chip'); if(c) c.classList.toggle('active');
+// チップイベント
+document.getElementById('chips').addEventListener('click',function(e){ var c=e.target.closest('.chip'); if(c) c.classList.toggle('active'); });
+document.getElementById('category-chips').addEventListener('click',function(e){ var c=e.target.closest('.chip'); if(c) c.classList.toggle('active'); });
+['period-chips','tone-chips'].forEach(function(id){
+  document.getElementById(id).addEventListener('click',function(e){
+    var c=e.target.closest('.chip'); if(!c) return;
+    this.querySelectorAll('.chip').forEach(function(x){ x.classList.remove('active'); });
+    c.classList.add('active');
+  });
 });
-document.getElementById('tone-chips').addEventListener('click',function(e){
-  var c=e.target.closest('.chip'); if(!c) return;
-  document.querySelectorAll('#tone-chips .chip').forEach(function(x){ x.classList.remove('active'); });
-  c.classList.add('active');
-});
+
 function applyPreset(s,t){ var el=document.getElementById(s); if(!el.value) return; document.getElementById(t).value=el.value; el.selectedIndex=0; }
+
 function loadDemo(){
   document.getElementById('name').value='月詠 さくら';
-  document.getElementById('theme').value='自分を信じて一歩踏み出す月。迷いが晴れる出来事が訪れます。';
+  document.getElementById('theme').value='自分を信じて一歩踏み出す時期。迷いが晴れる出来事が訪れます。';
   document.getElementById('bio').value='鑑定歴8年。恋愛・転職・人間関係が得意です。';
   document.querySelectorAll('#chips .chip').forEach(function(c){ c.classList.toggle('active',c.dataset.v==='タロット'||c.dataset.v==='西洋占星術'); });
+  document.querySelectorAll('#period-chips .chip').forEach(function(c){ c.classList.toggle('active',c.dataset.period==='今月'); });
+  document.querySelectorAll('#category-chips .chip').forEach(function(c){ c.classList.toggle('active',c.dataset.cat==='総合運'||c.dataset.cat==='恋愛運'); });
+  document.getElementById('target-select').value='牡羊座';
   document.querySelectorAll('#tone-chips .chip').forEach(function(c,i){ c.classList.toggle('active',i===0); });
 }
+
 function clearAll(){
-  document.getElementById('name').value='';
-  document.getElementById('theme').value='';
-  document.getElementById('bio').value='';
-  document.getElementById('theme-select').selectedIndex=0;
-  document.getElementById('bio-select').selectedIndex=0;
-  document.querySelectorAll('#chips .chip').forEach(function(c){ c.classList.remove('active'); });
+  ['name','theme','bio'].forEach(function(id){ document.getElementById(id).value=''; });
+  ['theme-select','bio-select','target-select'].forEach(function(id){ document.getElementById(id).selectedIndex=0; });
+  document.querySelectorAll('#chips .chip, #category-chips .chip').forEach(function(c){ c.classList.remove('active'); });
+  document.querySelectorAll('#category-chips .chip').forEach(function(c,i){ if(i===0) c.classList.add('active'); });
+  document.querySelectorAll('#period-chips .chip').forEach(function(c){ c.classList.toggle('active',c.dataset.period==='今月'); });
   document.querySelectorAll('#tone-chips .chip').forEach(function(c,i){ c.classList.toggle('active',i===0); });
   document.getElementById('results').classList.remove('show');
+  document.getElementById('lucky-display').classList.remove('show');
   document.getElementById('ai-result').style.display='none';
   document.getElementById('ai-result').textContent='';
   document.getElementById('ai-copy').style.display='none';
 }
 
+// テンプレートデータ
 var TEMPLATES={
   'やさしく':{
-    x:["🌙 今月も、あなたのそばに。\n\n{theme}\n\n小さな不安も、大きな迷いも、\nそっと寄り添いながら一緒に読み解いていきます✨\n\n{skill}で、あなたの「今」を照らします。\n\n📩 無料お試し鑑定、受付中です。\nプロフィールのリンクからどうぞ🌸\n\n{hashtag}",
-       "✨ 毎日がんばっているあなたへ。\n\n{theme}\n\nひとりで抱え込まないで。\n{name}が、あなたの声を聴きます。\n\n{skill} | {bio}\n\n📩 気軽にDMください💌\n{hashtag}"],
-    insta:["🌸 今月のメッセージをお届けします。\n\n{theme}\n\nどんな状況でも、あなたには必ず「流れ」があります。\n{name}の{skill}で、その流れを一緒に読んでいきましょう🌙\n\n{bio}\n\n✉️ プロフィールのリンクから、お気軽にどうぞ。\n\n{hashtag}"],
-    line:["こんにちは☺️ {name}です。\n\n今月のテーマをシェアしますね。\n\n{theme}\n\n「なんとなく不安…」\n「この選択でいいのかな？」\n\nそんなとき、ひとりで悩まないでください。\n\n{skill}で、あなたのペースに合わせて\n丁寧に鑑定します🌷\n\n→ お申し込みはこちら\n【リンク】"]
+    '今日':{
+      x:["☀️ {target}、今日のメッセージをお届けします🌸\n\n今日の{cat}：\n{theme}\n\n🌈 ラッキーカラー：{lc}\n🍀 ラッキーフード：{lf}\n✨ 今日やること：{la}\n\n{skill}で、あなたの今日を照らします。\n📩 プロフィールへ\n{hashtag}",
+         "🌷 {target}の皆さん、今日もお疲れ様☺️\n\n今日の{cat}：{theme}\n\n小さくても前に進んでいる自分を褒めてあげてください✨\n\n🌈 {lc}を身につけると運気UP！\n🍀 今日の一口は{lf}がおすすめ\n\n{skill} | {name}\n{hashtag}"],
+      insta:["🌸 {target}へ、今日のメッセージ。\n\n今日の{cat}\n{theme}\n\n🌈 ラッキーカラー：{lc}\n🍀 ラッキーフード：{lf}\n✨ ラッキーアクション：{la}\n\n{name}の{skill}で、今日の流れを一緒に読みましょう🌙\n{bio}\n✉️ プロフィールから\n{hashtag}"],
+      line:["こんにちは☺️ {name}です。\n\n{target}へ、今日のメッセージをお届けします。\n\n今日の{cat}：\n{theme}\n\n🌈 ラッキーカラー：{lc}\n🍀 ラッキーフード：{lf}\n✨ 今日やってほしいこと：{la}\n\n{skill}で、あなたのペースで丁寧に鑑定します🌷\n\n→ お申し込みはこちら\n【リンク】"]
+    },
+    '今週':{
+      x:["🌙 {target}へ、今週のメッセージ✨\n\n今週の{cat}：\n{theme}\n\n🌈 ラッキーカラー：{lc}\n🍀 ラッキーフード：{lf}\n✨ 今週やること：{la}\n\n{skill}で、あなたの今週を照らします。\n📩 プロフィールへ\n{hashtag}",
+         "✨ {target}の皆さん、今週もそばにいます。\n\n今週の{cat}：\n{theme}\n\n穏やかな光が差し込む一週間です🌸\n🌈 {lc}を意識すると流れが変わります。\n\n{skill} | {name}\n{hashtag}"],
+      insta:["🌸 {target}へ、今週のメッセージ。\n\n今週の{cat}\n{theme}\n\n🌈 ラッキーカラー：{lc}\n🍀 ラッキーフード：{lf}\n✨ ラッキーアクション：{la}\n\n{name}の{skill}で、今週の流れを読んでいきましょう🌙\n{bio}\n✉️ プロフィールから\n{hashtag}"],
+      line:["こんにちは☺️ {name}です。\n\n{target}へ、今週のメッセージをお届けします。\n\n今週の{cat}：\n{theme}\n\n🌈 ラッキーカラー：{lc}\n🍀 ラッキーフード：{lf}\n✨ 今週やってほしいこと：{la}\n\n{skill}で、あなたのペースで丁寧に鑑定します🌷\n\n→ お申し込みはこちら\n【リンク】"]
+    },
+    '今月':{
+      x:["🌙 {target}へ、今月も、あなたのそばに。\n\n今月の{cat}：\n{theme}\n\n🌈 ラッキーカラー：{lc}\n🍀 ラッキーフード：{lf}\n✨ 今月やること：{la}\n\n{skill}で、あなたの「今」を照らします。\n📩 プロフィールへ\n{hashtag}",
+         "✨ {target}の皆さん、毎日がんばっているあなたへ。\n\n今月の{cat}：\n{theme}\n\nひとりで抱え込まないで。{name}が、あなたの声を聴きます。\n🌈 {lc} | 🍀 {lf}\n{skill} | {bio}\n📩 気軽にDMください💌\n{hashtag}"],
+      insta:["🌸 {target}へ、今月のメッセージ。\n\n今月の{cat}\n{theme}\n\n🌈 ラッキーカラー：{lc}\n🍀 ラッキーフード：{lf}\n✨ ラッキーアクション：{la}\n\n{name}の{skill}で、今月の流れを読んでいきましょう🌙\n{bio}\n✉️ プロフィールから\n{hashtag}"],
+      line:["こんにちは☺️ {name}です。\n\n{target}へ、今月のテーマをシェアします。\n\n今月の{cat}：\n{theme}\n\n🌈 ラッキーカラー：{lc}\n🍀 ラッキーフード：{lf}\n✨ 今月やってほしいこと：{la}\n\n{skill}で、あなたのペースで丁寧に鑑定します🌷\n\n→ お申し込みはこちら\n【リンク】"]
+    }
   },
   '神秘的に':{
-    x:["🔮 星は、すべてを知っている。\n\n{theme}\n\n見えない力が動き始めるとき、\nあなたはどこに立っているだろう。\n\n{skill}が紡ぐ、あなただけの物語。\n\n📩 鑑定受付中 → プロフィールへ\n{hashtag}"],
-    insta:["🌌 宇宙はいつも、あなたに語りかけている。\n\n{theme}\n\n偶然などない。\nすべては、必然の流れの中に。\n\n{name}の{skill}で、その声を聴いてみませんか。\n\n{bio}\n\n🔮 鑑定受付中 → プロフィールへ\n{hashtag}"],
-    line:["🔮 {name}です。\n\n今月の星からのメッセージをお届けします。\n\n{theme}\n\n偶然に見えるできごとの中に、\nあなたへのサインが隠れています。\n\n{skill}で、その意味を一緒に読み解きましょう✨\n\n→ 鑑定のご予約はこちら\n【リンク】"]
+    '今日':{
+      x:["🔮 {target}へ、今日の星からのメッセージ。\n\n今日の{cat}：\n{theme}\n\n今日という日には、意味がある。\n🌈 {lc}を纏って、今日を歩いて。\n✨ {la}\n\n{skill} | {name}\n{hashtag}"],
+      insta:["🌌 宇宙は今日も、{target}に語りかけている。\n\n今日の{cat}\n{theme}\n\n偶然などない。すべては必然の流れの中に。\n🌈 ラッキーカラー：{lc}\n🍀 ラッキーフード：{lf}\n✨ ラッキーアクション：{la}\n\n{name}の{skill}で、その声を聴いてみませんか。\n{bio}\n🔮 鑑定受付中\n{hashtag}"],
+      line:["🔮 {name}です。\n\n{target}へ、今日の星からのメッセージをお届けします。\n\n今日の{cat}：\n{theme}\n\n🌈 ラッキーカラー：{lc}\n🍀 ラッキーフード：{lf}\n✨ {la}\n\n{skill}で、その意味を一緒に読み解きましょう✨\n\n→ 鑑定のご予約はこちら\n【リンク】"]
+    },
+    '今週':{
+      x:["🔮 {target}へ、今週の星からのメッセージ。\n\n今週の{cat}：\n{theme}\n\n見えない力が動き始めるとき、あなたはどこに立っているだろう。\n🌈 ラッキーカラー：{lc}\n\n{skill} | {name}\n{hashtag}"],
+      insta:["🌌 宇宙は今週も、{target}に語りかけている。\n\n今週の{cat}\n{theme}\n\n偶然などない。すべては必然の流れの中に。\n🌈 ラッキーカラー：{lc}\n🍀 ラッキーフード：{lf}\n✨ ラッキーアクション：{la}\n\n{name}の{skill}で、その声を聴いてみませんか。\n{bio}\n🔮 鑑定受付中\n{hashtag}"],
+      line:["🔮 {name}です。\n\n{target}へ、今週の星からのメッセージをお届けします。\n\n今週の{cat}：\n{theme}\n\n🌈 ラッキーカラー：{lc}\n🍀 ラッキーフード：{lf}\n✨ {la}\n\n{skill}で、その意味を一緒に読み解きましょう✨\n\n→ 鑑定のご予約はこちら\n【リンク】"]
+    },
+    '今月':{
+      x:["🔮 星は、すべてを知っている。\n\n{target}へ、今月の{cat}：\n{theme}\n\n見えない力が動き始めるとき、あなたはどこに立っているだろう。\n🌈 ラッキーカラー：{lc}\n\n{skill} | {name}\n📩 鑑定受付中\n{hashtag}"],
+      insta:["🌌 宇宙はいつも、{target}に語りかけている。\n\n今月の{cat}\n{theme}\n\n偶然などない。すべては必然の流れの中に。\n🌈 ラッキーカラー：{lc}\n🍀 ラッキーフード：{lf}\n✨ ラッキーアクション：{la}\n\n{name}の{skill}で、その声を聴いてみませんか。\n{bio}\n🔮 鑑定受付中\n{hashtag}"],
+      line:["🔮 {name}です。\n\n{target}へ、今月の星からのメッセージをお届けします。\n\n今月の{cat}：\n{theme}\n\n🌈 ラッキーカラー：{lc}\n🍀 ラッキーフード：{lf}\n✨ {la}\n\n{skill}で、その意味を一緒に読み解きましょう✨\n\n→ 鑑定のご予約はこちら\n【リンク】"]
+    }
   },
   '背中を押す':{
-    x:["✊ 迷ってる時間、もったいないよ。\n\n{theme}\n\n「やっぱり動いてよかった」\nそう言える未来を、一緒に選びにいこう。\n\n{skill}で本音を引き出す。{name}の鑑定、今月も受付中！\n📩 プロフィールへ\n{hashtag}"],
-    insta:["🔥 あなたの「もっと」を、諦めないで。\n\n{theme}\n\n答えは、すでにあなたの中にある。\n{skill}は、それを引き出すための地図。\n\n{name} | {bio}\n\n📩 鑑定ご予約はプロフィールから！\n{hashtag}"],
-    line:["こんにちは✊ {name}です！\n\n今月のメッセージです👇\n\n{theme}\n\n「踏み出せない」\n「また同じところで止まってる…」\n\nそのループ、{skill}で一緒に突破しましょう！\n\n→ 今すぐ申し込む\n【リンク】"]
+    '今日':{
+      x:["✊ {target}、今日動かなくていつ動く！\n\n今日の{cat}：\n{theme}\n\n🌈 {lc}で、一歩踏み出そう。\n🍀 {lf}でエネルギー補給！\n\n{name}の{skill}で本音を引き出す。今すぐ！\n{hashtag}"],
+      insta:["🔥 {target}へ、今日のメッセージ！\n\n今日の{cat}\n{theme}\n\n答えは、すでにあなたの中にある。{skill}はそれを引き出す地図。\n🌈 ラッキーカラー：{lc}\n🍀 ラッキーフード：{lf}\n✨ ラッキーアクション：{la}\n\n{name} | {bio}\n📩 プロフィールから！\n{hashtag}"],
+      line:["こんにちは✊ {name}です！\n\n{target}へ、今日のメッセージです👇\n\n今日の{cat}：\n{theme}\n\n🌈 ラッキーカラー：{lc}\n✨ 今日やること：{la}\n\n「踏み出せない」そのループ、{skill}で一緒に突破しましょう！\n\n→ 今すぐ申し込む\n【リンク】"]
+    },
+    '今週':{
+      x:["✊ {target}、今週こそ動き時！\n\n今週の{cat}：\n{theme}\n\n「やっぱり動いてよかった」そう言える週末を一緒に選びにいこう。\n🌈 {lc} | 🍀 {lf}\n\n{skill}で本音を引き出す！\n{hashtag}"],
+      insta:["🔥 {target}へ、今週のメッセージ！\n\n今週の{cat}\n{theme}\n\n答えは、すでにあなたの中にある。{skill}はそれを引き出す地図。\n🌈 ラッキーカラー：{lc}\n🍀 ラッキーフード：{lf}\n✨ ラッキーアクション：{la}\n\n{name} | {bio}\n📩 プロフィールから！\n{hashtag}"],
+      line:["こんにちは✊ {name}です！\n\n{target}へ、今週のメッセージです👇\n\n今週の{cat}：\n{theme}\n\n🌈 ラッキーカラー：{lc}\n🍀 ラッキーフード：{lf}\n✨ 今週やること：{la}\n\n「また同じところで止まってる…」そのループ、{skill}で突破！\n\n→ 今すぐ申し込む\n【リンク】"]
+    },
+    '今月':{
+      x:["✊ {target}、迷ってる時間、もったいないよ。\n\n今月の{cat}：\n{theme}\n\n🌈 {lc}を纏って動き出そう！\n🍀 {lf}でエネルギー充填！\n\n{skill}で本音を引き出す。今月も受付中！\n{hashtag}"],
+      insta:["🔥 {target}の「もっと」を、諦めないで。\n\n今月の{cat}\n{theme}\n\n答えは、すでにあなたの中にある。{skill}はそれを引き出す地図。\n🌈 ラッキーカラー：{lc}\n🍀 ラッキーフード：{lf}\n✨ ラッキーアクション：{la}\n\n{name} | {bio}\n📩 プロフィールから！\n{hashtag}"],
+      line:["こんにちは✊ {name}です！\n\n{target}へ、今月のメッセージです👇\n\n今月の{cat}：\n{theme}\n\n🌈 ラッキーカラー：{lc}\n🍀 ラッキーフード：{lf}\n✨ 今月やってほしいこと：{la}\n\n「踏み出せない」「また同じところで…」\nそのループ、{skill}で突破！\n\n→ 今すぐ申し込む\n【リンク】"]
+    }
   },
   '落ち着いて':{
-    x:["🍃 静かに、深く、あなたと向き合う時間を。\n\n{theme}\n\n焦らなくていい。\n{name}の{skill}は、あなたのペースで進みます。\n\n{bio}\n\n📩 ご予約はプロフィールから\n{hashtag}"],
-    insta:["🌿 ゆっくりでいい。\n\n{theme}\n\n急がなくていい。\nただ「今」を見つめることには、価値がある。\n\n{name}の{skill}で、静かな時間を過ごしませんか。\n\n{bio}\n\n📩 鑑定受付中 → プロフィールへ\n{hashtag}"],
-    line:["こんにちは🍃 {name}です。\n\n今月のメッセージをお届けします。\n\n{theme}\n\n慌てなくていい。\nただ、今の自分の声をちゃんと聴いてあげてください。\n\n{skill}で、穏やかに、ていねいに向き合います。\n\n→ お申し込みはこちら\n【リンク】"]
+    '今日':{
+      x:["🍃 {target}へ、静かに。今日のメッセージ。\n\n今日の{cat}：\n{theme}\n\n焦らなくていい。今日のあなたに必要なのは、{la}かもしれません。\n🌈 {lc}に包まれて、今日を丁寧に。\n\n{skill} | {name}\n{hashtag}"],
+      insta:["🌿 {target}へ、今日もゆっくりでいい。\n\n今日の{cat}\n{theme}\n\n急がなくていい。「今日」を見つめることには、価値がある。\n🌈 ラッキーカラー：{lc}\n🍀 ラッキーフード：{lf}\n✨ ラッキーアクション：{la}\n\n{name}の{skill}で、静かな時間を。\n{bio}\n📩 プロフィールへ\n{hashtag}"],
+      line:["こんにちは🍃 {name}です。\n\n{target}へ、今日のメッセージをお届けします。\n\n今日の{cat}：\n{theme}\n\n🌈 ラッキーカラー：{lc}\n🍀 ラッキーフード：{lf}\n✨ 今日の一歩：{la}\n\n{skill}で、穏やかに、ていねいに向き合います。\n\n→ お申し込みはこちら\n【リンク】"]
+    },
+    '今週':{
+      x:["🍃 {target}へ、今週も静かに向き合う時間を。\n\n今週の{cat}：\n{theme}\n\n焦らなくていい。{name}の{skill}は、あなたのペースで進みます。\n🌈 {lc}と共に、穏やかな一週間を。\n{hashtag}"],
+      insta:["🌿 {target}へ、今週もゆっくりでいい。\n\n今週の{cat}\n{theme}\n\n急がなくていい。「今週」を見つめることには、価値がある。\n🌈 ラッキーカラー：{lc}\n🍀 ラッキーフード：{lf}\n✨ ラッキーアクション：{la}\n\n{name}の{skill}で、静かな時間を。\n{bio}\n📩 プロフィールへ\n{hashtag}"],
+      line:["こんにちは🍃 {name}です。\n\n{target}へ、今週のメッセージをお届けします。\n\n今週の{cat}：\n{theme}\n\n🌈 ラッキーカラー：{lc}\n🍀 ラッキーフード：{lf}\n✨ 今週の一歩：{la}\n\n{skill}で、穏やかに、ていねいに向き合います。\n\n→ お申し込みはこちら\n【リンク】"]
+    },
+    '今月':{
+      x:["🍃 {target}へ、静かに、深く、あなたと向き合う時間を。\n\n今月の{cat}：\n{theme}\n\n焦らなくていい。{name}の{skill}は、あなたのペースで進みます。\n🌈 {lc}に包まれて、今月を丁寧に。\n{hashtag}"],
+      insta:["🌿 {target}へ、今月もゆっくりでいい。\n\n今月の{cat}\n{theme}\n\n急がなくていい。「今」を見つめることには、価値がある。\n🌈 ラッキーカラー：{lc}\n🍀 ラッキーフード：{lf}\n✨ ラッキーアクション：{la}\n\n{name}の{skill}で、静かな時間を。\n{bio}\n📩 プロフィールへ\n{hashtag}"],
+      line:["こんにちは🍃 {name}です。\n\n{target}へ、今月のメッセージをお届けします。\n\n今月の{cat}：\n{theme}\n\n🌈 ラッキーカラー：{lc}\n🍀 ラッキーフード：{lf}\n✨ 今月意識したいこと：{la}\n\n{skill}で、穏やかに、ていねいに向き合います。\n\n→ お申し込みはこちら\n【リンク】"]
+    }
   }
 };
+
 var HASHTAG={'タロット':'#タロット占い #タロットリーディング','星座占い':'#星座占い #今月の運勢','数秘術':'#数秘術 #数字占い','四柱推命':'#四柱推命 #命式','西洋占星術':'#西洋占星術 #ホロスコープ','霊感・霊視':'#霊感鑑定 #霊視','ルーン':'#ルーン占い #ルーン','オラクルカード':'#オラクルカード #カードリーディング'};
 var COMMON='#占い #占い師 #鑑定 #スピリチュアル';
-function getSelected(id){ return Array.from(document.querySelectorAll('#'+id+' .chip.active')).map(function(c){ return c.dataset.v||c.dataset.tone; }); }
-function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
-function build(tpl,name,skills,theme,bio){
-  var skillStr=skills.length?skills.join('・'):'占い';
-  var htags=skills.map(function(s){ return HASHTAG[s]||''; }).join(' ').trim()+' '+COMMON;
-  return tpl.replace(/{name}/g,name||'私').replace(/{skill}/g,skillStr).replace(/{theme}/g,theme||'あなたの未来に、光が差し込む月。\n新しい流れが始まろうとしています。').replace(/{bio}/g,bio||'').replace(/{hashtag}/g,htags.trim());
+
+function getChipValues(id,attr){
+  return Array.from(document.querySelectorAll('#'+id+' .chip.active')).map(function(c){ return c.dataset[attr]; }).filter(Boolean);
 }
+
+function build(tpl,name,skills,theme,bio,period,cats,target,lucky){
+  var skillStr  = skills.length ? skills.join('・') : '占い';
+  var catStr    = cats.length   ? cats.join('・')   : '総合運';
+  var targetStr = target ? target+'の皆さん' : 'あなた';
+  var htags     = skills.map(function(s){ return HASHTAG[s]||''; }).join(' ').trim()+' '+COMMON;
+  var defTheme  = '新しい流れが動き始める'+period+'。あなたの直感を信じて進んでください。';
+  return tpl
+    .replace(/{name}/g,    name||'私')
+    .replace(/{skill}/g,   skillStr)
+    .replace(/{theme}/g,   theme||defTheme)
+    .replace(/{bio}/g,     bio||'')
+    .replace(/{hashtag}/g, htags.trim())
+    .replace(/{cat}/g,     catStr)
+    .replace(/{target}/g,  targetStr)
+    .replace(/{lc}/g,      lucky.color)
+    .replace(/{lf}/g,      lucky.food)
+    .replace(/{la}/g,      lucky.action);
+}
+
 function generate(){
-  var name=document.getElementById('name').value.trim();
-  var skills=getSelected('chips');
-  var theme=document.getElementById('theme').value.trim();
-  var bio=document.getElementById('bio').value.trim();
-  var tones=getSelected('tone-chips');
-  var T=TEMPLATES[tones[0]||'やさしく'];
-  document.getElementById('text-x').textContent=build(pick(T.x),name,skills,theme,bio);
-  document.getElementById('text-insta').textContent=build(pick(T.insta),name,skills,theme,bio);
-  document.getElementById('text-line').textContent=build(pick(T.line),name,skills,theme,bio);
+  var name   = document.getElementById('name').value.trim();
+  var theme  = document.getElementById('theme').value.trim();
+  var bio    = document.getElementById('bio').value.trim();
+  var target = document.getElementById('target-select').value;
+  var skills = getChipValues('chips','v');
+  var tones  = getChipValues('tone-chips','tone');
+  var periods= getChipValues('period-chips','period');
+  var cats   = getChipValues('category-chips','cat');
+
+  var tone   = tones[0]   || 'やさしく';
+  var period = periods[0] || '今月';
+
+  // ④ ラッキーアイテム生成
+  var lucky  = { color: pickRand(LUCKY_COLORS), food: pickRand(LUCKY_FOODS), action: pickRand(LUCKY_ACTIONS) };
+  document.getElementById('lucky-color-text').textContent  = lucky.color;
+  document.getElementById('lucky-food-text').textContent   = lucky.food;
+  document.getElementById('lucky-action-text').textContent = lucky.action;
+  document.getElementById('lucky-display').classList.add('show');
+
+  var T = TEMPLATES[tone][period];
+  document.getElementById('text-x').textContent     = build(pickRand(T.x),     name,skills,theme,bio,period,cats,target,lucky);
+  document.getElementById('text-insta').textContent = build(pickRand(T.insta), name,skills,theme,bio,period,cats,target,lucky);
+  document.getElementById('text-line').textContent  = build(pickRand(T.line),  name,skills,theme,bio,period,cats,target,lucky);
+
   var r=document.getElementById('results');
   r.classList.add('show');
   setTimeout(function(){ r.scrollIntoView({behavior:'smooth',block:'start'}); },100);
 }
+
 function switchTab(key,btn){
   document.querySelectorAll('.result-tab').forEach(function(t){ t.classList.remove('active'); });
   document.querySelectorAll('.result-panel').forEach(function(p){ p.classList.remove('active'); });
@@ -971,85 +727,49 @@ function switchTab(key,btn){
 }
 function copyText(id,btn){
   var el=document.getElementById(id); if(!el) return;
-  var textarea = document.createElement("textarea");
-  textarea.value = el.textContent;
-  document.body.appendChild(textarea);
-  textarea.select();
-  try {
-    document.execCommand('copy');
-    btn.textContent='コピーしました！';
-    btn.classList.add('copied');
-    setTimeout(function(){ btn.textContent='コピーする'; btn.classList.remove('copied'); },2000);
-  } catch (err) {
-    console.error('コピーに失敗しました', err);
-  }
-  document.body.removeChild(textarea);
+  var ta=document.createElement("textarea"); ta.value=el.textContent;
+  document.body.appendChild(ta); ta.select();
+  try{ document.execCommand('copy'); btn.textContent='コピーしました！'; btn.classList.add('copied'); setTimeout(function(){ btn.textContent='コピーする'; btn.classList.remove('copied'); },2000); }
+  catch(e){ console.error(e); }
+  document.body.removeChild(ta);
 }
 
-// ==========================================
-// AI生成（Pro版）のロジック
-// ==========================================
+// AI生成（Pro版）
 function selectPlatform(btn){
   document.querySelectorAll('#platform-btns .platform-btn').forEach(function(b){ b.classList.remove('active'); });
   btn.classList.add('active');
 }
-
 function generateAI(){
-  var unlocked = sessionStorage.getItem('pro_unlocked') === '1';
-  var remain = MAX_FREE_TRIAL - getFreeTrialCount();
-  
-  // 未認証 かつ 無料体験を使い切っている場合はゲートを開いて終了
-  if(!unlocked && remain <= 0){ 
-    openGate();
-    return; 
-  }
+  var unlocked=sessionStorage.getItem('pro_unlocked')==='1';
+  var remain=MAX_FREE_TRIAL-getFreeTrialCount();
+  if(!unlocked&&remain<=0){ openGate(); return; }
+  var pw=sessionStorage.getItem('pro_pw')||PRO_PASSWORD;
 
-  // ▼▼▼ 修正ポイント ▼▼▼
-  // 認証済みはセッション保存のパスワードを使用
-  // 未認証の無料体験中もWorkerが受け付けるパスワードをセット
-  // （PRO_PASSWORDはソース上に公開されているため、セキュリティ上の差異なし）
-  var pw = sessionStorage.getItem('pro_pw') || PRO_PASSWORD;
-  // ▲▲▲ 修正ポイント ▲▲▲
-  
-  var name=document.getElementById('name').value.trim();
-  var theme=document.getElementById('theme').value.trim();
-  var bio=document.getElementById('bio').value.trim();
-  var skills=getSelected('chips');
-  var tones=getSelected('tone-chips');
+  var name   =document.getElementById('name').value.trim();
+  var theme  =document.getElementById('theme').value.trim();
+  var bio    =document.getElementById('bio').value.trim();
+  var target =document.getElementById('target-select').value;
+  var skills =getChipValues('chips','v');
+  var tones  =getChipValues('tone-chips','tone');
+  var periods=getChipValues('period-chips','period');
+  var cats   =getChipValues('category-chips','cat');
   var activeBtn=document.querySelector('#platform-btns .platform-btn.active');
   var platform=activeBtn?activeBtn.dataset.platform:'x';
-  
+
   var result=document.getElementById('ai-result');
   var loading=document.getElementById('ai-loading');
   var copyBtn=document.getElementById('ai-copy');
-  
-  loading.classList.add('show');
-  result.style.display='none';
-  copyBtn.style.display='none';
-  
+  loading.classList.add('show'); result.style.display='none'; copyBtn.style.display='none';
+
   fetch(WORKERS_URL+'/generate',{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({password:pw,name:name||'私',skills:skills,theme:theme,bio:bio,tone:tones[0]||'やさしく',platform:platform})
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({ password:pw, name:name||'私', skills:skills, theme:theme, bio:bio, tone:tones[0]||'やさしく', period:periods[0]||'今月', category:cats, target:target, platform:platform })
   })
   .then(function(r){ return r.json(); })
   .then(function(d){
     loading.classList.remove('show');
-    if(d.text){ 
-      result.textContent=d.text; 
-      result.style.display='block'; 
-      copyBtn.style.display='block'; 
-      
-      // 生成成功時に無料回数を減らしてバナー更新
-      if(!unlocked) {
-        incrementFreeTrialCount();
-        updateBanner();
-      }
-    }
-    else { 
-      result.textContent='エラーが発生しました。もう一度お試しください。'; 
-      result.style.display='block'; 
-    }
+    if(d.text){ result.textContent=d.text; result.style.display='block'; copyBtn.style.display='block'; if(!unlocked){ incrementFreeTrialCount(); updateBanner(); } }
+    else{ result.textContent='エラーが発生しました。もう一度お試しください。'; result.style.display='block'; }
   })
   .catch(function(){
     loading.classList.remove('show');
