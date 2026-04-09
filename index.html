@@ -287,6 +287,18 @@ footer { text-align:center; margin-top:56px; font-size:13px; font-weight:bold; c
   <div class="modal">
     <button class="modal-close" onclick="closeModal('settings-modal')">✕</button>
     <div class="modal-title">⚙ 設定</div>
+
+    <!-- ハンドルネーム登録 -->
+    <div style="margin-bottom:28px;">
+      <div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:16px;">🔮 ハンドルネームを登録する</div>
+      <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:16px;">
+        <input type="text" id="handle-1" placeholder="ハンドルネーム①" maxlength="30">
+        <input type="text" id="handle-2" placeholder="ハンドルネーム②（任意）" maxlength="30">
+        <input type="text" id="handle-3" placeholder="ハンドルネーム③（任意）" maxlength="30">
+      </div>
+      <button class="setting-action-btn" id="handle-save-btn" onclick="saveHandleNames()" style="width:100%;padding:14px;">保存する</button>
+    </div>
+
     <div class="setting-row">
       <span>🌙 ダークモード</span>
       <label class="toggle">
@@ -333,7 +345,10 @@ footer { text-align:center; margin-top:56px; font-size:13px; font-weight:bold; c
 
     <div class="field-group">
       <label>お名前・ハンドルネーム</label>
-      <input type="text" id="name" placeholder="例）月詠 さくら" maxlength="30">
+      <select id="name-select" class="preset-select" onchange="onNameSelect(this)" style="margin-bottom:0;">
+        <option value="">▼ 登録済みの名前から選ぶ</option>
+      </select>
+      <input type="text" id="name" placeholder="直接入力する場合はここに書いてください" maxlength="30" style="margin-top:12px;">
     </div>
 
     <div class="field-group">
@@ -547,10 +562,72 @@ function checkGate(){
   if(pw===PRO_PASSWORD){ sessionStorage.setItem('pro_unlocked','1'); sessionStorage.setItem('pro_pw',pw); closeGate(); updateBanner(); }
   else{ err.textContent='パスワードが正しくありません'; document.getElementById('gate-pw').value=''; document.getElementById('gate-pw').focus(); }
 }
-function openModal(id){ document.getElementById(id).classList.add('open'); }
+function openModal(id){
+  document.getElementById(id).classList.add('open');
+  if(id==='settings-modal'){ loadHandleNamesIntoSettings(); }
+}
 function closeModal(id){ document.getElementById(id).classList.remove('open'); }
 document.querySelectorAll('.modal-overlay').forEach(function(o){ o.addEventListener('click',function(e){ if(e.target===o) o.classList.remove('open'); }); });
 function toggleTheme(chk){ document.body.classList.toggle('light',!chk.checked); }
+
+// ==========================================
+// ハンドルネーム管理
+// ==========================================
+function saveHandleNames(){
+  var names=[
+    document.getElementById('handle-1').value.trim(),
+    document.getElementById('handle-2').value.trim(),
+    document.getElementById('handle-3').value.trim()
+  ];
+  localStorage.setItem('handle_names', JSON.stringify(names));
+  refreshNameDropdown();
+  // 保存完了フィードバック
+  var btn=document.getElementById('handle-save-btn');
+  btn.textContent='保存しました！';
+  btn.style.color='var(--primary)';
+  setTimeout(function(){ btn.textContent='保存する'; btn.style.color=''; }, 2000);
+}
+
+function loadHandleNamesIntoSettings(){
+  var stored=localStorage.getItem('handle_names');
+  if(!stored) return;
+  var names=JSON.parse(stored);
+  ['handle-1','handle-2','handle-3'].forEach(function(id,i){
+    var el=document.getElementById(id);
+    if(el && names[i]) el.value=names[i];
+  });
+}
+
+function refreshNameDropdown(){
+  var sel=document.getElementById('name-select');
+  var stored=localStorage.getItem('handle_names');
+  var names=stored ? JSON.parse(stored).filter(function(n){ return n; }) : [];
+  // 既存のオプションをリセット
+  sel.innerHTML='<option value="">▼ 登録済みの名前から選ぶ</option>';
+  names.forEach(function(n){
+    var opt=document.createElement('option');
+    opt.value=n; opt.textContent=n;
+    sel.appendChild(opt);
+  });
+  if(names.length===0){
+    var opt=document.createElement('option');
+    opt.value=''; opt.disabled=true;
+    opt.textContent='（設定からハンドルネームを登録してください）';
+    sel.appendChild(opt);
+  }
+}
+
+function onNameSelect(sel){
+  if(sel.value){
+    document.getElementById('name').value=sel.value;
+  }
+}
+
+// 初期化：設定値とドロップダウンを読み込む
+(function(){
+  loadHandleNamesIntoSettings();
+  refreshNameDropdown();
+})();
 
 // チップイベント
 document.getElementById('chips').addEventListener('click',function(e){ var c=e.target.closest('.chip'); if(c) c.classList.toggle('active'); });
@@ -578,6 +655,7 @@ function loadDemo(){
 
 function clearAll(){
   ['name','theme','bio'].forEach(function(id){ document.getElementById(id).value=''; });
+  document.getElementById('name-select').selectedIndex=0;
   ['theme-select','bio-select','target-select'].forEach(function(id){ document.getElementById(id).selectedIndex=0; });
   document.querySelectorAll('#chips .chip, #category-chips .chip').forEach(function(c){ c.classList.remove('active'); });
   document.querySelectorAll('#category-chips .chip').forEach(function(c,i){ if(i===0) c.classList.add('active'); });
